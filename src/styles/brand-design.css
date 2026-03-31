@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+
+:root {
+  /* IRA Exclusive Palette - Sourced from screenshot */
+  --bg-deep: #0A0D11;
+  --bg-sidebar: #121418;
+  --bg-card: rgba(255, 255, 255, 0.02);
+  --primary-green: #00D084;
+  --primary-glow: rgba(0, 208, 132, 0.4);
+  --border-muted: rgba(255, 255, 255, 0.08);
+  --text-main: #FFFFFF;
+  --text-muted: #8E95A2;
+  --input-bg: rgba(0, 0, 0, 0.3);
+  
+  /* Radii & Shadows */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-glow: 0 0 20px var(--primary-glow);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .logo-text {
+  font-family: 'Outfit', sans-serif;
+}
+
+/* 1:1 Screenshot Styles */
+
+.glass-panel {
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border-muted);
+  backdrop-filter: blur(20px);
+}
+
+.ira-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+}
+
+.ira-icon-box {
+  width: 44px;
+  height: 44px;
+  padding: 8px;
+  background: linear-gradient(135deg, #1A1F26 0%, #0A0D11 100%);
+  border: 1px solid var(--border-muted);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ira-icon-box img {
+    width: 100%;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  margin: 4px 12px;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+.nav-item:hover, .nav-item.active {
+  color: var(--text-main);
+}
+
+.nav-item.active {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--primary-green);
+  border-left: 3px solid var(--primary-green);
+  border-radius: 0 8px 8px 0;
+}
+
+/* Quick Pricing Table - Exact Layout */
+.pricing-table-container {
+  margin: 24px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-muted);
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 60px 2fr 1fr 1fr 1fr;
+  padding: 16px 32px;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-muted);
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 60px 2fr 1fr 1fr 1fr;
+  padding: 20px 32px;
+  align-items: center;
+  border-bottom: 1px solid var(--border-muted);
+  transition: background 0.3s;
+}
+
+.table-row:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.table-row:nth-child(even) {
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.part-name {
+  font-weight: 500;
+}
+
+.price-input {
+  background: var(--input-bg);
+  border: 1px solid var(--border-muted);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  width: 140px;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.price-input:focus {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 8px rgba(0, 208, 132, 0.1);
+}
+
+/* Button & Toggles from screenshot */
+.btn-ira-primary {
+  background: var(--primary-green);
+  color: #000; /* Contrast black on bright green */
+  font-weight: 700;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.btn-ira-primary:hover {
+  box-shadow: 0 0 15px var(--primary-green);
+}
+
+.ira-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+}
+
+.ira-switch input { opacity: 0; width: 0; height: 0; }
+
+.ira-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #2D333B;
+  transition: .3s;
+  border-radius: 34px;
+}
+
+.ira-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px; width: 20px;
+  left: 3px; bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+
+input:checked + .ira-slider {
+  background-color: var(--primary-green);
+}
+
+input:checked + .ira-slider:before {
+  transform: translateX(22px);
+}
+
+/* Mobile-First WebApp Helper */
+.mobile-container {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-up {
+  animation: slideUp 0.6s ease-out forwards;
+}
