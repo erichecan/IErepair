@@ -22,7 +22,11 @@
       "Bash(git stash:*)",
       "Bash(git merge:*)",
       "Bash(git commit:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(wc -l server/src/services/*.js)",
+      "Bash(wc -l server/src/routes/client/*.js)",
+      "Bash(wc -l server/src/routes/merchant/*.js)",
+      "Bash(wc -l server/src/routes/hq/*.js)"
     ]
   }
 }
