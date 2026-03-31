@@ -1,0 +1,218 @@
+{
+  "version": "2.0",
+  "project": "Ireland Repair Alliance (IRA)",
+  "created_at": "2026-03-30",
+  "sprint": "Sprint 1 — Foundation",
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "title": "Initialize backend project structure (Express + Prisma + PostgreSQL)",
+      "title_zh": "初始化后端项目结构（Express + Prisma + PostgreSQL）",
+      "assignee": "Coder-Alpha",
+      "status": "In-Progress",
+      "priority": "P0",
+      "branch": "feature/agent-alpha-TASK-001",
+      "scope": [
+        "server/package.json",
+        "server/src/index.js",
+        "server/src/config/database.js",
+        "server/prisma/schema.prisma"
+      ],
+      "description": "Set up Node.js + Express server, configure Prisma ORM with PostgreSQL, define all 13 database models from PRD Section 4.",
+      "notes": []
+    },
+    {
+      "id": "TASK-002",
+      "title": "Implement HQ Auth + Master Catalog CRUD API",
+      "title_zh": "实现总部认证 + 母产品库增删改查 API",
+      "assignee": "Coder-Alpha",
+      "status": "Ready",
+      "priority": "P1",
+      "branch": "feature/agent-alpha-TASK-002",
+      "scope": [
+        "server/src/routes/hq/auth.routes.js",
+        "server/src/routes/hq/catalog.routes.js",
+        "server/src/middleware/auth.js",
+        "server/src/middleware/role.js"
+      ],
+      "description": "HQ admin login (JWT), CRUD for master_brands, master_devices, master_categories, master_products. See PRD Section 5.3.",
+      "notes": []
+    },
+    {
+      "id": "TASK-003",
+      "title": "Implement Merchant Auth + Pricing API",
+      "title_zh": "实现商户认证 + 定价 API",
+      "assignee": "Coder-Alpha",
+      "status": "Ready",
+      "priority": "P1",
+      "branch": "feature/agent-alpha-TASK-003",
+      "scope": [
+        "server/src/routes/merchant/auth.routes.js",
+        "server/src/routes/merchant/catalog.routes.js",
+        "server/src/routes/merchant/settings.routes.js"
+      ],
+      "description": "Merchant login, browse master catalog with own prices overlaid, sync/update merchant_products, shop settings CRUD. See PRD Section 5.2.",
+      "notes": []
+    },
+    {
+      "id": "TASK-004",
+      "title": "Implement Client Browse + Search + Shop API",
+      "title_zh": "实现客户端浏览 + 搜索 + 店铺 API",
+      "assignee": "Coder-Alpha",
+      "status": "Ready",
+      "priority": "P1",
+      "branch": "feature/agent-alpha-TASK-004",
+      "scope": [
+        "server/src/routes/client/browse.routes.js",
+        "server/src/routes/client/shop.routes.js",
+        "server/src/utils/geo.js"
+      ],
+      "description": "List brands/devices/services, LBS-based shop search with distance sorting (Haversine), shop detail with services & reviews. See PRD Section 5.1.",
+      "notes": []
+    },
+    {
+      "id": "TASK-005",
+      "title": "Implement Booking + Stripe Deposit API",
+      "title_zh": "实现预约 + Stripe 定金支付 API",
+      "assignee": "Coder-Alpha",
+      "status": "Ready",
+      "priority": "P1",
+      "branch": "feature/agent-alpha-TASK-005",
+      "scope": [
+        "server/src/routes/client/booking.routes.js",
+        "server/src/routes/merchant/booking.routes.js",
+        "server/src/services/booking.service.js",
+        "server/src/services/stripe.service.js",
+        "server/src/config/stripe.js",
+        "server/src/utils/qr.js"
+      ],
+      "description": "Create booking, generate QR code, Stripe Checkout Session for 20% deposit, webhook handler, merchant check-in/complete/no-show. See PRD Sections 5.1-5.2 & 12.",
+      "notes": []
+    },
+    {
+      "id": "TASK-006",
+      "title": "Implement Warranty + Commission APIs",
+      "title_zh": "实现保修 + 佣金 API",
+      "assignee": "Coder-Alpha",
+      "status": "Ready",
+      "priority": "P1",
+      "branch": "feature/agent-alpha-TASK-006",
+      "scope": [
+        "server/src/services/warranty.service.js",
+        "server/src/services/commission.service.js",
+        "server/src/routes/client/warranty.routes.js",
+        "server/src/routes/merchant/warranty.routes.js",
+        "server/src/routes/hq/commission.routes.js",
+        "server/src/routes/hq/finance.routes.js"
+      ],
+      "description": "Auto-create warranty on booking completion (180 days), cross-shop claims, commission rules engine (global/region/merchant priority resolution). See PRD Sections 5.1-5.3.",
+      "notes": []
+    },
+    {
+      "id": "TASK-010",
+      "title": "Set up React Router + Layout + Auth Context",
+      "title_zh": "配置 React Router + 布局 + 认证上下文",
+      "assignee": "Coder-Beta",
+      "status": "In-Progress",
+      "priority": "P0",
+      "branch": "feature/agent-beta-TASK-010",
+      "scope": [
+        "client/src/App.jsx",
+        "client/src/api/client.js",
+        "client/src/context/AuthContext.jsx",
+        "client/src/components/shared/Navbar.jsx",
+        "client/src/components/shared/Footer.jsx"
+      ],
+      "description": "Install react-router-dom, set up all routes per PRD Section 3.3, create API client (axios), auth context for customer/merchant/HQ. Clean up old dead code (src/data/, src/logic/, src/merchant/Dashboard.jsx, src/customer/Home.jsx).",
+      "notes": []
+    },
+    {
+      "id": "TASK-011",
+      "title": "Build C-End: HomePage + SearchPage + ShopPage",
+      "title_zh": "构建客户端：首页 + 搜索页 + 店铺微站",
+      "assignee": "Coder-Beta",
+      "status": "Ready",
+      "priority": "P1",
+      "branch": "feature/agent-beta-TASK-011",
+      "scope": [
+        "client/src/pages/customer/HomePage.jsx",
+        "client/src/pages/customer/SearchPage.jsx",
+        "client/src/pages/customer/ShopPage.jsx",
+        "client/src/components/customer/ShopCard.jsx",
+        "client/src/components/customer/ServiceCard.jsx"
+      ],
+      "description": "Homepage with brand grid + search, search results with map toggle (Google Maps), shop micro-site with tabs (Services/About/Reviews). See PRD Section 7.1.",
+      "notes": []
+    },
+    {
+      "id": "TASK-012",
+      "title": "Build C-End: BookingFlow + Confirmation + WarrantyWallet",
+      "title_zh": "构建客户端：预约流程 + 确认页 + 保修钱包",
+      "assignee": "Coder-Beta",
+      "status": "Ready",
+      "priority": "P1",
+      "branch": "feature/agent-beta-TASK-012",
+      "scope": [
+        "client/src/pages/customer/BookingFlow.jsx",
+        "client/src/pages/customer/BookingConfirmation.jsx",
+        "client/src/pages/customer/MyBookings.jsx",
+        "client/src/pages/customer/WarrantyWallet.jsx",
+        "client/src/pages/customer/LoginPage.jsx"
+      ],
+      "description": "4-step booking flow (date→time→details→summary), Stripe redirect, booking confirmation with QR, booking history, warranty wallet. See PRD Section 7.1.",
+      "notes": []
+    },
+    {
+      "id": "TASK-013",
+      "title": "Build Merchant-End: Dashboard + Pricing + Scan + Settings",
+      "title_zh": "构建商户端：仪表盘 + 定价 + 扫码 + 设置",
+      "assignee": "Coder-Beta",
+      "status": "Ready",
+      "priority": "P1",
+      "branch": "feature/agent-beta-TASK-013",
+      "scope": [
+        "client/src/pages/merchant/Dashboard.jsx",
+        "client/src/pages/merchant/Pricing.jsx",
+        "client/src/pages/merchant/Orders.jsx",
+        "client/src/pages/merchant/ScanCheckIn.jsx",
+        "client/src/pages/merchant/Settings.jsx",
+        "client/src/pages/merchant/MerchantLogin.jsx"
+      ],
+      "description": "Merchant dashboard (today stats + timeline), pricing table (toggle/price from master catalog), QR scanner, shop settings (hours, photos, slots). See PRD Section 7.2.",
+      "notes": []
+    },
+    {
+      "id": "TASK-014",
+      "title": "Build HQ-End: Catalog + Merchants + Commission + Finance",
+      "title_zh": "构建总部端：产品库 + 商户管理 + 佣金 + 财务",
+      "assignee": "Coder-Beta",
+      "status": "Ready",
+      "priority": "P1",
+      "branch": "feature/agent-beta-TASK-014",
+      "scope": [
+        "client/src/pages/hq/HQLogin.jsx",
+        "client/src/pages/hq/MasterCatalog.jsx",
+        "client/src/pages/hq/MerchantManagement.jsx",
+        "client/src/pages/hq/CommissionRules.jsx",
+        "client/src/pages/hq/Finance.jsx"
+      ],
+      "description": "HQ master catalog CRUD table, merchant list (pending/active/suspended tabs), commission rules editor (scope/rate/priority), finance ledger tabs. See PRD Section 7.3.",
+      "notes": []
+    },
+    {
+      "id": "TASK-020",
+      "title": "Write API integration tests + E2E booking flow test",
+      "title_zh": "编写 API 集成测试 + E2E 预约流程测试",
+      "assignee": "QA-Bot",
+      "status": "Ready",
+      "priority": "P2",
+      "branch": "feature/agent-qa-TASK-020",
+      "scope": [
+        "server/tests/",
+        "client/tests/"
+      ],
+      "description": "Test full booking lifecycle: create booking → pay deposit → check-in → complete → warranty issued. Test commission calculation. Test auth flows.",
+      "notes": []
+    }
+  ]
+}
