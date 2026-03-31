@@ -21,7 +21,8 @@
       "Bash(npm init:*)",
       "Bash(git stash:*)",
       "Bash(git merge:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npm run:*)"
     ]
   }
 }
