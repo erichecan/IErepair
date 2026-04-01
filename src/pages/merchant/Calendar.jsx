@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { merchantAPI } from '../../api/client';
 
 const statusColors = {
   confirmed: '#00D084',
@@ -64,8 +65,29 @@ const s = {
 
 export default function Calendar() {
   const [weekOffset, setWeekOffset] = useState(0);
+  const [events, setEvents] = useState(mockEvents);
   const days = getWeekDays(weekOffset);
   const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const from = days[0].toISOString().slice(0, 10);
+        const to = days[6].toISOString().slice(0, 10);
+        const res = await merchantAPI.get(`/bookings?date_from=${from}&date_to=${to}`);
+        const bookings = res.data?.data || res.data || [];
+        const mapped = bookings.map(b => {
+          const bDate = new Date(b.booking_date || b.bookingDate);
+          const dayIdx = (bDate.getDay() + 6) % 7; // Mon=0
+          return { day: dayIdx, time: b.booking_time || b.bookingTime, service: b.service_name || b.serviceName, customer: b.customer_name || b.customerName, status: b.status };
+        });
+        setEvents(mapped);
+      } catch {
+        setEvents(weekOffset === 0 ? mockEvents : []);
+      }
+    };
+    load();
+  }, [weekOffset]);
 
   const weekStart = days[0].toLocaleDateString('en-IE', { month: 'short', day: 'numeric' });
   const weekEnd = days[6].toLocaleDateString('en-IE', { month: 'short', day: 'numeric' });
@@ -83,7 +105,7 @@ export default function Calendar() {
       <div style={s.grid}>
         {dayNames.map((d) => <div key={d} style={s.dayHeader}>{d}</div>)}
         {days.map((date, idx) => {
-          const eventsForDay = weekOffset === 0 ? mockEvents.filter((e) => e.day === idx) : [];
+          const eventsForDay = events.filter((e) => e.day === idx);
           return (
             <div key={idx} style={s.dayCol}>
               <div style={s.dateNum}>{date.getDate()}</div>

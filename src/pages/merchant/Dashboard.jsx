@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { merchantAPI } from '../../api/client';
 
 const summaryCards = [
   { label: "Today's Bookings", value: 8, color: 'var(--primary-green)' },
@@ -60,13 +61,38 @@ const s = {
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const [cards, setCards] = useState(summaryCards);
+  const [bookings, setBookings] = useState(todayBookings);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const [todayRes, statsRes] = await Promise.all([
+          merchantAPI.get('/dashboard/today'),
+          merchantAPI.get('/dashboard/stats'),
+        ]);
+        const today = todayRes.data?.data || todayRes.data;
+        if (today?.bookings) setBookings(today.bookings);
+        const stats = statsRes.data?.data || statsRes.data;
+        if (stats) {
+          setCards([
+            { label: "Today's Bookings", value: stats.todayCount ?? summaryCards[0].value, color: 'var(--primary-green)' },
+            { label: 'Revenue', value: stats.revenue ? `\u20AC${stats.revenue}` : summaryCards[1].value, color: '#3B82F6' },
+            { label: 'Pending Check-ins', value: stats.pendingCheckins ?? summaryCards[2].value, color: '#EAB308' },
+            { label: 'Completed', value: stats.completed ?? summaryCards[3].value, color: '#6B7280' },
+          ]);
+        }
+      } catch { /* use mock data */ }
+    };
+    load();
+  }, []);
 
   return (
     <div className="animate-up">
       <h2 style={s.heading}>Dashboard</h2>
 
       <div style={s.cardGrid}>
-        {summaryCards.map((c) => (
+        {cards.map((c) => (
           <div key={c.label} style={s.card(c.color)}>
             <div style={s.cardValue}>{c.value}</div>
             <div style={s.cardLabel}>{c.label}</div>
@@ -76,7 +102,7 @@ export default function Dashboard() {
 
       <div style={s.sectionTitle}>Today&apos;s Bookings</div>
       <div style={s.timeline}>
-        {todayBookings.map((b) => (
+        {bookings.map((b) => (
           <div key={b.id} style={s.row}>
             <span style={s.time}>{b.time}</span>
             <span style={s.customer}>{b.customer}</span>

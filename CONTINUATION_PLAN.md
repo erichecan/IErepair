@@ -13,17 +13,17 @@
 |-------|--------|-------------|
 | **Phase A** — Fix Critical Gaps | ✅ Done | App.jsx rewritten, all route/service stubs created |
 | **Phase B** — Backend APIs | ✅ Done | 30 files, 3038 lines. All 50+ endpoints implemented |
-| **Phase C** — Frontend Pages | 🟡 ~70% | Customer 8/8 done, Merchant 6/8 done, HQ 0/5 done |
-| **Phase D** — Integration & Polish | ❌ Not started | Seed data, API integration, error handling |
+| **Phase C** — Frontend Pages | ✅ Done | All 21 pages implemented (Customer 8, Merchant 8, HQ 5) |
+| **Phase D** — Integration & Polish | 🟡 ~60% | Seed script done, Dashboard/Calendar connected, remaining: migration, full e2e test, responsive pass |
 
 ### What's committed (on `main`):
 - Phase A + B complete (commit `34b58cc`)
 - Frontend stubs for all 21 pages
 
-### What's modified but NOT committed (in working directory):
-- 14 files with ~1,850 lines of new UI code (Customer + Merchant pages)
-- These are **real implementations** (not stubs), with API calls + mock data fallback
-- **Must be committed before starting new work**
+### What's been committed since:
+- All Customer + Merchant page implementations (commit `e8ba207`)
+- All HQ pages + remaining Merchant pages (commit `074a2b3`)
+- Phase D: seed script, Dashboard/Calendar API integration (latest)
 
 ---
 
