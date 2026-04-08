@@ -9,7 +9,7 @@ const mockBooking = {
   service_name: 'iPhone 15 Pro Screen Replacement',
   shop_name: 'Fix-It Dublin',
   shop_address: '12 Grafton St, Dublin 2',
-  date: '2026-04-05',
+  date: '2026-04-10',
   time: '10:30',
   total_price: 89,
   deposit_amount: 18,
@@ -18,35 +18,207 @@ const mockBooking = {
 };
 
 const s = {
-  center: { textAlign: 'center', marginBottom: 24 },
-  badge: {
-    display: 'inline-block', padding: '6px 20px', borderRadius: 20,
-    background: 'rgba(0,208,132,0.15)', color: 'var(--primary-green)',
-    fontWeight: 700, fontSize: '0.9rem', marginBottom: 12,
+  successBanner: {
+    textAlign: 'center',
+    padding: '32px 0 24px',
+    marginBottom: 24,
   },
-  bookingNum: { fontFamily: "'Outfit', sans-serif", fontSize: '1.3rem', fontWeight: 700, marginBottom: 20 },
+  checkCircle: {
+    width: 64,
+    height: 64,
+    borderRadius: '50%',
+    background: 'rgba(22,163,74,0.1)',
+    border: '2px solid rgba(22,163,74,0.2)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '1.75rem',
+    margin: '0 auto 16px',
+  },
+  successTitle: {
+    fontSize: '1.4rem',
+    fontWeight: 800,
+    color: 'var(--text-main)',
+    letterSpacing: '-0.03em',
+    marginBottom: 6,
+  },
+  successSub: {
+    fontSize: '0.875rem',
+    color: 'var(--text-muted)',
+    lineHeight: 1.5,
+  },
+  bookingChip: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 6,
+    padding: '6px 14px',
+    borderRadius: 'var(--radius-full)',
+    background: 'var(--bg-surface)',
+    boxShadow: 'var(--shadow-sm)',
+    fontSize: '0.82rem',
+    fontWeight: 700,
+    color: 'var(--text-main)',
+    letterSpacing: '0.02em',
+    marginTop: 12,
+    fontFamily: 'monospace',
+  },
+  qrBlock: {
+    background: 'var(--bg-card)',
+    boxShadow: 'var(--shadow-card)',
+    borderRadius: 'var(--radius-xl)',
+    padding: '24px 20px',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
   qrBox: {
-    width: 180, height: 180, margin: '0 auto 24px',
-    border: '2px solid var(--border-muted)', borderRadius: 'var(--radius-md)',
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    background: 'var(--bg-card)', flexDirection: 'column', gap: 8,
+    width: 160,
+    height: 160,
+    margin: '0 auto 14px',
+    borderRadius: 'var(--radius-md)',
+    background: 'var(--bg-surface)',
+    border: '1px solid var(--border-muted)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '4rem',
+    boxShadow: 'var(--shadow-sm)',
   },
-  qrText: { fontSize: '0.75rem', color: 'var(--text-muted)', wordBreak: 'break-all', padding: '0 12px', textAlign: 'center' },
-  qrLabel: { fontSize: '0.7rem', color: 'var(--text-muted)' },
-  card: {
-    borderRadius: 'var(--radius-md)', border: '1px solid var(--border-muted)',
-    padding: 16, background: 'var(--bg-card)', marginBottom: 16,
+  qrTitle: {
+    fontSize: '0.875rem',
+    fontWeight: 700,
+    color: 'var(--text-main)',
+    marginBottom: 4,
   },
-  row: { display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid var(--border-muted)', fontSize: '0.9rem' },
-  rowLast: { display: 'flex', justifyContent: 'space-between', padding: '10px 0', fontSize: '0.9rem' },
-  label: { color: 'var(--text-muted)' },
-  value: { fontWeight: 600 },
+  qrSub: {
+    fontSize: '0.78rem',
+    color: 'var(--text-muted)',
+  },
+  detailCard: {
+    background: 'var(--bg-card)',
+    boxShadow: 'var(--shadow-card)',
+    borderRadius: 'var(--radius-xl)',
+    marginBottom: 16,
+    overflow: 'hidden',
+  },
+  detailHeader: {
+    padding: '14px 20px',
+    borderBottom: '1px solid var(--border-muted)',
+    fontSize: '0.8rem',
+    fontWeight: 700,
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase',
+    color: 'var(--text-muted)',
+  },
+  detailRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '13px 20px',
+    gap: 12,
+  },
+  detailLabel: {
+    fontSize: '0.875rem',
+    color: 'var(--text-muted)',
+    flexShrink: 0,
+  },
+  detailValue: {
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    color: 'var(--text-main)',
+    textAlign: 'right',
+  },
+  separator: {
+    height: 1,
+    background: 'var(--border-muted)',
+    margin: '0 20px',
+  },
+  paymentTotal: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '14px 20px',
+    gap: 12,
+  },
+  totalLabel: {
+    fontSize: '0.875rem',
+    fontWeight: 700,
+    color: 'var(--text-main)',
+  },
+  totalValue: {
+    fontSize: '1rem',
+    fontWeight: 800,
+    color: 'var(--text-main)',
+  },
+  depositRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '10px 20px',
+    gap: 12,
+    background: 'rgba(22,163,74,0.04)',
+  },
+  depositLabel: {
+    fontSize: '0.82rem',
+    color: '#16a34a',
+    fontWeight: 600,
+    display: 'flex',
+    alignItems: 'center',
+    gap: 4,
+  },
+  depositValue: {
+    fontSize: '0.875rem',
+    fontWeight: 700,
+    color: '#16a34a',
+  },
+  dueRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '10px 20px',
+    gap: 12,
+  },
+  dueLabel: {
+    fontSize: '0.82rem',
+    color: 'var(--text-muted)',
+  },
+  dueValue: {
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    color: 'var(--text-main)',
+  },
   cancelBtn: {
-    width: '100%', padding: '12px', borderRadius: 20,
-    border: '1px solid rgba(255,100,100,0.3)', background: 'transparent',
-    color: '#ff6b6b', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem', marginTop: 8,
+    width: '100%',
+    padding: '12px',
+    borderRadius: 'var(--radius-md)',
+    border: '1px solid rgba(220,38,38,0.2)',
+    background: 'rgba(220,38,38,0.04)',
+    color: '#b91c1c',
+    fontWeight: 600,
+    cursor: 'pointer',
+    fontSize: '0.875rem',
+    fontFamily: 'inherit',
+    marginTop: 4,
+    transition: 'background 0.15s',
   },
-  loading: { textAlign: 'center', padding: 40, color: 'var(--text-muted)' },
+  backBtn: {
+    width: '100%',
+    padding: '12px',
+    borderRadius: 'var(--radius-md)',
+    border: '1px solid var(--border-muted)',
+    background: 'transparent',
+    color: 'var(--text-muted)',
+    fontWeight: 600,
+    cursor: 'pointer',
+    fontSize: '0.875rem',
+    fontFamily: 'inherit',
+    marginTop: 8,
+    transition: 'background 0.15s',
+  },
+  loading: {
+    textAlign: 'center',
+    padding: 60,
+    color: 'var(--text-muted)',
+  },
 };
 
 export default function BookingConfirmation() {
@@ -54,6 +226,7 @@ export default function BookingConfirmation() {
   const navigate = useNavigate();
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [cancelling, setCancelling] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -73,47 +246,113 @@ export default function BookingConfirmation() {
   }, [bookingId]);
 
   async function handleCancel() {
-    if (!window.confirm('Are you sure you want to cancel this booking?')) return;
+    if (!window.confirm('Cancel this booking? This action cannot be undone.')) return;
+    setCancelling(true);
     try {
       await clientAPI.post(`/booking/bookings/${bookingId}/cancel`);
-      alert('Booking cancelled.');
       navigate('/my/bookings');
     } catch {
-      alert('Cancellation failed. Please try again.');
+      alert('Cancellation failed. Please try again or contact support.');
+    } finally {
+      setCancelling(false);
     }
   }
 
-  if (loading) return <div style={s.loading}>Loading booking...</div>;
+  if (loading) return <div style={s.loading}>Loading booking details...</div>;
   if (!booking) return <div style={s.loading}>Booking not found.</div>;
+
+  const isCancelled = booking.status === 'cancelled';
 
   return (
     <div className="animate-up">
-      <div style={s.center}>
-        <div style={s.badge}>Confirmed</div>
-        <div style={s.bookingNum}>{booking.booking_number || bookingId}</div>
+      {/* Success Banner */}
+      <div style={s.successBanner}>
+        <div style={s.checkCircle}>
+          {isCancelled ? '✕' : '✓'}
+        </div>
+        <div style={s.successTitle}>
+          {isCancelled ? 'Booking Cancelled' : 'Booking Confirmed!'}
+        </div>
+        <div style={s.successSub}>
+          {isCancelled
+            ? 'Your booking has been cancelled. Any deposit will be refunded.'
+            : `Your appointment is set. Show the QR code when you arrive.`}
+        </div>
+        <div style={s.bookingChip}>
+          <span>🎫</span>
+          <span>{booking.booking_number || bookingId}</span>
+        </div>
       </div>
 
-      <div style={s.qrBox}>
-        <div style={{ fontSize: '2.5rem' }}>&#9634;</div>
-        <div style={s.qrText}>{booking.qr_code || booking.booking_number || bookingId}</div>
-        <div style={s.qrLabel}>Show this at the shop</div>
+      {/* QR Code */}
+      {!isCancelled && (
+        <div style={s.qrBlock}>
+          <div style={s.qrBox}>⬛</div>
+          <div style={s.qrTitle}>Show this at the shop</div>
+          <div style={s.qrSub}>{booking.qr_code || booking.booking_number || bookingId}</div>
+        </div>
+      )}
+
+      {/* Booking Details */}
+      <div style={s.detailCard}>
+        <div style={s.detailHeader}>Appointment Details</div>
+        <div style={s.detailRow}>
+          <span style={s.detailLabel}>Service</span>
+          <span style={s.detailValue}>{booking.service_name}</span>
+        </div>
+        <div style={s.separator} />
+        <div style={s.detailRow}>
+          <span style={s.detailLabel}>Shop</span>
+          <span style={s.detailValue}>{booking.shop_name}</span>
+        </div>
+        <div style={s.separator} />
+        <div style={s.detailRow}>
+          <span style={s.detailLabel}>Address</span>
+          <span style={s.detailValue}>{booking.shop_address}</span>
+        </div>
+        <div style={s.separator} />
+        <div style={s.detailRow}>
+          <span style={s.detailLabel}>Date</span>
+          <span style={s.detailValue}>{booking.date}</span>
+        </div>
+        <div style={s.separator} />
+        <div style={s.detailRow}>
+          <span style={s.detailLabel}>Time</span>
+          <span style={s.detailValue}>{booking.time}</span>
+        </div>
       </div>
 
-      <div style={s.card}>
-        <div style={s.row}><span style={s.label}>Service</span><span style={s.value}>{booking.service_name}</span></div>
-        <div style={s.row}><span style={s.label}>Shop</span><span style={s.value}>{booking.shop_name}</span></div>
-        <div style={s.row}><span style={s.label}>Address</span><span style={s.value}>{booking.shop_address}</span></div>
-        <div style={s.row}><span style={s.label}>Date</span><span style={s.value}>{booking.date}</span></div>
-        <div style={s.rowLast}><span style={s.label}>Time</span><span style={s.value}>{booking.time}</span></div>
+      {/* Payment Summary */}
+      <div style={s.detailCard}>
+        <div style={s.detailHeader}>Payment Summary</div>
+        <div style={s.paymentTotal}>
+          <span style={s.totalLabel}>Total Price</span>
+          <span style={s.totalValue}>€{booking.total_price}</span>
+        </div>
+        <div style={s.separator} />
+        <div style={s.depositRow}>
+          <span style={s.depositLabel}><span>✅</span> Deposit Paid</span>
+          <span style={s.depositValue}>−€{booking.deposit_amount}</span>
+        </div>
+        <div style={s.dueRow}>
+          <span style={s.dueLabel}>Due at Shop</span>
+          <span style={s.dueValue}>€{booking.due_at_shop}</span>
+        </div>
       </div>
 
-      <div style={s.card}>
-        <div style={s.row}><span style={s.label}>Total</span><span style={s.value}>&euro;{booking.total_price}</span></div>
-        <div style={s.row}><span style={s.label}>Deposit Paid</span><span style={{ ...s.value, color: 'var(--primary-green)' }}>&euro;{booking.deposit_amount}</span></div>
-        <div style={s.rowLast}><span style={s.label}>Due at Shop</span><span style={s.value}>&euro;{booking.due_at_shop}</span></div>
-      </div>
-
-      <button style={s.cancelBtn} onClick={handleCancel}>Cancel Booking</button>
+      {/* Actions */}
+      {!isCancelled && (
+        <button
+          style={{ ...s.cancelBtn, opacity: cancelling ? 0.6 : 1 }}
+          onClick={handleCancel}
+          disabled={cancelling}
+        >
+          {cancelling ? 'Cancelling...' : 'Cancel Booking'}
+        </button>
+      )}
+      <button style={s.backBtn} onClick={() => navigate('/my/bookings')}>
+        Back to My Bookings
+      </button>
     </div>
   );
 }

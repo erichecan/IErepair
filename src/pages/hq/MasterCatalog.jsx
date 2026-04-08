@@ -16,169 +16,434 @@ const mockBrands = ['Apple', 'Samsung', 'Google', 'Huawei', 'Xiaomi', 'OnePlus']
 const mockCategories = ['Screen Replacement', 'Battery Replacement', 'Charging Port', 'Water Damage', 'Back Glass'];
 
 const s = {
-  heading: { fontFamily: "'Outfit', sans-serif", fontSize: '1.4rem', fontWeight: 700 },
-  topBar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 },
-  searchRow: { display: 'flex', gap: 12, alignItems: 'center' },
-  searchInput: { background: 'var(--input-bg)', border: '1px solid var(--border-muted)', color: '#fff', padding: '9px 14px', borderRadius: 8, outline: 'none', fontFamily: 'inherit', fontSize: '0.9rem', width: 260 },
-  primaryBtn: { background: 'var(--primary-green)', color: '#000', fontWeight: 700, border: 'none', padding: '10px 24px', borderRadius: 20, cursor: 'pointer', fontSize: '0.9rem' },
-  ghostBtn: { padding: '10px 20px', borderRadius: 20, border: '1px solid var(--border-muted)', background: 'var(--bg-card)', color: 'var(--text-main)', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' },
-  dangerBtn: { padding: '6px 14px', borderRadius: 8, background: 'rgba(239,68,68,0.15)', color: '#EF4444', border: '1px solid rgba(239,68,68,0.3)', cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600 },
-  editBtn: { padding: '6px 14px', borderRadius: 8, background: 'rgba(59,130,246,0.15)', color: '#3B82F6', border: '1px solid rgba(59,130,246,0.3)', cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600 },
-  tableWrap: { borderRadius: 'var(--radius-md)', border: '1px solid var(--border-muted)', overflow: 'hidden' },
-  tableHeader: { display: 'grid', gridTemplateColumns: '100px 2fr 1fr 1fr 90px 90px 70px 120px', padding: '14px 20px', background: 'rgba(255,255,255,0.02)', color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 600, gap: 10 },
-  tableRow: { display: 'grid', gridTemplateColumns: '100px 2fr 1fr 1fr 90px 90px 70px 120px', padding: '12px 20px', borderTop: '1px solid var(--border-muted)', alignItems: 'center', fontSize: '0.88rem', gap: 10 },
-  activeBadge: (active) => ({ display: 'inline-block', padding: '3px 10px', borderRadius: 12, background: active ? 'rgba(0,208,132,0.15)' : 'rgba(107,114,128,0.15)', color: active ? '#00D084' : '#6B7280', fontSize: '0.75rem', fontWeight: 600 }),
-  overlay: { position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 },
-  modal: { background: 'var(--bg-sidebar)', border: '1px solid var(--border-muted)', borderRadius: 'var(--radius-lg)', padding: 28, width: '100%', maxWidth: 560, maxHeight: '85vh', overflowY: 'auto' },
-  modalTitle: { fontFamily: "'Outfit', sans-serif", fontSize: '1.15rem', fontWeight: 600, marginBottom: 20 },
-  formGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 },
-  field: { display: 'flex', flexDirection: 'column', gap: 6 },
-  fieldFull: { display: 'flex', flexDirection: 'column', gap: 6, gridColumn: '1 / -1' },
-  label: { fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 500 },
-  input: { background: 'var(--input-bg)', border: '1px solid var(--border-muted)', color: '#fff', padding: '10px 14px', borderRadius: 8, outline: 'none', fontFamily: 'inherit', fontSize: '0.9rem' },
-  select: { background: 'var(--input-bg)', border: '1px solid var(--border-muted)', color: '#fff', padding: '10px 14px', borderRadius: 8, outline: 'none', fontFamily: 'inherit', fontSize: '0.9rem' },
-  modalActions: { display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 24 },
-  muted: { color: 'var(--text-muted)', fontSize: '0.82rem' },
+  header: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  title: {
+    fontSize: '1.5rem',
+    fontWeight: 800,
+    color: 'var(--text-main)',
+    letterSpacing: '-0.03em',
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: '0.875rem',
+    color: 'var(--text-muted)',
+  },
+  toolbar: {
+    display: 'flex',
+    gap: 10,
+    marginBottom: 16,
+    alignItems: 'center',
+  },
+  searchWrap: {
+    position: 'relative',
+    flex: 1,
+    minWidth: 220,
+  },
+  searchIcon: {
+    position: 'absolute',
+    left: 12,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    color: 'var(--text-muted)',
+    fontSize: '0.85rem',
+    pointerEvents: 'none',
+  },
+  searchInput: {
+    width: '100%',
+    padding: '9px 14px 9px 34px',
+    borderRadius: 'var(--radius-md)',
+    border: '1px solid var(--border-muted)',
+    background: 'var(--input-bg)',
+    color: 'var(--text-main)',
+    fontSize: '0.875rem',
+    fontFamily: 'inherit',
+    outline: 'none',
+    boxSizing: 'border-box',
+  },
+  tableWrap: {
+    background: 'var(--bg-card)',
+    boxShadow: 'var(--shadow-card)',
+    borderRadius: 'var(--radius-xl)',
+    overflow: 'hidden',
+  },
+  tableHead: {
+    display: 'grid',
+    gridTemplateColumns: '100px 2fr 1fr 1fr 90px 90px 80px 110px',
+    padding: '12px 20px',
+    borderBottom: '1px solid var(--border-muted)',
+    fontSize: '0.72rem',
+    fontWeight: 700,
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase',
+    color: 'var(--text-muted)',
+    gap: 10,
+  },
+  tableRow: {
+    display: 'grid',
+    gridTemplateColumns: '100px 2fr 1fr 1fr 90px 90px 80px 110px',
+    padding: '13px 20px',
+    borderBottom: '1px solid var(--border-muted)',
+    alignItems: 'center',
+    gap: 10,
+    transition: 'background 0.1s',
+  },
+  sku: {
+    fontSize: '0.72rem',
+    fontWeight: 700,
+    color: 'var(--text-muted)',
+    fontFamily: 'monospace',
+  },
+  productName: {
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    color: 'var(--text-main)',
+  },
+  productSub: {
+    fontSize: '0.72rem',
+    color: 'var(--text-muted)',
+    marginTop: 2,
+  },
+  categoryCell: {
+    fontSize: '0.78rem',
+    color: 'var(--text-muted)',
+  },
+  priceCell: {
+    fontSize: '0.875rem',
+    fontWeight: 700,
+    color: 'var(--text-main)',
+  },
+  baseCostCell: {
+    fontSize: '0.82rem',
+    color: 'var(--text-muted)',
+  },
+  actionGroup: {
+    display: 'flex',
+    gap: 6,
+    alignItems: 'center',
+  },
+  // Modal
+  overlay: {
+    position: 'fixed',
+    inset: 0,
+    background: 'rgba(0,0,0,0.4)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+    padding: 20,
+  },
+  modal: {
+    background: 'var(--bg-card)',
+    border: '1px solid var(--border-muted)',
+    borderRadius: 'var(--radius-xl)',
+    padding: '28px 24px',
+    width: '100%',
+    maxWidth: 560,
+    maxHeight: '85vh',
+    overflowY: 'auto',
+    boxShadow: 'var(--shadow-pop)',
+  },
+  modalTitle: {
+    fontSize: '1.1rem',
+    fontWeight: 800,
+    color: 'var(--text-main)',
+    letterSpacing: '-0.02em',
+    marginBottom: 20,
+  },
+  formGrid: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: 14,
+    marginBottom: 4,
+  },
+  field: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 6,
+  },
+  fieldFull: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 6,
+    gridColumn: '1 / -1',
+  },
+  label: {
+    fontSize: '0.78rem',
+    fontWeight: 600,
+    letterSpacing: '0.04em',
+    textTransform: 'uppercase',
+    color: 'var(--text-muted)',
+  },
+  input: {
+    padding: '9px 12px',
+    borderRadius: 'var(--radius-md)',
+    border: '1px solid var(--border-muted)',
+    background: 'var(--input-bg)',
+    color: 'var(--text-main)',
+    fontSize: '0.875rem',
+    fontFamily: 'inherit',
+    outline: 'none',
+  },
+  select: {
+    padding: '9px 12px',
+    borderRadius: 'var(--radius-md)',
+    border: '1px solid var(--border-muted)',
+    background: 'var(--input-bg)',
+    color: 'var(--text-main)',
+    fontSize: '0.875rem',
+    fontFamily: 'inherit',
+    outline: 'none',
+    cursor: 'pointer',
+  },
+  modalActions: {
+    display: 'flex',
+    gap: 10,
+    marginTop: 20,
+    justifyContent: 'flex-end',
+  },
+  activeToggleRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10,
+    gridColumn: '1 / -1',
+    padding: '4px 0',
+  },
+  toggleLabel: {
+    fontSize: '0.875rem',
+    fontWeight: 500,
+    color: 'var(--text-main)',
+  },
 };
 
-const emptyForm = { sku: '', name: '', device_name: '', brand_name: 'Apple', category_name: 'Screen Replacement', base_cost: '', suggested_price: '', estimated_time: 45, warranty_days: 180, is_active: true };
+const emptyForm = {
+  sku: '', name: '', device_name: '', brand_name: 'Apple',
+  category_name: 'Screen Replacement', base_cost: '', suggested_price: '',
+  estimated_time: 45, warranty_days: 180, is_active: true,
+};
+
+function StatusBadge({ active }) {
+  return (
+    <span className={`badge ${active ? 'badge-green' : 'badge-gray'}`}>
+      {active ? 'Active' : 'Inactive'}
+    </span>
+  );
+}
+
+function Toggle({ enabled, onChange }) {
+  return (
+    <button
+      type="button"
+      style={{
+        width: 36, height: 20, borderRadius: 10,
+        background: enabled ? '#16a34a' : 'var(--border-muted)',
+        border: 'none', cursor: 'pointer', position: 'relative',
+        transition: 'background 0.2s', flexShrink: 0,
+      }}
+      onClick={() => onChange(!enabled)}
+    >
+      <div style={{
+        position: 'absolute', top: 2, left: enabled ? 18 : 2,
+        width: 16, height: 16, borderRadius: '50%', background: '#fff',
+        transition: 'left 0.2s', boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+      }} />
+    </button>
+  );
+}
 
 export default function MasterCatalog() {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editId, setEditId] = useState(null);
   const [form, setForm] = useState(emptyForm);
 
   useEffect(() => {
-    const load = async () => {
+    let cancelled = false;
+    async function load() {
+      setLoading(true);
       try {
         const res = await hqAPI.get('/catalog');
-        setProducts(res.data?.data || res.data || []);
+        if (!cancelled) setProducts(res.data?.data || res.data || []);
       } catch {
-        setProducts(mockProducts);
+        if (!cancelled) setProducts(mockProducts);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-    };
+    }
     load();
+    return () => { cancelled = true; };
   }, []);
 
-  const filtered = products.filter(p =>
+  const filtered = products.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()) ||
     p.sku.toLowerCase().includes(search.toLowerCase()) ||
     p.brand_name?.toLowerCase().includes(search.toLowerCase())
   );
 
+  const activeCount = products.filter((p) => p.is_active).length;
+
   const openAdd = () => { setEditId(null); setForm(emptyForm); setShowModal(true); };
-  const openEdit = (p) => { setEditId(p.id); setForm({ ...p, base_cost: p.base_cost, suggested_price: p.suggested_price }); setShowModal(true); };
+  const openEdit = (p) => { setEditId(p.id); setForm({ ...p }); setShowModal(true); };
 
   const handleSave = async () => {
     if (editId) {
       try { await hqAPI.patch(`/catalog/${editId}`, form); } catch { /* demo */ }
-      setProducts(prev => prev.map(p => p.id === editId ? { ...p, ...form } : p));
+      setProducts((prev) => prev.map((p) => p.id === editId ? { ...p, ...form } : p));
     } else {
       const newProduct = { ...form, id: Date.now().toString() };
       try { await hqAPI.post('/catalog', form); } catch { /* demo */ }
-      setProducts(prev => [...prev, newProduct]);
+      setProducts((prev) => [...prev, newProduct]);
     }
     setShowModal(false);
   };
 
   const handleDelete = async (id) => {
     try { await hqAPI.delete(`/catalog/${id}`); } catch { /* demo */ }
-    setProducts(prev => prev.filter(p => p.id !== id));
+    setProducts((prev) => prev.filter((p) => p.id !== id));
   };
 
-  const updateForm = (field, value) => setForm(prev => ({ ...prev, [field]: value }));
+  const toggleActive = async (id) => {
+    const product = products.find((p) => p.id === id);
+    const updated = { ...product, is_active: !product.is_active };
+    try { await hqAPI.patch(`/catalog/${id}`, { is_active: updated.is_active }); } catch { /* demo */ }
+    setProducts((prev) => prev.map((p) => p.id === id ? updated : p));
+  };
 
   return (
     <div className="animate-up">
-      <div style={s.topBar}>
-        <h2 style={s.heading}>Master Product Catalog</h2>
-        <div style={s.searchRow}>
-          <input style={s.searchInput} placeholder="Search by name, SKU, brand..." value={search} onChange={e => setSearch(e.target.value)} />
-          <button style={s.primaryBtn} onClick={openAdd}>+ Add Product</button>
+      <div style={s.header}>
+        <div>
+          <div style={s.title}>Master Catalog</div>
+          <div style={s.subtitle}>{activeCount} of {products.length} services active</div>
+        </div>
+        <button className="btn btn-primary" onClick={openAdd}>+ Add Service</button>
+      </div>
+
+      <div style={s.toolbar}>
+        <div style={s.searchWrap}>
+          <span style={s.searchIcon}>🔍</span>
+          <input
+            style={s.searchInput}
+            type="text"
+            placeholder="Search by name, SKU, or brand..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
       </div>
 
-      <div style={s.tableWrap}>
-        <div style={s.tableHeader}>
-          <span>SKU</span><span>Product Name</span><span>Device</span><span>Category</span>
-          <span>Base Cost</span><span>Sugg. Price</span><span>Status</span><span>Actions</span>
+      {loading ? (
+        <div className="empty-state">
+          <div className="empty-state-icon">⏳</div>
+          <div className="empty-state-title">Loading catalog...</div>
         </div>
-        {filtered.map(p => (
-          <div key={p.id} style={s.tableRow}>
-            <span style={{ fontFamily: 'monospace', fontSize: '0.82rem' }}>{p.sku}</span>
-            <span style={{ fontWeight: 500 }}>{p.name}</span>
-            <span style={s.muted}>{p.device_name}</span>
-            <span style={s.muted}>{p.category_name}</span>
-            <span>&euro;{Number(p.base_cost).toFixed(2)}</span>
-            <span>&euro;{Number(p.suggested_price).toFixed(2)}</span>
-            <span style={s.activeBadge(p.is_active)}>{p.is_active ? 'Active' : 'Off'}</span>
-            <span style={{ display: 'flex', gap: 6 }}>
-              <button style={s.editBtn} onClick={() => openEdit(p)}>Edit</button>
-              <button style={s.dangerBtn} onClick={() => handleDelete(p.id)}>Delete</button>
-            </span>
+      ) : (
+        <div style={s.tableWrap}>
+          <div style={s.tableHead}>
+            <span>SKU</span>
+            <span>Service</span>
+            <span>Category</span>
+            <span>Device</span>
+            <span>Base Cost</span>
+            <span>Sugg. Price</span>
+            <span>Status</span>
+            <span>Actions</span>
           </div>
-        ))}
-        {filtered.length === 0 && <div style={{ padding: 40, textAlign: 'center', color: 'var(--text-muted)' }}>No products found</div>}
-      </div>
-
-      <div style={{ marginTop: 12, color: 'var(--text-muted)', fontSize: '0.85rem' }}>{filtered.length} products</div>
+          {filtered.map((p, idx) => (
+            <div
+              key={p.id}
+              style={{ ...s.tableRow, borderBottom: idx < filtered.length - 1 ? '1px solid var(--border-muted)' : 'none', opacity: p.is_active ? 1 : 0.55 }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(34,42,53,0.02)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+            >
+              <span style={s.sku}>{p.sku}</span>
+              <div>
+                <div style={s.productName}>{p.name}</div>
+                <div style={s.productSub}>{p.brand_name} · {p.estimated_time}min · {p.warranty_days}d warranty</div>
+              </div>
+              <span style={s.categoryCell}>{p.category_name}</span>
+              <span style={s.categoryCell}>{p.device_name}</span>
+              <span style={s.baseCostCell}>€{p.base_cost}</span>
+              <span style={s.priceCell}>€{p.suggested_price}</span>
+              <span><StatusBadge active={p.is_active} /></span>
+              <div style={s.actionGroup}>
+                <button className="btn btn-secondary" style={{ padding: '5px 10px', fontSize: '0.75rem' }} onClick={() => openEdit(p)}>Edit</button>
+                <button
+                  style={{ padding: '5px 10px', fontSize: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid rgba(220,38,38,0.2)', background: 'rgba(220,38,38,0.05)', color: '#b91c1c', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 600 }}
+                  onClick={() => handleDelete(p.id)}
+                >Del</button>
+              </div>
+            </div>
+          ))}
+          {filtered.length === 0 && (
+            <div style={{ padding: '32px 20px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+              No services match your search.
+            </div>
+          )}
+        </div>
+      )}
 
       {showModal && (
         <div style={s.overlay} onClick={() => setShowModal(false)}>
-          <div style={s.modal} onClick={e => e.stopPropagation()}>
-            <h3 style={s.modalTitle}>{editId ? 'Edit Product' : 'Add New Product'}</h3>
+          <div style={s.modal} onClick={(e) => e.stopPropagation()}>
+            <div style={s.modalTitle}>{editId ? 'Edit Service' : 'Add New Service'}</div>
             <div style={s.formGrid}>
+              <div style={s.fieldFull}>
+                <label style={s.label}>Service Name</label>
+                <input style={s.input} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g. iPhone 15 Pro Screen Replacement" />
+              </div>
+              <div style={s.field}>
+                <label style={s.label}>SKU</label>
+                <input style={s.input} value={form.sku} onChange={(e) => setForm({ ...form, sku: e.target.value })} placeholder="APL-IP15P-SCR" />
+              </div>
+              <div style={s.field}>
+                <label style={s.label}>Device Name</label>
+                <input style={s.input} value={form.device_name} onChange={(e) => setForm({ ...form, device_name: e.target.value })} placeholder="iPhone 15 Pro" />
+              </div>
               <div style={s.field}>
                 <label style={s.label}>Brand</label>
-                <select style={s.select} value={form.brand_name} onChange={e => updateForm('brand_name', e.target.value)}>
-                  {mockBrands.map(b => <option key={b} value={b}>{b}</option>)}
+                <select style={s.select} value={form.brand_name} onChange={(e) => setForm({ ...form, brand_name: e.target.value })}>
+                  {mockBrands.map((b) => <option key={b} value={b}>{b}</option>)}
                 </select>
               </div>
               <div style={s.field}>
                 <label style={s.label}>Category</label>
-                <select style={s.select} value={form.category_name} onChange={e => updateForm('category_name', e.target.value)}>
-                  {mockCategories.map(c => <option key={c} value={c}>{c}</option>)}
+                <select style={s.select} value={form.category_name} onChange={(e) => setForm({ ...form, category_name: e.target.value })}>
+                  {mockCategories.map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
               <div style={s.field}>
-                <label style={s.label}>Device Name</label>
-                <input style={s.input} value={form.device_name} onChange={e => updateForm('device_name', e.target.value)} placeholder="iPhone 15 Pro" />
+                <label style={s.label}>Base Cost (€)</label>
+                <input style={s.input} type="number" min="0" value={form.base_cost} onChange={(e) => setForm({ ...form, base_cost: Number(e.target.value) })} />
               </div>
               <div style={s.field}>
-                <label style={s.label}>SKU</label>
-                <input style={s.input} value={form.sku} onChange={e => updateForm('sku', e.target.value)} placeholder="APL-IP15P-SCR" />
-              </div>
-              <div style={s.fieldFull}>
-                <label style={s.label}>Product Name</label>
-                <input style={s.input} value={form.name} onChange={e => updateForm('name', e.target.value)} placeholder="iPhone 15 Pro Screen Replacement" />
+                <label style={s.label}>Suggested Price (€)</label>
+                <input style={s.input} type="number" min="0" value={form.suggested_price} onChange={(e) => setForm({ ...form, suggested_price: Number(e.target.value) })} />
               </div>
               <div style={s.field}>
-                <label style={s.label}>Base Cost (&euro;)</label>
-                <input style={s.input} type="number" step="0.01" value={form.base_cost} onChange={e => updateForm('base_cost', e.target.value)} />
+                <label style={s.label}>Est. Time (min)</label>
+                <input style={s.input} type="number" min="5" value={form.estimated_time} onChange={(e) => setForm({ ...form, estimated_time: Number(e.target.value) })} />
               </div>
               <div style={s.field}>
-                <label style={s.label}>Suggested Price (&euro;)</label>
-                <input style={s.input} type="number" step="0.01" value={form.suggested_price} onChange={e => updateForm('suggested_price', e.target.value)} />
+                <label style={s.label}>Warranty (days)</label>
+                <input style={s.input} type="number" min="0" value={form.warranty_days} onChange={(e) => setForm({ ...form, warranty_days: Number(e.target.value) })} />
               </div>
-              <div style={s.field}>
-                <label style={s.label}>Estimated Time (min)</label>
-                <input style={s.input} type="number" value={form.estimated_time} onChange={e => updateForm('estimated_time', Number(e.target.value))} />
-              </div>
-              <div style={s.field}>
-                <label style={s.label}>Warranty Days</label>
-                <input style={s.input} type="number" value={form.warranty_days} onChange={e => updateForm('warranty_days', Number(e.target.value))} />
-              </div>
-              <div style={s.field}>
-                <label style={{ ...s.label, display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
-                  <input type="checkbox" checked={form.is_active} onChange={e => updateForm('is_active', e.target.checked)} /> Active
-                </label>
+              <div style={s.activeToggleRow}>
+                <Toggle enabled={form.is_active} onChange={(val) => setForm({ ...form, is_active: val })} />
+                <span style={s.toggleLabel}>Active — visible to merchants</span>
               </div>
             </div>
             <div style={s.modalActions}>
-              <button style={s.ghostBtn} onClick={() => setShowModal(false)}>Cancel</button>
-              <button style={s.primaryBtn} onClick={handleSave}>{editId ? 'Update' : 'Create'}</button>
+              <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Cancel</button>
+              <button className="btn btn-primary" onClick={handleSave}>{editId ? 'Save Changes' : 'Create Service'}</button>
             </div>
           </div>
         </div>

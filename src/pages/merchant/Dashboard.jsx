@@ -2,66 +2,206 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { merchantAPI } from '../../api/client';
 
-const summaryCards = [
-  { label: "Today's Bookings", value: 8, color: 'var(--primary-green)' },
-  { label: 'Revenue', value: '\u20AC1,240', color: '#3B82F6' },
-  { label: 'Pending Check-ins', value: 3, color: '#EAB308' },
-  { label: 'Completed', value: 5, color: '#6B7280' },
+const mockStats = [
+  { label: "Today's Bookings", value: '8', icon: '📅', trend: '+2 vs yesterday', up: true },
+  { label: "Revenue Today",    value: '€1,240', icon: '💰', trend: '+€180 vs yesterday', up: true },
+  { label: 'Pending Check-ins', value: '3', icon: '⏳', trend: '2 in next hour', up: null },
+  { label: 'Completed',        value: '5', icon: '✅', trend: '62.5% completion', up: null },
 ];
 
 const todayBookings = [
-  { id: 1, time: '09:00', customer: 'Sarah Murphy', service: 'iPhone 15 Pro Screen', status: 'checked_in' },
-  { id: 2, time: '09:30', customer: 'James Kelly', service: 'Samsung S24 Battery', status: 'in_progress' },
-  { id: 3, time: '10:30', customer: 'Emma Lynch', service: 'iPhone 14 Screen', status: 'confirmed' },
-  { id: 4, time: '11:00', customer: 'Liam O\'Brien', service: 'Water Damage Assessment', status: 'confirmed' },
-  { id: 5, time: '13:00', customer: 'Aoife Ryan', service: 'Google Pixel 8 Screen', status: 'confirmed' },
-  { id: 6, time: '14:00', customer: 'Ciaran Walsh', service: 'iPhone 15 Battery', status: 'completed' },
-  { id: 7, time: '15:00', customer: 'Niamh Byrne', service: 'Samsung S24 Screen', status: 'completed' },
-  { id: 8, time: '16:30', customer: 'Sean Doyle', service: 'iPad Screen', status: 'completed' },
+  { id: 1, time: '09:00', customer: 'Sarah Murphy',  service: 'iPhone 15 Pro Screen',   status: 'checked_in' },
+  { id: 2, time: '09:30', customer: 'James Kelly',   service: 'Samsung S24 Battery',    status: 'in_progress' },
+  { id: 3, time: '10:30', customer: 'Emma Lynch',    service: 'iPhone 14 Screen',       status: 'confirmed' },
+  { id: 4, time: '11:00', customer: "Liam O'Brien",  service: 'Water Damage Assessment',status: 'confirmed' },
+  { id: 5, time: '13:00', customer: 'Aoife Ryan',    service: 'Google Pixel 8 Screen',  status: 'confirmed' },
+  { id: 6, time: '14:00', customer: 'Ciaran Walsh',  service: 'iPhone 15 Battery',      status: 'completed' },
+  { id: 7, time: '15:00', customer: 'Niamh Byrne',   service: 'Samsung S24 Screen',     status: 'completed' },
+  { id: 8, time: '16:30', customer: 'Sean Doyle',    service: 'iPad Screen',            status: 'completed' },
 ];
 
-const statusColors = {
-  confirmed: { bg: 'rgba(0,208,132,0.15)', color: '#00D084' },
-  checked_in: { bg: 'rgba(59,130,246,0.15)', color: '#3B82F6' },
-  in_progress: { bg: 'rgba(234,179,8,0.15)', color: '#EAB308' },
-  completed: { bg: 'rgba(107,114,128,0.15)', color: '#6B7280' },
+const STATUS_MAP = {
+  confirmed:   { label: 'Confirmed',   cls: 'badge-green' },
+  checked_in:  { label: 'Checked In',  cls: 'badge-blue' },
+  in_progress: { label: 'In Progress', cls: 'badge-yellow' },
+  completed:   { label: 'Completed',   cls: 'badge-gray' },
+  no_show:     { label: 'No Show',     cls: 'badge-red' },
+};
+
+const ACTION_MAP = {
+  confirmed:   ['Check-in', 'No-show'],
+  checked_in:  ['Start'],
+  in_progress: ['Complete'],
+};
+
+const STATUS_TRANSITIONS = {
+  'Check-in': 'checked_in',
+  'Start':    'in_progress',
+  'Complete': 'completed',
+  'No-show':  'no_show',
 };
 
 const s = {
-  heading: { fontFamily: "'Outfit', sans-serif", fontSize: '1.4rem', fontWeight: 700, marginBottom: 20 },
-  cardGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 28 },
-  card: (color) => ({
-    padding: 20, borderRadius: 'var(--radius-md)',
-    border: '1px solid var(--border-muted)', background: 'var(--bg-card)',
-    borderLeft: `3px solid ${color}`,
-  }),
-  cardValue: { fontFamily: "'Outfit', sans-serif", fontSize: '1.6rem', fontWeight: 700, marginBottom: 4 },
-  cardLabel: { fontSize: '0.85rem', color: 'var(--text-muted)' },
-  sectionTitle: { fontFamily: "'Outfit', sans-serif", fontSize: '1.1rem', fontWeight: 600, marginBottom: 14 },
-  timeline: { display: 'flex', flexDirection: 'column', gap: 8 },
-  row: {
-    display: 'flex', alignItems: 'center', gap: 16, padding: '12px 16px',
-    borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-muted)',
+  header: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  title: {
+    fontSize: '1.5rem',
+    fontWeight: 800,
+    color: 'var(--text-main)',
+    letterSpacing: '-0.03em',
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: '0.875rem',
+    color: 'var(--text-muted)',
+  },
+  statsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+    gap: 14,
+    marginBottom: 28,
+  },
+  statCard: {
     background: 'var(--bg-card)',
+    boxShadow: 'var(--shadow-card)',
+    borderRadius: 'var(--radius-lg)',
+    padding: '18px 20px',
   },
-  time: { fontWeight: 600, fontSize: '0.9rem', minWidth: 50 },
-  customer: { flex: 1, fontWeight: 500, fontSize: '0.9rem' },
-  service: { flex: 2, fontSize: '0.85rem', color: 'var(--text-muted)' },
-  badge: (status) => {
-    const c = statusColors[status] || statusColors.confirmed;
-    return { padding: '3px 10px', borderRadius: 12, background: c.bg, color: c.color, fontSize: '0.75rem', fontWeight: 600, whiteSpace: 'nowrap' };
+  statTop: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
   },
-  actions: { display: 'flex', gap: 12, marginTop: 24 },
-  actionBtn: {
-    padding: '10px 20px', borderRadius: 20, border: '1px solid var(--border-muted)',
-    background: 'var(--bg-card)', color: 'var(--text-main)', fontWeight: 600,
-    cursor: 'pointer', fontSize: '0.9rem', transition: 'border-color 0.2s',
+  statIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 'var(--radius-sm)',
+    background: 'var(--bg-surface)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '1rem',
+  },
+  statValue: {
+    fontSize: '1.6rem',
+    fontWeight: 800,
+    color: 'var(--text-main)',
+    letterSpacing: '-0.04em',
+    lineHeight: 1,
+    marginBottom: 4,
+  },
+  statLabel: {
+    fontSize: '0.78rem',
+    color: 'var(--text-muted)',
+    fontWeight: 500,
+    marginBottom: 8,
+  },
+  statTrend: (up) => ({
+    fontSize: '0.72rem',
+    fontWeight: 600,
+    color: up === true ? '#16a34a' : up === false ? '#dc2626' : 'var(--text-muted)',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 3,
+  }),
+  sectionHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 14,
+  },
+  sectionTitle: {
+    fontSize: '0.8rem',
+    fontWeight: 700,
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase',
+    color: 'var(--text-muted)',
+  },
+  tableWrap: {
+    background: 'var(--bg-card)',
+    boxShadow: 'var(--shadow-card)',
+    borderRadius: 'var(--radius-xl)',
+    overflow: 'hidden',
+    marginBottom: 20,
+  },
+  tableHead: {
+    display: 'grid',
+    gridTemplateColumns: '70px 1fr 1.5fr 110px 140px',
+    padding: '12px 20px',
+    borderBottom: '1px solid var(--border-muted)',
+    fontSize: '0.75rem',
+    fontWeight: 700,
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase',
+    color: 'var(--text-muted)',
+    gap: 12,
+  },
+  tableRow: {
+    display: 'grid',
+    gridTemplateColumns: '70px 1fr 1.5fr 110px 140px',
+    padding: '13px 20px',
+    borderBottom: '1px solid var(--border-muted)',
+    alignItems: 'center',
+    gap: 12,
+    transition: 'background 0.1s',
+  },
+  timeCell: {
+    fontSize: '0.875rem',
+    fontWeight: 700,
+    color: 'var(--text-main)',
+    fontFamily: 'monospace',
+  },
+  customerCell: {
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    color: 'var(--text-main)',
+  },
+  serviceCell: {
+    fontSize: '0.82rem',
+    color: 'var(--text-muted)',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  actionsCell: {
+    display: 'flex',
+    gap: 6,
+  },
+  actionBtn: (variant) => ({
+    padding: '4px 10px',
+    borderRadius: 'var(--radius-sm)',
+    border: variant === 'danger'
+      ? '1px solid rgba(220,38,38,0.2)'
+      : '1px solid var(--border-muted)',
+    background: variant === 'danger' ? 'rgba(220,38,38,0.06)' : 'transparent',
+    color: variant === 'danger' ? '#b91c1c' : 'var(--text-main)',
+    fontSize: '0.72rem',
+    fontWeight: 600,
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    transition: 'background 0.1s',
+    whiteSpace: 'nowrap',
+  }),
+  quickActions: {
+    display: 'flex',
+    gap: 10,
   },
 };
 
+function getToday() {
+  return new Date().toLocaleDateString('en-IE', { weekday: 'long', day: 'numeric', month: 'long' });
+}
+
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [cards, setCards] = useState(summaryCards);
+  const [stats, setStats] = useState(mockStats);
   const [bookings, setBookings] = useState(todayBookings);
 
   useEffect(() => {
@@ -73,13 +213,13 @@ export default function Dashboard() {
         ]);
         const today = todayRes.data?.data || todayRes.data;
         if (today?.bookings) setBookings(today.bookings);
-        const stats = statsRes.data?.data || statsRes.data;
-        if (stats) {
-          setCards([
-            { label: "Today's Bookings", value: stats.todayCount ?? summaryCards[0].value, color: 'var(--primary-green)' },
-            { label: 'Revenue', value: stats.revenue ? `\u20AC${stats.revenue}` : summaryCards[1].value, color: '#3B82F6' },
-            { label: 'Pending Check-ins', value: stats.pendingCheckins ?? summaryCards[2].value, color: '#EAB308' },
-            { label: 'Completed', value: stats.completed ?? summaryCards[3].value, color: '#6B7280' },
+        const s = statsRes.data?.data || statsRes.data;
+        if (s) {
+          setStats([
+            { label: "Today's Bookings",  value: String(s.todayCount ?? 8), icon: '📅', trend: '+2 vs yesterday', up: true },
+            { label: 'Revenue Today',     value: `€${s.revenue ?? 1240}`, icon: '💰', trend: '+€180 vs yesterday', up: true },
+            { label: 'Pending Check-ins', value: String(s.pendingCheckins ?? 3), icon: '⏳', trend: '2 in next hour', up: null },
+            { label: 'Completed',         value: String(s.completed ?? 5), icon: '✅', trend: '62.5% completion', up: null },
           ]);
         }
       } catch { /* use mock data */ }
@@ -87,34 +227,85 @@ export default function Dashboard() {
     load();
   }, []);
 
+  function handleAction(id, action) {
+    const newStatus = STATUS_TRANSITIONS[action];
+    if (newStatus) {
+      setBookings((prev) => prev.map((b) => b.id === id ? { ...b, status: newStatus } : b));
+    }
+  }
+
   return (
     <div className="animate-up">
-      <h2 style={s.heading}>Dashboard</h2>
+      <div style={s.header}>
+        <div>
+          <div style={s.title}>Dashboard</div>
+          <div style={s.subtitle}>{getToday()}</div>
+        </div>
+        <div style={s.quickActions}>
+          <button className="btn btn-secondary" onClick={() => navigate('/merchant/scan')}>Scan QR</button>
+          <button className="btn btn-primary" onClick={() => navigate('/merchant/orders')}>All Orders</button>
+        </div>
+      </div>
 
-      <div style={s.cardGrid}>
-        {cards.map((c) => (
-          <div key={c.label} style={s.card(c.color)}>
-            <div style={s.cardValue}>{c.value}</div>
-            <div style={s.cardLabel}>{c.label}</div>
+      {/* Stats */}
+      <div style={s.statsGrid}>
+        {stats.map((stat) => (
+          <div key={stat.label} style={s.statCard}>
+            <div style={s.statTop}>
+              <div style={s.statIcon}>{stat.icon}</div>
+            </div>
+            <div style={s.statValue}>{stat.value}</div>
+            <div style={s.statLabel}>{stat.label}</div>
+            <div style={s.statTrend(stat.up)}>
+              {stat.up === true ? '↑' : stat.up === false ? '↓' : ''}
+              {' '}{stat.trend}
+            </div>
           </div>
         ))}
       </div>
 
-      <div style={s.sectionTitle}>Today&apos;s Bookings</div>
-      <div style={s.timeline}>
-        {bookings.map((b) => (
-          <div key={b.id} style={s.row}>
-            <span style={s.time}>{b.time}</span>
-            <span style={s.customer}>{b.customer}</span>
-            <span style={s.service}>{b.service}</span>
-            <span style={s.badge(b.status)}>{(b.status || '').replace(/_/g, ' ')}</span>
-          </div>
-        ))}
+      {/* Today's Schedule */}
+      <div style={s.sectionHeader}>
+        <div style={s.sectionTitle}>Today's Schedule</div>
+        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{bookings.length} appointments</span>
       </div>
 
-      <div style={s.actions}>
-        <button style={s.actionBtn} onClick={() => navigate('/merchant/scan')}>Scan QR</button>
-        <button style={s.actionBtn} onClick={() => navigate('/merchant/orders')}>View All Orders</button>
+      <div style={s.tableWrap}>
+        <div style={s.tableHead}>
+          <span>Time</span>
+          <span>Customer</span>
+          <span>Service</span>
+          <span>Status</span>
+          <span>Actions</span>
+        </div>
+        {bookings.map((b, idx) => {
+          const st = STATUS_MAP[b.status] || STATUS_MAP.confirmed;
+          const actions = ACTION_MAP[b.status] || [];
+          return (
+            <div
+              key={b.id}
+              style={{ ...s.tableRow, borderBottom: idx < bookings.length - 1 ? '1px solid var(--border-muted)' : 'none' }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(34,42,53,0.02)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+            >
+              <span style={s.timeCell}>{b.time}</span>
+              <span style={s.customerCell}>{b.customer}</span>
+              <span style={s.serviceCell}>{b.service}</span>
+              <span><span className={`badge ${st.cls}`}>{st.label}</span></span>
+              <div style={s.actionsCell}>
+                {actions.map((a) => (
+                  <button
+                    key={a}
+                    style={s.actionBtn(a === 'No-show' ? 'danger' : 'default')}
+                    onClick={() => handleAction(b.id, a)}
+                  >
+                    {a}
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

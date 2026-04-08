@@ -11,8 +11,8 @@ const spinnerStyle = {
 const dotStyle = {
   width: 40,
   height: 40,
-  border: '4px solid rgba(255,255,255,0.1)',
-  borderTopColor: '#00D084',
+  border: '4px solid rgba(34,42,53,0.1)',
+  borderTopColor: '#242424',
   borderRadius: '50%',
   animation: 'ira-spin 0.8s linear infinite',
 };

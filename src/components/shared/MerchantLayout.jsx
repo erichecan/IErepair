@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
-
-const sidebarWidth = 260;
 
 const navItems = [
   { to: '/merchant/dashboard', label: 'Dashboard', icon: '📊' },
@@ -14,92 +12,94 @@ const navItems = [
 ];
 
 const styles = {
-  container: {
-    display: 'flex',
-    minHeight: '100vh',
-    background: 'var(--bg-deep)',
-  },
-  sidebar: {
-    width: sidebarWidth,
-    minWidth: sidebarWidth,
-    background: 'var(--bg-sidebar)',
-    borderRight: '1px solid var(--border-muted)',
-    display: 'flex',
-    flexDirection: 'column',
-  },
   logo: {
-    padding: 24,
-    fontFamily: "'Outfit', sans-serif",
-    fontSize: '1.4rem',
+    padding: '20px 20px 16px',
+    fontFamily: "'Inter', sans-serif",
+    fontSize: '1.1rem',
     fontWeight: 700,
-    color: 'var(--primary-green)',
+    color: 'var(--text-main)',
     textDecoration: 'none',
     display: 'block',
+    letterSpacing: '-0.02em',
+  },
+  logoSub: {
+    display: 'block',
+    fontSize: '0.72rem',
+    fontWeight: 400,
+    color: 'var(--text-muted)',
+    letterSpacing: 0,
+    marginTop: 2,
   },
   navList: {
     listStyle: 'none',
-    padding: 0,
+    padding: '8px 0',
     margin: 0,
     flex: 1,
   },
   navLink: {
     display: 'flex',
     alignItems: 'center',
-    gap: 12,
-    padding: '12px 24px',
+    gap: 10,
+    padding: '9px 14px',
     color: 'var(--text-muted)',
     textDecoration: 'none',
-    fontSize: '0.95rem',
-    margin: '4px 12px',
+    fontSize: '0.875rem',
+    fontWeight: 500,
+    margin: '1px 8px',
     borderRadius: 'var(--radius-sm)',
-    transition: 'all 0.2s',
+    transition: 'all 0.15s',
   },
   navLinkActive: {
-    color: 'var(--primary-green)',
-    background: 'rgba(255,255,255,0.05)',
-    borderLeft: '3px solid var(--primary-green)',
-    borderRadius: '0 8px 8px 0',
-    marginLeft: 0,
-    paddingLeft: 21,
-  },
-  mainArea: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'auto',
+    color: 'var(--text-main)',
+    background: 'rgba(34,42,53,0.06)',
+    fontWeight: 600,
   },
   topBar: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '16px 32px',
+    padding: '14px 28px',
     borderBottom: '1px solid var(--border-muted)',
+    background: 'var(--bg-sidebar)',
   },
   searchInput: {
-    background: 'var(--input-bg)',
+    background: '#f9f9f9',
     border: '1px solid var(--border-muted)',
-    color: 'white',
-    padding: '10px 16px',
-    borderRadius: 8,
-    width: 280,
+    color: 'var(--text-main)',
+    padding: '8px 14px',
+    borderRadius: 'var(--radius-sm)',
+    width: 260,
     outline: 'none',
     fontFamily: 'inherit',
+    fontSize: '0.875rem',
   },
   merchantName: {
     color: 'var(--text-muted)',
-    fontSize: '0.9rem',
+    fontSize: '0.85rem',
+    fontWeight: 500,
   },
   content: {
     flex: 1,
-    padding: 24,
+    padding: 28,
   },
 };
 
 export default function MerchantLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div style={styles.container}>
-      <aside style={styles.sidebar}>
-        <NavLink to="/merchant/dashboard" style={styles.logo}>IRA Merchant</NavLink>
+    <div className="sidebar-layout">
+      {/* Backdrop for mobile */}
+      <div
+        className={`sidebar-backdrop${sidebarOpen ? ' open' : ''}`}
+        onClick={() => setSidebarOpen(false)}
+      />
+
+      <aside className={`sidebar-panel${sidebarOpen ? ' open' : ''}`}>
+        <NavLink to="/merchant/dashboard" style={styles.logo} onClick={() => setSidebarOpen(false)}>
+          IRA
+          <span style={styles.logoSub}>Merchant Portal</span>
+        </NavLink>
         <ul style={styles.navList}>
           {navItems.map(item => (
             <li key={item.to}>
@@ -109,6 +109,7 @@ export default function MerchantLayout() {
                   ...styles.navLink,
                   ...(isActive ? styles.navLinkActive : {}),
                 })}
+                onClick={() => setSidebarOpen(false)}
               >
                 <span>{item.icon}</span>
                 {item.label}
@@ -118,9 +119,20 @@ export default function MerchantLayout() {
         </ul>
       </aside>
 
-      <div style={styles.mainArea}>
+      <div className="sidebar-main">
         <header style={styles.topBar}>
-          <input type="text" placeholder="Search..." style={styles.searchInput} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button className="sidebar-toggle" onClick={() => setSidebarOpen(v => !v)} aria-label="Toggle menu">
+              ☰
+            </button>
+            <input
+              type="text"
+              placeholder="Search orders, customers..."
+              style={styles.searchInput}
+              onFocus={e => { e.target.style.borderColor = 'rgba(34,42,53,0.3)'; }}
+              onBlur={e => { e.target.style.borderColor = 'rgba(34,42,53,0.08)'; }}
+            />
+          </div>
           <span style={styles.merchantName}>Merchant Portal</span>
         </header>
         <main style={styles.content}>
