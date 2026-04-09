@@ -1,20 +1,7 @@
-# Stage 1: build
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-
-# Stage 2: serve with nginx
+# Pre-built dist/ is copied into nginx (build runs locally via npm run build)
 FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY dist /usr/share/nginx/html
 # SPA fallback: all routes → index.html
-RUN echo 'server { \
-  listen 8080; \
-  root /usr/share/nginx/html; \
-  index index.html; \
-  location / { try_files $uri $uri/ /index.html; } \
-}' > /etc/nginx/conf.d/default.conf
+RUN printf 'server {\n  listen 8080;\n  root /usr/share/nginx/html;\n  index index.html;\n  location / { try_files $uri $uri/ /index.html; }\n}\n' > /etc/nginx/conf.d/default.conf
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]

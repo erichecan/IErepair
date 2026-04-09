@@ -15,15 +15,26 @@
 | Cloud Run Region | `asia-east1` |
 | 部署方式 | Cloud Run（nginx 容器，纯前端 SPA） |
 
+**线上地址：** https://ierepair-549968261036.asia-east1.run.app
+
 **部署命令（每次发布执行）：**
 ```bash
-gcloud config set project supply-491510
+# 1. 本地构建
 npm run build
+
+# 2. 构建并推送 Docker 镜像
+docker build --platform linux/amd64 \
+  -t asia-east1-docker.pkg.dev/supply-491510/cloud-run-source-deploy/ierepair:latest .
+docker push asia-east1-docker.pkg.dev/supply-491510/cloud-run-source-deploy/ierepair:latest
+
+# 3. 部署到 Cloud Run
 gcloud run deploy ierepair \
-  --source . \
+  --image asia-east1-docker.pkg.dev/supply-491510/cloud-run-source-deploy/ierepair:latest \
   --region asia-east1 \
   --allow-unauthenticated \
-  --project supply-491510
+  --port 8080 \
+  --project supply-491510 \
+  --quiet
 ```
 
 ---
