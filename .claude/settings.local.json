@@ -109,7 +109,24 @@
       "Bash(docker push:*)",
       "Bash(gcloud run:*)",
       "Bash(ls /Volumes/datacenter/ericworkspace/IErepair/ierepair/.env*)",
-      "Bash(python3)"
+      "Bash(python3)",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); print\\(f'Products: {len\\(data\\)}'\\); print\\('Sample:', json.dumps\\(data[0], ensure_ascii=False, indent=2\\)[:600]\\)\")",
+      "Bash(python3 -c ':*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:3005/images/devices/iphone-16-pro.jpg\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:3005/_next/image?url=%2Fimages%2Fdevices%2Fiphone-16-pro.jpg&w=3840&q=75\")",
+      "Bash(curl -s -v \"http://localhost:3005/_next/image?url=%2Fimages%2Fdevices%2Fiphone-16-pro.jpg&w=3840&q=75\")",
+      "Bash(file /Volumes/datacenter/ericworkspace/IErepair/ierepair/public/images/devices/*.jpg)",
+      "Bash(file /Volumes/datacenter/ericworkspace/IErepair/ierepair/public/images/devices/*.jpg /Volumes/datacenter/ericworkspace/IErepair/ierepair/public/images/devices/*.png)",
+      "Bash(file /Volumes/datacenter/ericworkspace/IErepair/ierepair/public/images/devices/*)",
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); print\\(data[0] if isinstance\\(data, list\\) else list\\(data.values\\(\\)\\)[0]\\)\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://e-tech.ie/images/model/20260212-9a5cef9e3bc4480d910af7d07380e001.jpg\")",
+      "Bash(curl -s -I \"https://e-tech.ie/images/model/20260212-9a5cef9e3bc4480d910af7d07380e001.jpg\")",
+      "Bash(curl -s -I https://e-tech.ie/images/model/20260212-9a5cef9e3bc4480d910af7d07380e001.jpg -H 'User-Agent: Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/123.0.0.0 Safari/537.36' -H 'Referer: https://e-tech.ie/' -H 'Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8')",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('title:', d['title']\\); print\\('cover:', d['cover']\\)\")",
+      "Bash(curl -s https://e-tech.ie/images/model/20260212-9a5cef9e3bc4480d910af7d07380e001.jpg -H 'User-Agent: Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/123.0.0.0 Safari/537.36' -H 'Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8' -H 'Accept-Language: en-US,en;q=0.9' -H 'Referer: https://e-tech.ie/model/iPhone-17-Pro-Max' -H 'Cookie: ' -o /tmp/test_img.jpg -w '%{content_type} size=%{size_download}')",
+      "Bash(curl -s \"https://e-tech.ie/\")"
     ]
   }
 }
