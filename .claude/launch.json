@@ -2,10 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "Vite Frontend Dev Server",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 5173
+      "name": "ierepair-worktree",
+      "cwd": "/Volumes/datacenter/ericworkspace/IErepair/.claude/worktrees/recursing-spence/ierepair",
+      "runtimeExecutable": "/bin/bash",
+      "runtimeArgs": ["-c", "export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH && cd /Volumes/datacenter/ericworkspace/IErepair/.claude/worktrees/recursing-spence/ierepair && exec node node_modules/.bin/next dev --port 3004"],
+      "port": 3004,
+      "autoPort": false
     }
   ]
 }

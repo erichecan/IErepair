@@ -1,0 +1,48 @@
+{
+  "id": "A4C8FE24516B4916A6D77530CF5A499F",
+  "title": "iPhone 8 Plus Repair",
+  "cover": "images/model/20260203-747a9661d8f843149f7be30c2dae0d82.jpg",
+  "order": 13,
+  "keyword": "iphone8plus",
+  "description": "<p>iPhone 8 Plus Screen Repair – Fast, Professional &amp; Reliable</p><p>&nbsp;</p><p>Dropped your iPhone and cracked the screen? No worries. At E-Tech, we specialise in professional iPhone screen repair, using high-quality OEM replacement parts to restore your phone to like-new condition.</p><p>&nbsp;</p><p>Why Choose E-Tech Screen Repair?</p><p>• 30-Minute Repair</p><p>• OEM Replacement Parts</p><p>• Expert Technicians</p><p>• 3-Month Warranty</p><p>• No Fix, No Fee</p><p>• Free Diagnostics</p><p>&nbsp;</p><p>OLED Screen Advantages</p><p>• Rich colours &amp; true blacks</p><p>• Slim, original iPhone design</p><p>• Smooth, fast response</p><p>• Power efficient</p><p>• Wide viewing angles</p><p>&nbsp;</p><p>Get Your iPhone Back to Perfect Condition</p><p>&nbsp;</p><p>Bring your iPhone to E-Tech and have it repaired quickly, professionally, and affordably. Walk in today and get your phone back to normal — fast.</p>",
+  "categories": [
+    173
+  ],
+  "options": [
+    {
+      "id": 228,
+      "modelId": null,
+      "name": "LCD Screen replacement",
+      "picture": null,
+      "price": "60"
+    },
+    {
+      "id": 229,
+      "modelId": null,
+      "name": "Battery replacement ",
+      "picture": null,
+      "price": "50"
+    },
+    {
+      "id": 230,
+      "modelId": null,
+      "name": "Charging Port replacement",
+      "picture": null,
+      "price": "50"
+    },
+    {
+      "id": 231,
+      "modelId": null,
+      "name": "Main Camera replacement ",
+      "picture": null,
+      "price": "60"
+    },
+    {
+      "id": 232,
+      "modelId": null,
+      "name": "Water Damage repair",
+      "picture": null,
+      "price": "50"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "id": "17E7093EE6884D298080097308851B44",
+  "title": "iPhone 14 Pro Max Repair",
+  "cover": "images/model/20260130-3af9e59175c441a0afc5d18a6911dea9.jpg",
+  "order": 5,
+  "keyword": "iphone14promax",
+  "description": "<p>iPhone 14 Pro Max Screen Repair – Fast, Professional &amp; Reliable</p><p>&nbsp;</p><p><span style=\"color: black;\">Dropped your iPhone</span></p><p><span style=\"color: black;\">and cracked the screen? No worries. At E-Tech, we specialise in professional</span></p><p><span style=\"color: black;\">iPhone screen repair, using high-quality OEM replacement parts to restore your</span></p><p><span style=\"color: black;\">phone to like-new condition.</span></p><p>&nbsp;</p><p><span style=\"color: black;\">Why Choose E-Tech</span></p><p><span style=\"color: black;\">Screen Repair?</span></p><p><span style=\"color: black;\">• 30-Minute Repair</span></p><p><span style=\"color: black;\">• OEM Replacement</span></p><p><span style=\"color: black;\">Parts</span></p><p><span style=\"color: black;\">• Expert</span></p><p><span style=\"color: black;\">Technicians</span></p><p><span style=\"color: black;\">• 3-Month Warranty</span></p><p><span style=\"color: black;\">• No Fix, No Fee</span></p><p><span style=\"color: black;\">• Free Diagnostics</span></p><p>&nbsp;</p><p><span style=\"color: black;\">OLED Screen</span></p><p><span style=\"color: black;\">Advantages</span></p><p><span style=\"color: black;\">• Rich colours</span></p><p><span style=\"color: black;\">&amp; true blacks</span></p><p><span style=\"color: black;\">• Slim, original</span></p><p><span style=\"color: black;\">iPhone design</span></p><p><span style=\"color: black;\">• Smooth, fast</span></p><p><span style=\"color: black;\">response</span></p><p><span style=\"color: black;\">• Power efficient</span></p><p><span style=\"color: black;\">• Wide viewing</span></p><p><span style=\"color: black;\">angles</span></p><p>&nbsp;</p><p><span style=\"color: black;\">Get Your iPhone</span></p><p><span style=\"color: black;\">Back to Perfect Condition</span></p><p>&nbsp;</p><p><span style=\"color: black;\">Bring your iPhone</span></p><p><span style=\"color: black;\">to E-Tech and have it repaired quickly, professionally, and affordably. Walk in</span></p><p><span style=\"color: black;\">today and get your phone back to normal — fast.</span></p>",
+  "categories": [
+    173
+  ],
+  "options": [
+    {
+      "id": 79,
+      "modelId": null,
+      "name": "LCD Screen replacement",
+      "picture": null,
+      "price": "100"
+    },
+    {
+      "id": 80,
+      "modelId": null,
+      "name": "OLED Screen replacement ",
+      "picture": null,
+      "price": "160"
+    },
+    {
+      "id": 81,
+      "modelId": null,
+      "name": "Battery replacement ",
+      "picture": null,
+      "price": "80"
+    },
+    {
+      "id": 82,
+      "modelId": null,
+      "name": "Charging Port replacement",
+      "picture": null,
+      "price": "110"
+    },
+    {
+      "id": 83,
+      "modelId": null,
+      "name": "Main Camera replacement ",
+      "picture": "images/model/20260130-4a4a53eeea0541ec822c7a72a241f5a2.jpg",
+      "price": "130"
+    },
+    {
+      "id": 84,
+      "modelId": null,
+      "name": "Back Glass replacement ",
+      "picture": null,
+      "price": "100"
+    },
+    {
+      "id": 85,
+      "modelId": null,
+      "name": "Water Damage repair",
+      "picture": null,
+      "price": "50"
+    }
+  ]
+}

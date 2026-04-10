@@ -1,0 +1,62 @@
+{
+  "id": "5B567151389242369757EECACC16D67C",
+  "title": "iPhone 16 Pro Repair",
+  "cover": "images/model/20260130-499c3126bbb54779933327e617e7c7a7.jpg",
+  "order": 3,
+  "keyword": "Iphone16Pro",
+  "description": "<p>iPhone 16 Pro Screen Repair – Fast, Professional &amp; Reliable</p><p><br></p><p>Dropped your iPhone and cracked the screen? No worries. At E-Tech, we specialise in professional iPhone screen repair, using high-quality OEM replacement parts to restore your phone to like-new condition.</p><p><br></p><p>Why Choose E-Tech Screen Repair?</p><p>•\t30-Minute Repair</p><p>•\tOEM Replacement Parts</p><p>•\tExpert Technicians</p><p>•\t3-Month Warranty</p><p>•\tNo Fix, No Fee</p><p>• Free Diagnostics</p><p><br></p><p>OLED Screen Advantages</p><p>•\tRich colours &amp; true blacks</p><p>•\tSlim, original iPhone design</p><p>•\tSmooth, fast response</p><p>•\tPower efficient</p><p>•\tWide viewing angles</p><p><br></p><p>Get Your iPhone Back to Perfect Condition</p><p><br></p><p>Bring your iPhone to E-Tech and have it repaired quickly, professionally, and affordably. Walk in today and get your phone back to normal — fast.</p>",
+  "categories": [
+    173
+  ],
+  "options": [
+    {
+      "id": 15,
+      "modelId": null,
+      "name": "LCD screen replacement",
+      "picture": null,
+      "price": "120"
+    },
+    {
+      "id": 16,
+      "modelId": null,
+      "name": "OLED screen replacement ",
+      "picture": null,
+      "price": "220"
+    },
+    {
+      "id": 17,
+      "modelId": null,
+      "name": "Battery replacement ",
+      "picture": null,
+      "price": "90"
+    },
+    {
+      "id": 18,
+      "modelId": null,
+      "name": "Charging Ports replacement ",
+      "picture": null,
+      "price": "100"
+    },
+    {
+      "id": 19,
+      "modelId": null,
+      "name": "Back Glass replacement ",
+      "picture": null,
+      "price": "120"
+    },
+    {
+      "id": 31,
+      "modelId": null,
+      "name": "Water Damage Repair",
+      "picture": null,
+      "price": "50"
+    },
+    {
+      "id": 64,
+      "modelId": null,
+      "name": "Main Camera replacement ",
+      "picture": "images/model/20260130-f456fa2f2a51457e991153319208050b.jpg",
+      "price": "150"
+    }
+  ]
+}

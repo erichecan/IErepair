@@ -1,0 +1,41 @@
+{
+  "id": "F2DC0B0105BE4FE79AC2CDE7F258B13F",
+  "title": "MacBook Air Screen Repair",
+  "cover": "images/model/20260203-9a8bbd82bb074753a9ac4ee073eb41f7.jpg",
+  "order": 4,
+  "keyword": "macbookairscreem",
+  "description": "<p>MacBook Air Repair – Fast, Professional &amp; Reliable</p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Dropped your MacBook Air</span></p><p><span style=\"color: black;\">and cracked the screen? No worries. At E-Tech, we specialise in professional MacBook screen repair, using high-quality OEM replacement parts to restore your</span></p><p><span style=\"color: black;\">phone to like-new condition.</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Why Choose E-Tech</span></p><p><span style=\"color: black;\">Screen Repair?</span></p><p><span style=\"color: black;\">• 4-24 hours Repair</span></p><p><span style=\"color: black;\">• OEM Replacement Parts</span></p><p><span style=\"color: black;\">• Expert Technicians</span></p><p><span style=\"color: black;\">• 3-Month Warranty</span></p><p><span style=\"color: black;\">• No Fix, No Fee</span></p><p><span style=\"color: black;\">• Free Diagnostics</span></p><p>&nbsp;</p><p>&nbsp;<span style=\"color: black;\">Get Your MacBook</span></p><p><span style=\"color: black;\">Back to Perfect Condition</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Bring your Macbook to</span></p><p><span style=\"color: black;\">E-Tech and have it repaired quickly, professionally, and affordably. </span></p><p><span style=\"color: black;\">Walk in today and get your phone back to normal — fast.</span></p>",
+  "categories": [
+    181
+  ],
+  "options": [
+    {
+      "id": 260,
+      "modelId": null,
+      "name": "MacBook Air 2013-2017 (A1465,A1466) screen replacement ",
+      "picture": "images/model/20260203-0f43a37aeaf549dabea06db86e644160.jpg",
+      "price": "220"
+    },
+    {
+      "id": 261,
+      "modelId": null,
+      "name": "MacBook Air 2018-2020(A1932,A2179,A2337)screen replacement",
+      "picture": "images/model/20260203-2d20dc380c46460c8e6080bc760349a0.jpg",
+      "price": "380"
+    },
+    {
+      "id": 295,
+      "modelId": null,
+      "name": "MacBook Air 13' 2022-2025(A2681, A3113, A3240)screen replacement ",
+      "picture": "images/model/20260205-ff7bc98c656a4a44b099408c8e8a1dd2.jpg",
+      "price": "480"
+    },
+    {
+      "id": 296,
+      "modelId": null,
+      "name": "MacBook Air 15'2023-2025(A2941, A3114, A3241)screen replacement",
+      "picture": "images/model/20260205-00c197ec0c924930ac210d8affb59ee5.jpg",
+      "price": "580"
+    }
+  ]
+}

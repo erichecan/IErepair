@@ -31,7 +31,7 @@ export const merchants = pgTable("merchants", {
   createdAt:     timestamp("created_at").defaultNow().notNull(),
   updatedAt:     timestamp("updated_at").defaultNow().notNull(),
 }, (t) => [
-  index("idx_merchants_location").using("gist").on(t.location),
+  index("idx_merchants_location").on(t.location),
   index("idx_merchants_status").on(t.status),
   index("idx_merchants_city").on(t.city),
 ]);

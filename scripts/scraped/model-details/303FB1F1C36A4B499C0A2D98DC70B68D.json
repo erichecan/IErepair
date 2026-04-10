@@ -1,0 +1,27 @@
+{
+  "id": "303FB1F1C36A4B499C0A2D98DC70B68D",
+  "title": "iPod Touch Repair",
+  "cover": "images/model/20260203-af46f1a0c6c24fafaf8ac0b2b30ec0fc.png",
+  "order": 2,
+  "keyword": "ipodtouch",
+  "description": "<p>iPod Touch Screen Repair – Fast, Professional &amp; Reliable</p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Dropped your iPod Touch</span></p><p><span style=\"color: black;\">and cracked the screen? No worries. At E-Tech, we specialise in professional</span></p><p><span style=\"color: black;\">iPhone screen repair, using high-quality OEM replacement parts to restore your</span></p><p><span style=\"color: black;\">phone to like-new condition.</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Why Choose E-Tech</span></p><p><span style=\"color: black;\">Screen Repair?</span></p><p><span style=\"color: black;\">• 2-4 hours Repair</span></p><p><span style=\"color: black;\">• OEM Replacement</span></p><p><span style=\"color: black;\">Parts</span></p><p><span style=\"color: black;\">• Expert</span></p><p><span style=\"color: black;\">Technicians</span></p><p><span style=\"color: black;\">• 3-Month Warranty</span></p><p><span style=\"color: black;\">• No Fix, No Fee</span></p><p><span style=\"color: black;\">• Free Diagnostics</span></p><p>&nbsp;</p><p>&nbsp;</p><p><span style=\"color: black;\">Get Your iPhone</span></p><p><span style=\"color: black;\">Back to Perfect Condition</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Bring your iPod Touch to</span></p><p><span style=\"color: black;\">E-Tech and have it repaired quickly, professionally, and affordably. Walk in</span></p><p><span style=\"color: black;\">today and get your phone back to normal — fast.</span></p>",
+  "categories": [
+    180
+  ],
+  "options": [
+    {
+      "id": 258,
+      "modelId": null,
+      "name": "iPod touch 5/6/7th gen  screen replacement ",
+      "picture": "images/model/20260203-d9a993a57ad941ebbabbaf5487695336.jpg",
+      "price": "80"
+    },
+    {
+      "id": 259,
+      "modelId": null,
+      "name": "iPod touch 5/6/7th gen  Battery replacement ",
+      "picture": "images/model/20260203-8776c3131de34fc697717083384dc45c.jpg",
+      "price": "70"
+    }
+  ]
+}

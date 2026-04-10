@@ -1,0 +1,48 @@
+{
+  "id": "30328EC3F51D4AFBA75BC8BB0ED69234",
+  "title": "Nintendo Switch Repair",
+  "cover": "images/model/20260212-3cc1e1e18468416bb1eef806bbd07649.png",
+  "order": 0,
+  "keyword": "nintendoswitchrepair",
+  "description": "<h3>Nintendo Switch Repair – Fast, Professional &amp; Reliable</h3><p>Having issues with your Nintendo Switch? Screen damage, charging problems, or no power?</p><p> No worries. At <strong>E-Tech</strong>, we specialise in professional <strong>Nintendo Switch repairs</strong>, using high-quality replacement parts to restore your console to perfect working condition.</p><h4>Why Choose E-Tech?</h4><ul><li><strong>Fast Turnaround Repairs</strong></li><li><strong>High-Quality Replacement Parts</strong></li><li><strong>Expert Console Repair Technicians</strong></li><li><strong>3-Month Warranty</strong></li><li><strong>No Fix, No Fee</strong></li><li><strong>Free Diagnostics</strong></li></ul><h4>Get Your Nintendo Switch Back to Perfect Condition</h4><p>Bring your Nintendo Switch to <strong>E-Tech</strong> for fast, reliable, and affordable repair.</p><p> Walk in today and get your console back to gaming — fast.</p>",
+  "categories": [
+    732
+  ],
+  "options": [
+    {
+      "id": 568,
+      "modelId": null,
+      "name": "LCD replacement ",
+      "picture": null,
+      "price": "120"
+    },
+    {
+      "id": 569,
+      "modelId": null,
+      "name": "Battery replacement ",
+      "picture": null,
+      "price": "90"
+    },
+    {
+      "id": 570,
+      "modelId": null,
+      "name": "Touch screen replacement ",
+      "picture": null,
+      "price": "80"
+    },
+    {
+      "id": 571,
+      "modelId": null,
+      "name": "Charging port replacement ",
+      "picture": null,
+      "price": "95"
+    },
+    {
+      "id": 572,
+      "modelId": null,
+      "name": "Card reader replacement ",
+      "picture": null,
+      "price": "95"
+    }
+  ]
+}

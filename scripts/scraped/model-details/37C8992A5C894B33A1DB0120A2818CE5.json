@@ -1,0 +1,48 @@
+{
+  "id": "37C8992A5C894B33A1DB0120A2818CE5",
+  "title": "iPhone SE(2020) Repair",
+  "cover": "images/model/20260203-0bf6e894ebc649e9be563f20b254a4e4.jpg",
+  "order": 12,
+  "keyword": "iphonese2020",
+  "description": "<p>iPhone SE(2020) Screen Repair – Fast, Professional &amp; Reliable</p><p>&nbsp;</p><p>Dropped your iPhone and cracked the screen? No worries. At E-Tech, we specialise in professional iPhone screen repair, using high-quality OEM replacement parts to restore your phone to like-new condition.</p><p>&nbsp;</p><p>Why Choose E-Tech Screen Repair?</p><p>• 30-Minute Repair</p><p>• OEM Replacement Parts</p><p>• Expert Technicians</p><p>• 3-Month Warranty</p><p>• No Fix, No Fee</p><p>• Free Diagnostics</p><p>&nbsp;</p><p>OLED Screen Advantages</p><p>• Rich colours &amp; true blacks</p><p>• Slim, original iPhone design</p><p>• Smooth, fast response</p><p>• Power efficient</p><p>• Wide viewing angles</p><p>&nbsp;</p><p>Get Your iPhone Back to Perfect Condition</p><p>&nbsp;</p><p>Bring your iPhone to E-Tech and have it repaired quickly, professionally, and affordably. Walk in today and get your phone back to normal — fast.</p>",
+  "categories": [
+    173
+  ],
+  "options": [
+    {
+      "id": 213,
+      "modelId": null,
+      "name": "LCD Screen replacement",
+      "picture": null,
+      "price": "60"
+    },
+    {
+      "id": 214,
+      "modelId": null,
+      "name": "Battery replacement ",
+      "picture": null,
+      "price": "45"
+    },
+    {
+      "id": 215,
+      "modelId": null,
+      "name": "Charging Port replacement",
+      "picture": null,
+      "price": "40"
+    },
+    {
+      "id": 216,
+      "modelId": null,
+      "name": "Main Camera replacement ",
+      "picture": "images/model/20260203-b83a64bf62fe485caddf3f681c32909f.png",
+      "price": "50"
+    },
+    {
+      "id": 217,
+      "modelId": null,
+      "name": "Water Damage repair",
+      "picture": null,
+      "price": "50"
+    }
+  ]
+}

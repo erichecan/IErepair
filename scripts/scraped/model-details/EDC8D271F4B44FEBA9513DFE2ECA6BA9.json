@@ -1,0 +1,55 @@
+{
+  "id": "EDC8D271F4B44FEBA9513DFE2ECA6BA9",
+  "title": "iPhone XR Repair",
+  "cover": "images/model/20260203-21f6c42633ea47ee982621e9ac27a9e2.jpg",
+  "order": 9,
+  "keyword": "iphonexr",
+  "description": "<p>iPhone XR Screen Repair – Fast, Professional &amp; Reliable</p><p>&nbsp;</p><p>Dropped your iPhone and cracked the screen? No worries. At E-Tech, we specialise in professional iPhone screen repair, using high-quality OEM replacement parts to restore your phone to like-new condition.</p><p>&nbsp;</p><p>Why Choose E-Tech Screen Repair?</p><p>• 30-Minute Repair</p><p>• OEM Replacement Parts</p><p>• Expert Technicians</p><p>• 3-Month Warranty</p><p>• No Fix, No Fee</p><p>• Free Diagnostics</p><p>&nbsp;</p><p>&nbsp;</p><p>Get Your iPhone Back to Perfect Condition</p><p>&nbsp;</p><p>Bring your iPhone to E-Tech and have it repaired quickly, professionally, and affordably. Walk in today and get your phone back to normal — fast.</p>",
+  "categories": [
+    173
+  ],
+  "options": [
+    {
+      "id": 186,
+      "modelId": null,
+      "name": "LCD Screen replacement",
+      "picture": "images/model/20260203-e110f6c8923d42d98f6772cbc511605b.jpg",
+      "price": "60"
+    },
+    {
+      "id": 187,
+      "modelId": null,
+      "name": "Battery replacement ",
+      "picture": null,
+      "price": "60"
+    },
+    {
+      "id": 188,
+      "modelId": null,
+      "name": "Charging Port replacement",
+      "picture": null,
+      "price": "60"
+    },
+    {
+      "id": 189,
+      "modelId": null,
+      "name": "Main Camera replacement ",
+      "picture": "images/model/20260203-f022c08070f145bf92582c72d1e778e1.jpg",
+      "price": "60"
+    },
+    {
+      "id": 190,
+      "modelId": null,
+      "name": "Back Glass replacement ",
+      "picture": null,
+      "price": "80"
+    },
+    {
+      "id": 191,
+      "modelId": null,
+      "name": "Water Damage repair",
+      "picture": null,
+      "price": "50"
+    }
+  ]
+}

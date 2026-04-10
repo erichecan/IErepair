@@ -18,7 +18,7 @@ function getNext14Days() {
 const mockSlots = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00'];
 const unavailable = new Set(['12:00', '14:00', '16:30']);
 
-const STEPS = ['Date', 'Time', 'Details', 'Confirm'];
+const STEPS = ['Date & Time', 'Details', 'Confirm'];
 
 const s = {
   stepWrap: {
@@ -321,7 +321,7 @@ export default function BookingFlow() {
         <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.03em' }}>€{service.price}</div>
       </div>
 
-      {/* Step 1 — Date */}
+      {/* Step 1 — Date & Time */}
       {step === 1 && (
         <div>
           <div style={s.sectionLabel}>Select a Date</div>
@@ -330,52 +330,46 @@ export default function BookingFlow() {
               const iso = formatDateISO(d);
               const active = selectedDate && formatDateISO(selectedDate) === iso;
               return (
-                <div key={iso} style={s.datePill(active, false)} onClick={() => setSelectedDate(d)}>
+                <div key={iso} style={s.datePill(active, false)} onClick={() => { setSelectedDate(d); setSelectedTime(null); }}>
                   <div style={s.dateDow(active)}>{DAYS[d.getDay()]}</div>
                   <div style={s.dateNum(active)}>{d.getDate()}</div>
                 </div>
               );
             })}
           </div>
+
+          {selectedDate && (
+            <>
+              <div style={{ ...s.sectionLabel, marginTop: 4 }}>
+                Select a Time
+                <span style={{ fontSize: '0.78rem', fontWeight: 500, textTransform: 'none', letterSpacing: 0, marginLeft: 8 }}>
+                  — {formatDate(selectedDate)}
+                </span>
+              </div>
+              <div style={s.timeGrid}>
+                {mockSlots.map((t) => {
+                  const disabled = unavailable.has(t);
+                  return (
+                    <div key={t} style={s.timePill(selectedTime === t, disabled)} onClick={() => !disabled && setSelectedTime(t)}>
+                      {t}
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
+
           <div style={s.btnRow}>
             <button style={s.backBtn} onClick={() => navigate(-1)}>Back</button>
-            <button style={s.nextBtn(!selectedDate)} disabled={!selectedDate} onClick={() => selectedDate && setStep(2)}>
+            <button style={s.nextBtn(!selectedDate || !selectedTime)} disabled={!selectedDate || !selectedTime} onClick={() => (selectedDate && selectedTime) && setStep(2)}>
               Continue
             </button>
           </div>
         </div>
       )}
 
-      {/* Step 2 — Time */}
+      {/* Step 2 — Details */}
       {step === 2 && (
-        <div>
-          <div style={s.sectionLabel}>Select a Time</div>
-          {selectedDate && (
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: 14 }}>
-              {formatDate(selectedDate)}
-            </div>
-          )}
-          <div style={s.timeGrid}>
-            {mockSlots.map((t) => {
-              const disabled = unavailable.has(t);
-              return (
-                <div key={t} style={s.timePill(selectedTime === t, disabled)} onClick={() => !disabled && setSelectedTime(t)}>
-                  {t}
-                </div>
-              );
-            })}
-          </div>
-          <div style={s.btnRow}>
-            <button style={s.backBtn} onClick={() => setStep(1)}>Back</button>
-            <button style={s.nextBtn(!selectedTime)} disabled={!selectedTime} onClick={() => selectedTime && setStep(3)}>
-              Continue
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Step 3 — Details */}
-      {step === 3 && (
         <div>
           <div style={s.sectionLabel}>Your Details</div>
           <div style={s.formGroup}>
@@ -412,16 +406,16 @@ export default function BookingFlow() {
             />
           </div>
           <div style={s.btnRow}>
-            <button style={s.backBtn} onClick={() => setStep(2)}>Back</button>
-            <button style={s.nextBtn(!customerName || !customerPhone)} disabled={!customerName || !customerPhone} onClick={() => (customerName && customerPhone) && setStep(4)}>
+            <button style={s.backBtn} onClick={() => setStep(1)}>Back</button>
+            <button style={s.nextBtn(!customerName || !customerPhone)} disabled={!customerName || !customerPhone} onClick={() => (customerName && customerPhone) && setStep(3)}>
               Review Booking
             </button>
           </div>
         </div>
       )}
 
-      {/* Step 4 — Confirm */}
-      {step === 4 && (
+      {/* Step 3 — Confirm */}
+      {step === 3 && (
         <div>
           <div style={s.sectionLabel}>Review & Pay</div>
 
@@ -449,7 +443,7 @@ export default function BookingFlow() {
           {error && <div style={s.error}>{error}</div>}
 
           <div style={s.btnRow}>
-            <button style={s.backBtn} onClick={() => setStep(3)}>Back</button>
+            <button style={s.backBtn} onClick={() => setStep(2)}>Back</button>
             <button style={s.nextBtn(submitting)} disabled={submitting} onClick={handleSubmit}>
               {submitting ? 'Processing...' : `Pay Deposit €${deposit}`}
             </button>

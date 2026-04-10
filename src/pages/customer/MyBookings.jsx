@@ -143,6 +143,9 @@ export default function MyBookings() {
           <div style={s.title}>My Bookings</div>
           <div style={s.subtitle}>Track and manage your repair appointments</div>
         </div>
+        <button className="btn btn-primary" onClick={() => navigate('/')}>
+          + New Booking
+        </button>
       </div>
 
       <div className="tab-bar" style={{ marginBottom: 20 }}>

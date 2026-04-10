@@ -1,0 +1,55 @@
+{
+  "id": "1C38528EC0DE434E8D64DE7916AC2DF7",
+  "title": "iPad Air Repair",
+  "cover": "images/model/20260203-d96040cdf0ca46598cce58155c3b3c58.jpg",
+  "order": 6,
+  "keyword": "ipadair23456",
+  "description": "<p>iPad Screen Repair – Fast, Professional &amp; Reliable</p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Dropped your iPad</span></p><p><span style=\"color: black;\">and cracked the screen? No worries. At E-Tech, we specialise in professional</span></p><p><span style=\"color: black;\">iPhone screen repair, using high-quality OEM replacement parts to restore your</span></p><p><span style=\"color: black;\">phone to like-new condition.</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Why Choose E-Tech</span></p><p><span style=\"color: black;\">Screen Repair?</span></p><p><span style=\"color: black;\">• 2-4 hours Repair</span></p><p><span style=\"color: black;\">• OEM Replacement</span></p><p><span style=\"color: black;\">Parts</span></p><p><span style=\"color: black;\">• Expert</span></p><p><span style=\"color: black;\">Technicians</span></p><p><span style=\"color: black;\">• 3-Month Warranty</span></p><p><span style=\"color: black;\">• No Fix, No Fee</span></p><p><span style=\"color: black;\">• Free Diagnostics</span></p><p>&nbsp;</p><p>&nbsp;</p><p><span style=\"color: black;\">Get Your iPhone</span></p><p><span style=\"color: black;\">Back to Perfect Condition</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Bring your iPad to</span></p><p><span style=\"color: black;\">E-Tech and have it repaired quickly, professionally, and affordably. Walk in</span></p><p><span style=\"color: black;\">today and get your phone back to normal — fast.</span></p>",
+  "categories": [
+    178
+  ],
+  "options": [
+    {
+      "id": 240,
+      "modelId": null,
+      "name": "iPad Air 2/3 LCD+Digitizer replacement",
+      "picture": "images/model/20260203-95fe8d6a66de41058f6e1890ba1124c3.jpg",
+      "price": "160"
+    },
+    {
+      "id": 241,
+      "modelId": null,
+      "name": "iPad Air 2/3 Battery replacement",
+      "picture": "images/model/20260203-4302e72b5cb249ca86e72e575e8c55e3.jpg",
+      "price": "110"
+    },
+    {
+      "id": 242,
+      "modelId": null,
+      "name": "iPad Air 4/5 LCD+Digitizer replacement",
+      "picture": "images/model/20260203-0dcb4adeab8f4e16a0ba3f8ab9606ad9.jpg",
+      "price": "195"
+    },
+    {
+      "id": 243,
+      "modelId": null,
+      "name": "iPad Air 4/5 Battery replacement",
+      "picture": "images/model/20260203-a16f9090603a43aa898f6954a12540fc.jpg",
+      "price": "120"
+    },
+    {
+      "id": 244,
+      "modelId": null,
+      "name": "iPad Air 11' LCD+Digitizer replacement(A2899, A2903)",
+      "picture": "images/model/20260203-570ff6e7dd124816b1bc18a9030474b6.png",
+      "price": "280"
+    },
+    {
+      "id": 245,
+      "modelId": null,
+      "name": "iPad Air 13'LCD+Digitizer replacement(A2899, A2903)",
+      "picture": "images/model/20260203-d34211cf7ec44aea952b558aacb350d8.png",
+      "price": "300"
+    }
+  ]
+}

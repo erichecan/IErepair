@@ -1,0 +1,41 @@
+{
+  "id": "5C4474913BBA4B70B7407E894C533A9E",
+  "title": "iPad Pro 12.9' Repair",
+  "cover": "images/model/20260203-5e886a2334a34a5588b922905f79e30f.jpg",
+  "order": 8,
+  "keyword": "ipad12.9",
+  "description": "<p>iPad Screen Repair – Fast, Professional &amp; Reliable</p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Dropped your iPad</span></p><p><span style=\"color: black;\">and cracked the screen? No worries. At E-Tech, we specialise in professional</span></p><p><span style=\"color: black;\">iPhone screen repair, using high-quality OEM replacement parts to restore your</span></p><p><span style=\"color: black;\">phone to like-new condition.</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Why Choose E-Tech</span></p><p><span style=\"color: black;\">Screen Repair?</span></p><p><span style=\"color: black;\">• 2-4 hours Repair</span></p><p><span style=\"color: black;\">• OEM Replacement</span></p><p><span style=\"color: black;\">Parts</span></p><p><span style=\"color: black;\">• Expert</span></p><p><span style=\"color: black;\">Technicians</span></p><p><span style=\"color: black;\">• 3-Month Warranty</span></p><p><span style=\"color: black;\">• No Fix, No Fee</span></p><p><span style=\"color: black;\">• Free Diagnostics</span></p><p>&nbsp;</p><p>&nbsp;</p><p><span style=\"color: black;\">Get Your iPhone</span></p><p><span style=\"color: black;\">Back to Perfect Condition</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Bring your iPad to</span></p><p><span style=\"color: black;\">E-Tech and have it repaired quickly, professionally, and affordably. Walk in</span></p><p><span style=\"color: black;\">today and get your phone back to normal — fast.</span></p><p class=\"ql-align-justify\">&nbsp;</p><p><br></p>",
+  "categories": [
+    178
+  ],
+  "options": [
+    {
+      "id": 250,
+      "modelId": null,
+      "name": "iPad Pro 12.9' 3/4th gen LCD+Digitizer replacement",
+      "picture": "images/model/20260203-4c9ce72a67904761a9fd501fd2078acc.jpg",
+      "price": "279"
+    },
+    {
+      "id": 251,
+      "modelId": null,
+      "name": "iPad Pro 12.9' 3/4th gen Battery replacement",
+      "picture": "images/model/20260203-731e40599d594592bc8d33ea124709cc.jpg",
+      "price": "160"
+    },
+    {
+      "id": 252,
+      "modelId": null,
+      "name": "iPad Pro 12.9' 5/6th gen LCD+Digitizer replacement",
+      "picture": "images/model/20260203-b8af376f3005450ba470e1ec733c19c3.jpg",
+      "price": "349"
+    },
+    {
+      "id": 253,
+      "modelId": null,
+      "name": "iPad Pro 12.9' 5/6th gen Battery replacement",
+      "picture": "images/model/20260203-08b846124ef7447596b182a3c113f7be.jpg",
+      "price": "180"
+    }
+  ]
+}

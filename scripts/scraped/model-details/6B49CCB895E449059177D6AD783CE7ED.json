@@ -1,0 +1,20 @@
+{
+  "id": "6B49CCB895E449059177D6AD783CE7ED",
+  "title": "Mac OS & Windows System Install",
+  "cover": "images/model/20260209-2fe088195d9246679182d1bd24d07b9d.jpeg",
+  "order": 5,
+  "keyword": "MacOS&WindowsSystemInstall",
+  "description": "<p>SSD Upgrade with OS Reinstallation &amp; Data Migration</p><p>At E-Tech, we offer SSD replacement and upgrade services with optional operating system reinstallation and data migration, carried out using structured procedures to ensure data integrity and system stability.</p><p>Before installation, our technicians evaluate system compatibility and storage configuration. Data is transferred using verified cloning or manual migration methods, depending on drive condition and system requirements.</p><p class=\"ql-align-center\"><br></p><p>Service Options</p><p>• Fresh operating system installation (Windows / macOS)</p><p>• Full system cloning from old drive to SSD</p><p>• Selective data migration (documents, photos, user files)</p><p>• Boot configuration and system optimisation after installation</p><p class=\"ql-align-center\"><br></p><p>Data Handling &amp; Safety</p><p>• Pre-upgrade storage health assessment</p><p>• Secure data transfer procedures</p><p>• Verification of data integrity after migration</p><p>• Original drive retained until confirmation is completed</p><p class=\"ql-align-center\"><br></p><p>Technical Notes</p><p>• OS reinstall and data migration are optional services</p><p>• Service time may vary depending on data size and drive condition</p><p>• Severely damaged drives may limit data recovery or cloning</p><p class=\"ql-align-center\"><br></p><p>Professional SSD Upgrade You Can Rely On</p><p>Bring your laptop or desktop computer to E-Tech for a complete SSD upgrade solution — including system installation and secure data migration — for faster, more reliable performance.</p><p>&nbsp;</p>",
+  "categories": [
+    777
+  ],
+  "options": [
+    {
+      "id": 551,
+      "modelId": null,
+      "name": "Mac OS & Windows System Install",
+      "picture": null,
+      "price": "70"
+    }
+  ]
+}

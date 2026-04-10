@@ -1,0 +1,41 @@
+{
+  "id": "9DBC3EAB1A704EDCA8CB597324EA0132",
+  "title": "Samsung S22 Ultra Repair",
+  "cover": "images/model/20260205-259323e7910b4c658da5188cbeeef681.jpg",
+  "order": 18,
+  "keyword": "samsungs22ultra",
+  "description": "<p>Samsung Screen Repair – Fast, Professional &amp; Reliable</p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Dropped your Samsung phone</span></p><p><span style=\"color: black;\">and cracked the screen? No worries. At E-Tech, we specialise in</span></p><p><span style=\"color: black;\">professional</span></p><p><span style=\"color: black;\">Samsung screen repair, using high-quality OEM replacement parts to</span></p><p><span style=\"color: black;\">restore your</span></p><p><span style=\"color: black;\">phone to like-new condition.</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Why Choose E-Tech</span></p><p><span style=\"color: black;\">Screen Repair?</span></p><p><span style=\"color: black;\">• 2-4 hours Repair</span></p><p><span style=\"color: black;\">• OEM Replacement</span> Parts</p><p>• Expert Technicians</p><p>• 3-Month Warranty</p><p><span style=\"color: black;\">• No Fix, No Fee</span></p><p><span style=\"color: black;\">• Free Diagnostics</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">&nbsp;Get Your</span></p><p><span style=\"color: black;\">Samsung phone</span></p><p>Back to Perfect Condition</p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Bring your Samsung phone to</span></p><p><span style=\"color: black;\">E-Tech and have it repaired quickly, professionally, and</span></p><p><span style=\"color: black;\">affordably. Walk in today and get your phone back to </span></p><p><span style=\"color: black;\">normal — fast.</span></p>",
+  "categories": [
+    194
+  ],
+  "options": [
+    {
+      "id": 422,
+      "modelId": null,
+      "name": "Screen replacement",
+      "picture": null,
+      "price": "190"
+    },
+    {
+      "id": 423,
+      "modelId": null,
+      "name": "Battery replacement",
+      "picture": null,
+      "price": "70"
+    },
+    {
+      "id": 424,
+      "modelId": null,
+      "name": "Charging port replacement",
+      "picture": null,
+      "price": "70"
+    },
+    {
+      "id": 425,
+      "modelId": null,
+      "name": "Back glass replacement",
+      "picture": null,
+      "price": "50"
+    }
+  ]
+}

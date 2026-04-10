@@ -2,16 +2,24 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Smartphone, Battery, Shield, Headphones, Cable } from "lucide-react";
+import { Search, Smartphone, Battery, Shield, Headphones, Cable, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 const CATEGORIES = [
-  { label: "Screen Repair",    icon: <Smartphone size={28} />,  q: "screen repair" },
-  { label: "Battery",          icon: <Battery size={28} />,     q: "battery" },
-  { label: "Accessories",      icon: <Shield size={28} />,      q: "case" },
-  { label: "Earphones",        icon: <Headphones size={28} />,  q: "earphone" },
-  { label: "Cables",           icon: <Cable size={28} />,       q: "cable" },
+  { label: "Screen Repair",  icon: <Smartphone size={28} />, q: "screen repair" },
+  { label: "Battery",        icon: <Battery    size={28} />, q: "battery" },
+  { label: "Accessories",    icon: <Shield     size={28} />, q: "case" },
+  { label: "Earphones",      icon: <Headphones size={28} />, q: "earphone" },
+  { label: "Cables",         icon: <Cable      size={28} />, q: "cable" },
+  { label: "Other Repairs",  icon: <Wrench     size={28} />, q: "repair" },
+];
+
+const HOW_IT_WORKS = [
+  { step: "1", title: "Search",  desc: "Enter your Eircode to find nearby shops" },
+  { step: "2", title: "Compare", desc: "Compare prices, ratings and availability" },
+  { step: "3", title: "Book",    desc: "Pay a 20% deposit to secure your slot" },
+  { step: "4", title: "Repair",  desc: "Bring your device and pay the balance" },
 ];
 
 export default function HomePage() {
@@ -27,20 +35,23 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Hero */}
-      <div className="px-5 pt-14 pb-8 space-y-1">
-        <div className="text-2xl font-heading font-bold text-primary">IERepair</div>
-        <h1 className="text-3xl font-heading font-bold leading-tight">
-          Find repairs &<br />accessories near you
+    <div className="flex flex-col min-h-[calc(100vh-3.5rem)]">
+
+      {/* ── Hero ─────────────────────────────────────────────── */}
+      <div className="px-5 md:px-8 pt-14 md:pt-16 pb-8 space-y-2 md:space-y-3">
+        {/* Brand name only on mobile (desktop shows it in header) */}
+        <div className="text-2xl font-heading font-bold text-primary md:hidden">IERepair</div>
+        <h1 className="text-3xl md:text-5xl font-heading font-bold leading-tight">
+          Find repairs &amp; accessories<br className="hidden md:block" />
+          {" "}near you
         </h1>
-        <p className="text-muted-foreground text-sm">
-          Compare prices from local repair shops across Ireland
+        <p className="text-muted-foreground text-sm md:text-base max-w-md">
+          Compare prices from local repair shops across Ireland. Book online, pay a 20% deposit.
         </p>
       </div>
 
-      {/* Search box */}
-      <div className="px-5 space-y-3">
+      {/* ── Search box ───────────────────────────────────────── */}
+      <div className="px-5 md:px-8 space-y-3 md:max-w-2xl">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
           <Input
@@ -48,7 +59,7 @@ export default function HomePage() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="pl-9 bg-secondary border-border"
+            className="pl-9 bg-secondary border-border h-11"
           />
         </div>
         <div className="flex gap-2">
@@ -56,56 +67,56 @@ export default function HomePage() {
             placeholder="Eircode (D01 A234)"
             value={eircode}
             onChange={(e) => setEircode(e.target.value.toUpperCase())}
-            className="bg-secondary border-border flex-1"
+            className="bg-secondary border-border flex-1 h-11"
           />
-          <Button onClick={handleSearch} className="bg-primary text-primary-foreground px-5 shrink-0">
+          <Button onClick={handleSearch} className="bg-primary text-primary-foreground px-6 shrink-0 h-11">
             Search
           </Button>
         </div>
       </div>
 
-      {/* Category grid */}
-      <div className="px-5 mt-8">
-        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-          Browse by Category
-        </h2>
-        <div className="grid grid-cols-3 gap-3">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.label}
-              onClick={() => router.push(`/search?q=${encodeURIComponent(cat.q)}`)}
-              className="flex flex-col items-center gap-2 p-4 rounded-xl bg-card border border-border hover:border-primary/50 hover:bg-card/80 transition-all"
-            >
-              <span className="text-primary">{cat.icon}</span>
-              <span className="text-xs font-medium text-center leading-tight">{cat.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* ── Desktop two-column section ───────────────────────── */}
+      <div className="md:grid md:grid-cols-2 md:gap-12 md:px-8 md:mt-12">
 
-      {/* How it works */}
-      <div className="px-5 mt-10 pb-6">
-        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">
-          How it works
-        </h2>
-        <div className="space-y-4">
-          {[
-            { step: "1", title: "Search", desc: "Enter your Eircode to find nearby shops" },
-            { step: "2", title: "Compare", desc: "Compare prices, ratings and availability" },
-            { step: "3", title: "Book",   desc: "Pay a 20% deposit to secure your slot" },
-            { step: "4", title: "Repair", desc: "Bring your device and pay the balance" },
-          ].map((item) => (
-            <div key={item.step} className="flex items-start gap-4">
-              <div className="w-8 h-8 rounded-full bg-primary/15 text-primary text-sm font-bold flex items-center justify-center shrink-0">
-                {item.step}
-              </div>
-              <div>
-                <div className="font-semibold text-sm">{item.title}</div>
-                <div className="text-muted-foreground text-xs">{item.desc}</div>
-              </div>
-            </div>
-          ))}
+        {/* Categories */}
+        <div className="px-5 md:px-0 mt-8 md:mt-0">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+            Browse by Category
+          </h2>
+          <div className="grid grid-cols-3 gap-3">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.label}
+                onClick={() => router.push(`/search?q=${encodeURIComponent(cat.q)}`)}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-card border border-border hover:border-primary/50 hover:bg-secondary/60 transition-all"
+              >
+                <span className="text-primary">{cat.icon}</span>
+                <span className="text-xs font-medium text-center leading-tight">{cat.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
+
+        {/* How it works */}
+        <div className="px-5 md:px-0 mt-10 md:mt-0 pb-6">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">
+            How it works
+          </h2>
+          <div className="space-y-4">
+            {HOW_IT_WORKS.map((item) => (
+              <div key={item.step} className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-primary/15 text-primary text-sm font-bold flex items-center justify-center shrink-0">
+                  {item.step}
+                </div>
+                <div>
+                  <div className="font-semibold text-sm">{item.title}</div>
+                  <div className="text-muted-foreground text-xs">{item.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </div>
   );
