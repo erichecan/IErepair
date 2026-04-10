@@ -16,6 +16,10 @@ ENV DATABASE_URL=postgresql://placeholder:placeholder@placeholder/placeholder
 ENV AUTH_SECRET=placeholder-build-secret
 ENV NEXTAUTH_URL=https://ierepair-549968261036.asia-east1.run.app
 ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_placeholder
+ENV STRIPE_SECRET_KEY=sk_test_placeholder
+ENV STRIPE_WEBHOOK_SECRET=whsec_placeholder
+ENV UPSTASH_REDIS_REST_URL=https://placeholder.upstash.io
+ENV UPSTASH_REDIS_REST_TOKEN=placeholder_token
 
 RUN npm run build
 
