@@ -10,3 +10,4 @@ ierepair/node_modules
 ierepair/.next
 playwright-report
 test-results
+scripts/scraped
