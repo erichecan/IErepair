@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle2, QrCode } from "lucide-react";
@@ -14,7 +14,7 @@ interface Booking {
   createdAt: string;
 }
 
-export default function BookingDetailPage() {
+function BookingDetailPageInner() {
   const { id }       = useParams<{ id: string }>();
   const router       = useRouter();
   const searchParams = useSearchParams();
@@ -130,5 +130,13 @@ export default function BookingDetailPage() {
         </Button>
       )}
     </div>
+  );
+}
+
+export default function BookingDetailPage() {
+  return (
+    <Suspense>
+      <BookingDetailPageInner />
+    </Suspense>
   );
 }

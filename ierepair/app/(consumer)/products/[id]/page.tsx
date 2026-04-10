@@ -45,11 +45,11 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
       <div className="px-4 mt-4 space-y-2">
         <Badge variant="secondary" className="text-xs capitalize">{product.type as string}</Badge>
         <h1 className="text-xl font-heading font-bold">{product.name as string}</h1>
-        {product.compatibility && (
-          <p className="text-xs text-muted-foreground">Compatible: {product.compatibility as string}</p>
+        {product.compatibility != null && (
+          <p className="text-xs text-muted-foreground">Compatible: {String(product.compatibility)}</p>
         )}
-        {product.description && (
-          <p className="text-sm text-muted-foreground mt-2">{product.description as string}</p>
+        {product.description != null && (
+          <p className="text-sm text-muted-foreground mt-2">{String(product.description)}</p>
         )}
       </div>
 

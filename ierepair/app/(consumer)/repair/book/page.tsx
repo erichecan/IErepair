@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Clock, Calendar, ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -59,7 +59,7 @@ function generateSlots(slotDuration = 30) {
   return slots;
 }
 
-export default function BookRepairPage() {
+function BookRepairPageInner() {
   const router       = useRouter();
   const searchParams = useSearchParams();
   const storeId      = searchParams.get("storeId") ?? "";
@@ -522,5 +522,13 @@ export default function BookRepairPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function BookRepairPage() {
+  return (
+    <Suspense>
+      <BookRepairPageInner />
+    </Suspense>
   );
 }

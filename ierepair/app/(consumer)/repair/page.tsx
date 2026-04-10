@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Search, ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -16,7 +16,7 @@ interface Store {
   logoUrl: string | null; rating: string | null; services: Service[];
 }
 
-export default function RepairPage() {
+function RepairPageInner() {
   const router       = useRouter();
   const searchParams = useSearchParams();
   const storeId      = searchParams.get("storeId");
@@ -94,5 +94,13 @@ export default function RepairPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function RepairPage() {
+  return (
+    <Suspense>
+      <RepairPageInner />
+    </Suspense>
   );
 }

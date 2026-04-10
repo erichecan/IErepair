@@ -104,7 +104,12 @@
       "Bash(sed 's|const SCRAPED_DIR = path.join\\(__dirname, .scraped.\\);|const SCRAPED_DIR = process.env.SCRAPED_DIR \\\\|\\\\| path.join\\(__dirname, \"scraped\"\\);|' /Volumes/datacenter/ericworkspace/IErepair/server/import-tmp.js)",
       "Bash(cp /tmp/import-fixed.js /Volumes/datacenter/ericworkspace/IErepair/server/import-tmp.js)",
       "Bash(git -C /Volumes/datacenter/ericworkspace/IErepair log --oneline -5)",
-      "Bash(git -C /Volumes/datacenter/ericworkspace/IErepair status --short)"
+      "Bash(git -C /Volumes/datacenter/ericworkspace/IErepair status --short)",
+      "Bash(docker build:*)",
+      "Bash(docker push:*)",
+      "Bash(gcloud run:*)",
+      "Bash(ls /Volumes/datacenter/ericworkspace/IErepair/ierepair/.env*)",
+      "Bash(python3)"
     ]
   }
 }

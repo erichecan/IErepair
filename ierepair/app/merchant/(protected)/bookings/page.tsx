@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle2, UserCheck, XCircle, Clock, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -22,7 +22,7 @@ const STATUS_COLOR: Record<string, string> = {
   no_show:    "bg-destructive/15 text-destructive",
 };
 
-export default function MerchantBookingsPage() {
+function MerchantBookingsPageInner() {
   const searchParams = useSearchParams();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading]   = useState(true);
@@ -139,5 +139,13 @@ export default function MerchantBookingsPage() {
         ))}
       </div>
     </div>
+  );
+}
+
+export default function MerchantBookingsPage() {
+  return (
+    <Suspense>
+      <MerchantBookingsPageInner />
+    </Suspense>
   );
 }
