@@ -26,7 +26,7 @@ export default async function BrowsePage({
           href="/"
           className="inline-flex items-center gap-2 text-sm text-[#898989] hover:text-[#242424] transition-colors mb-4"
         >
-          <ArrowLeft size={16} />
+          <ArrowLeft size={16} aria-hidden="true" />
           Back
         </Link>
         <h1

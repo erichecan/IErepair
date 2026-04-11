@@ -131,7 +131,7 @@ export default function BrowseClient({ deviceType, brands, selectedBrand, device
                   <div className="text-xs text-[#898989]">On request</div>
                 )}
 
-                <ChevronRight size={14} className="text-[#c0c0c0] group-hover:text-[#242424] transition-colors mt-auto" />
+                <ChevronRight size={14} aria-hidden="true" className="text-[#c0c0c0] group-hover:text-[#242424] transition-colors mt-auto" />
               </Link>
             ))}
           </div>

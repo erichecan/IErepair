@@ -389,7 +389,7 @@ export default function HomePage() {
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#242424] text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-opacity"
           >
             Browse All Devices
-            <ChevronRight size={16} />
+            <ChevronRight size={16} aria-hidden="true" />
           </Link>
         </div>
 
