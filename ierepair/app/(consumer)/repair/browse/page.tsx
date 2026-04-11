@@ -21,7 +21,7 @@ export default async function BrowsePage({
   return (
     <div>
       {/* ── Header ───────────────────────────────────────── */}
-      <div className="max-w-2xl mx-auto px-5 md:px-8 pt-6 pb-4">
+      <div className="max-w-[1600px] mx-auto px-5 md:px-8 pt-6 pb-4">
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-sm text-[#898989] hover:text-[#242424] transition-colors mb-4"
@@ -41,7 +41,7 @@ export default async function BrowsePage({
       </div>
 
       {/* ── Client filter UI ─────────────────────────────── */}
-      <Suspense fallback={<div className="max-w-2xl mx-auto px-5 md:px-8 pt-6 text-sm text-[#898989]">Loading...</div>}>
+      <Suspense fallback={<div className="max-w-[1600px] mx-auto px-5 md:px-8 pt-6 text-sm text-[#898989]">Loading...</div>}>
         <BrowseClient
           deviceType={deviceType}
           brands={brands}

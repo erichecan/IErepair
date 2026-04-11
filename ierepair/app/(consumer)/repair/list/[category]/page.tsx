@@ -24,36 +24,32 @@ function DeviceCard({ device }: { device: DeviceListItem }) {
   return (
     <Link
       href={`/repair/device/${device.deviceSlug}`}
-      className="flex items-center gap-3 px-4 py-3.5 bg-white rounded-xl hover:bg-[#f8f8f8] transition-colors group"
+      className="flex flex-col items-center gap-2 p-4 bg-white rounded-2xl hover:bg-[#f8f8f8] transition-colors group"
       style={{ boxShadow: "rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.03) 0px 2px 8px" }}
     >
       {/* Device image */}
-      <div className="w-12 h-12 rounded-lg bg-[#f8f8f8] flex items-center justify-center shrink-0 relative overflow-hidden">
+      <div className="w-20 h-20 flex items-center justify-center relative overflow-hidden">
         {device.imageUrl ? (
           <Image
             src={device.imageUrl}
             alt={device.deviceModel}
             fill
-            className="object-contain p-1"
-            sizes="48px"
+            className="object-contain"
+            sizes="80px"
             unoptimized
           />
         ) : (
-          <Wrench size={20} className="text-[#898989]" />
+          <Wrench size={28} className="text-[#898989]" />
         )}
       </div>
 
       {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="text-sm font-semibold text-[#242424] truncate">{device.deviceModel}</div>
-        {device.minPrice != null ? (
-          <div className="text-xs text-[#e05c2a] font-medium mt-0.5">From €{device.minPrice.toFixed(0)}</div>
-        ) : (
-          <div className="text-xs text-[#898989] mt-0.5">Price on request</div>
-        )}
-      </div>
-
-      <ChevronRight size={16} className="text-[#898989] group-hover:text-[#242424] transition-colors shrink-0" />
+      <div className="text-xs font-semibold text-[#242424] text-center leading-tight line-clamp-2">{device.deviceModel}</div>
+      {device.minPrice != null ? (
+        <div className="text-xs text-[#e05c2a] font-medium">From €{device.minPrice.toFixed(0)}</div>
+      ) : (
+        <div className="text-xs text-[#898989]">Price on request</div>
+      )}
     </Link>
   );
 }
@@ -63,7 +59,7 @@ function BrandSection({ brand, devices }: { brand: string; devices: DeviceListIt
   return (
     <div>
       <h2 className="text-xs font-semibold text-[#898989] uppercase tracking-widest mb-3 px-1">{brand}</h2>
-      <div className="space-y-2">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
         {devices.map((d) => (
           <DeviceCard key={d.deviceSlug} device={d} />
         ))}
@@ -105,7 +101,7 @@ export default async function RepairListPage({
   });
 
   return (
-    <div className="px-5 md:px-8 pt-6 pb-10 max-w-2xl mx-auto">
+    <div className="px-5 md:px-8 pt-6 pb-10 max-w-[1600px] mx-auto">
       {/* Back */}
       <Link href="/" className="inline-flex items-center gap-2 text-sm text-[#898989] hover:text-[#242424] transition-colors mb-6">
         <ArrowLeft size={16} />

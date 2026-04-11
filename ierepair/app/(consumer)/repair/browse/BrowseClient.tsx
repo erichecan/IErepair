@@ -33,7 +33,7 @@ export default function BrowseClient({ deviceType, brands, selectedBrand, device
     <div className="pb-10">
       {/* ── Device Type Tabs ────────────────────────────────── */}
       <div className="sticky top-0 z-10 bg-white border-b border-[rgba(34,42,53,0.08)]">
-        <div className="max-w-2xl mx-auto px-5 md:px-8">
+        <div className="max-w-[1600px] mx-auto px-5 md:px-8">
           <div className="flex gap-0">
             {DEVICE_TYPES.map((t) => (
               <button
@@ -52,7 +52,7 @@ export default function BrowseClient({ deviceType, brands, selectedBrand, device
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-5 md:px-8 pt-6">
+      <div className="max-w-[1600px] mx-auto px-5 md:px-8 pt-6">
         {/* ── Brand Pills ──────────────────────────────────── */}
         <div className="flex flex-wrap gap-2 mb-8">
           <button
@@ -93,7 +93,7 @@ export default function BrowseClient({ deviceType, brands, selectedBrand, device
               : "Select a brand to see devices."}
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
             {devices.map((device) => (
               <Link
                 key={device.deviceSlug}
@@ -102,7 +102,7 @@ export default function BrowseClient({ deviceType, brands, selectedBrand, device
                 style={{ boxShadow: "rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.03) 0px 2px 8px" }}
               >
                 {/* Device image */}
-                <div className="w-16 h-16 rounded-xl bg-[#f5f5f5] flex items-center justify-center relative overflow-hidden">
+                <div className="w-20 h-20 flex items-center justify-center relative overflow-hidden">
                   {device.imageUrl ? (
                     <Image
                       src={device.imageUrl}
