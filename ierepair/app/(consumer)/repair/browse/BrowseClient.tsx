@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Wrench, ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -20,16 +20,13 @@ const DEVICE_TYPES = [
 
 export default function BrowseClient({ deviceType, brands, selectedBrand, devices }: Props) {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   function setType(type: string) {
     router.push(`/repair/browse?type=${type}`);
   }
 
   function setBrand(brand: string) {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("brand", brand);
-    router.push(`/repair/browse?${params.toString()}`);
+    router.push(`/repair/browse?type=${deviceType}&brand=${encodeURIComponent(brand)}`);
   }
 
   return (
@@ -116,7 +113,7 @@ export default function BrowseClient({ deviceType, brands, selectedBrand, device
                       unoptimized
                     />
                   ) : (
-                    <Wrench size={24} className="text-[#898989]" />
+                    <Wrench size={24} className="text-[#898989]" aria-hidden="true" />
                   )}
                 </div>
 

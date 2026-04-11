@@ -41,7 +41,7 @@ export default async function BrowsePage({
       </div>
 
       {/* ── Client filter UI ─────────────────────────────── */}
-      <Suspense>
+      <Suspense fallback={<div className="max-w-2xl mx-auto px-5 md:px-8 pt-6 text-sm text-[#898989]">Loading...</div>}>
         <BrowseClient
           deviceType={deviceType}
           brands={brands}
