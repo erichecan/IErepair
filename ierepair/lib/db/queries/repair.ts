@@ -39,11 +39,14 @@ export async function getDevicesByCategory(category: string): Promise<DeviceList
   const fragments = CATEGORY_GROUPS[category];
   if (!fragments) return [];
 
-  // Build LIKE conditions for category slug matching
-  const likeConditions = fragments.map((f) => `c.slug ILIKE '%${f}%'`).join(" OR ");
+  // Build parameterized LIKE conditions for category slug matching
+  const likeConditions = sql.join(
+    fragments.map((f) => sql`c.slug ILIKE ${"%" + f + "%"}`),
+    sql` OR `
+  );
 
-  const rows = await db.execute(sql.raw(`
-    SELECT DISTINCT
+  const rows = await db.execute(sql`
+    SELECT
       rs.device_brand,
       rs.device_model,
       rs.device_slug,
@@ -57,7 +60,7 @@ export async function getDevicesByCategory(category: string): Promise<DeviceList
       AND (${likeConditions})
     GROUP BY rs.device_brand, rs.device_model, rs.device_slug
     ORDER BY rs.device_brand, rs.device_model
-  `));
+  `);
 
   return (rows as unknown[]).map((r: unknown) => {
     const row = r as Record<string, unknown>;
@@ -73,7 +76,7 @@ export async function getDevicesByCategory(category: string): Promise<DeviceList
 
 /** Returns all services for a device, grouped by service category */
 export async function getDeviceBySlug(slug: string): Promise<DeviceDetail | null> {
-  const rows = await db.execute(sql.raw(`
+  const rows = await db.execute(sql`
     SELECT
       rs.id,
       rs.device_brand,
@@ -88,9 +91,9 @@ export async function getDeviceBySlug(slug: string): Promise<DeviceDetail | null
     FROM repair_services rs
     LEFT JOIN categories c ON rs.category_id = c.id
     WHERE rs.is_active = true
-      AND rs.device_slug = '${slug.replace(/'/g, "''")}'
+      AND rs.device_slug = ${slug}
     ORDER BY c.name, rs.name
-  `));
+  `);
 
   if (!rows.length) return null;
 
