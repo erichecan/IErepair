@@ -122,11 +122,15 @@ function DeviceImage({ src, alt, sizes }: { src: string; alt: string; sizes: str
   );
 }
 
+function slugify(str: string) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
 /* ── Device Card ─────────────────────────────────────── */
 function DeviceCard({ name, desc, price, img }: Device) {
   return (
     <Link
-      href={`/search?q=${encodeURIComponent(name)}`}
+      href={`/repair/device/${slugify(name)}`}
       className="shrink-0 w-36 md:w-44 bg-white rounded-xl overflow-hidden hover:scale-[1.02] transition-transform"
       style={{ boxShadow: "rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.05) 0px 4px 12px" }}
     >
@@ -221,8 +225,13 @@ export default function HomePage() {
   const [eircode, setEircode] = useState("");
 
   function handleSearch() {
+    // If there's a device keyword, try to navigate to the device repair page
+    if (q.trim()) {
+      const deviceSlug = q.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      router.push(`/repair/device/${deviceSlug}`);
+      return;
+    }
     const params = new URLSearchParams();
-    if (q)       params.set("q", q);
     if (eircode) params.set("eircode", eircode);
     router.push(`/search?${params.toString()}`);
   }
@@ -310,7 +319,8 @@ export default function HomePage() {
       <section className="max-w-5xl mx-auto px-5 md:px-8 pt-10 md:pt-14 pb-2">
         <div className="grid grid-cols-3 gap-3 md:gap-5">
           {/* Battery — green */}
-          <div className="relative rounded-2xl overflow-hidden p-5 md:p-7 flex flex-col justify-between min-h-[140px] md:min-h-[180px]"
+          <Link href="/repair/list/battery"
+               className="relative rounded-2xl overflow-hidden p-5 md:p-7 flex flex-col justify-between min-h-[140px] md:min-h-[180px] hover:opacity-90 transition-opacity"
                style={{ background: "linear-gradient(135deg, #1a6b3c 0%, #22a85c 100%)" }}>
             <div>
               <div className="text-white/70 text-[10px] md:text-xs font-semibold uppercase tracking-widest mb-1">Battery</div>
@@ -321,10 +331,11 @@ export default function HomePage() {
               <DeviceImage src="/images/devices/20260130-499c3126bbb54779933327e617e7c7a7.jpg" alt="battery" sizes="80px" />
             </div>
             <div className="mt-3 text-[10px] md:text-xs text-white/60">Done in 30 min · OEM quality</div>
-          </div>
+          </Link>
 
           {/* Screen — blue */}
-          <div className="relative rounded-2xl overflow-hidden p-5 md:p-7 flex flex-col justify-between min-h-[140px] md:min-h-[180px]"
+          <Link href="/repair/list/screen"
+               className="relative rounded-2xl overflow-hidden p-5 md:p-7 flex flex-col justify-between min-h-[140px] md:min-h-[180px] hover:opacity-90 transition-opacity"
                style={{ background: "linear-gradient(135deg, #1a3a6b 0%, #2258c8 100%)" }}>
             <div>
               <div className="text-white/70 text-[10px] md:text-xs font-semibold uppercase tracking-widest mb-1">Screen</div>
@@ -335,10 +346,11 @@ export default function HomePage() {
               <DeviceImage src="/images/devices/20260212-9a5cef9e3bc4480d910af7d07380e001.jpg" alt="screen" sizes="80px" />
             </div>
             <div className="mt-3 text-[10px] md:text-xs text-white/60">Same-day repair · 180-day warranty</div>
-          </div>
+          </Link>
 
           {/* Storage — amber */}
-          <div className="relative rounded-2xl overflow-hidden p-5 md:p-7 flex flex-col justify-between min-h-[140px] md:min-h-[180px]"
+          <Link href="/repair/list/back-glass"
+               className="relative rounded-2xl overflow-hidden p-5 md:p-7 flex flex-col justify-between min-h-[140px] md:min-h-[180px] hover:opacity-90 transition-opacity"
                style={{ background: "linear-gradient(135deg, #7a4a00 0%, #d97706 100%)" }}>
             <div>
               <div className="text-white/70 text-[10px] md:text-xs font-semibold uppercase tracking-widest mb-1">Storage</div>
@@ -349,7 +361,7 @@ export default function HomePage() {
               <DeviceImage src="/images/devices/20260130-3ef40111e5b945a59b345f5331e131ec.jpg" alt="storage" sizes="80px" />
             </div>
             <div className="mt-3 text-[10px] md:text-xs text-white/60">Up to 512GB · data safe</div>
-          </div>
+          </Link>
         </div>
       </section>
 
@@ -360,15 +372,26 @@ export default function HomePage() {
           title="iPhone Repair"
           tabs={IPHONE_TABS}
           devices={IPHONE_DEVICES}
-          moreHref="/repair/select?brand=apple"
+          moreHref="/repair/list/screen?brand=apple"
         />
 
         <RepairSection
           title="Android Repair"
           tabs={ANDROID_TABS}
           devices={ANDROID_DEVICES}
-          moreHref="/repair/select?brand=android"
+          moreHref="/repair/list/screen?brand=android"
         />
+
+        {/* ── Browse All CTA ─────────────────────────── */}
+        <div className="text-center mt-8">
+          <Link
+            href="/repair/browse"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#242424] text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-opacity"
+          >
+            Browse All Devices
+            <ChevronRight size={16} />
+          </Link>
+        </div>
 
       </section>
 
