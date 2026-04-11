@@ -135,9 +135,9 @@ export type DeviceBrowseItem = {
 
 /** Returns all brands with device counts, optionally filtered by deviceType */
 export async function getBrandsWithCounts(deviceType?: string): Promise<BrandWithCount[]> {
-  const typeFilter = deviceType ? `AND rs.device_type = '${deviceType.replace(/'/g, "''")}'` : "";
+  const typeCondition = deviceType ? sql` AND rs.device_type = ${deviceType}` : sql``;
 
-  const rows = await db.execute(sql.raw(`
+  const rows = await db.execute(sql`
     SELECT
       rs.device_brand,
       rs.device_type,
@@ -147,10 +147,10 @@ export async function getBrandsWithCounts(deviceType?: string): Promise<BrandWit
     WHERE rs.is_active = true
       AND rs.device_brand IS NOT NULL
       AND rs.device_type IS NOT NULL
-      ${typeFilter}
+      ${typeCondition}
     GROUP BY rs.device_brand, rs.device_type
     ORDER BY cnt DESC
-  `));
+  `);
 
   return (rows as unknown[]).map((r: unknown) => {
     const row = r as Record<string, unknown>;
@@ -168,10 +168,10 @@ export async function getDevicesByBrand(
   brand: string,
   deviceType?: string
 ): Promise<DeviceBrowseItem[]> {
-  const typeFilter = deviceType ? `AND rs.device_type = '${deviceType.replace(/'/g, "''")}'` : "";
+  const typeCondition = deviceType ? sql` AND rs.device_type = ${deviceType}` : sql``;
 
-  const rows = await db.execute(sql.raw(`
-    SELECT DISTINCT
+  const rows = await db.execute(sql`
+    SELECT
       rs.device_brand,
       rs.device_model,
       rs.device_slug,
@@ -180,12 +180,12 @@ export async function getDevicesByBrand(
       MAX(rs.image_url) as image_url
     FROM repair_services rs
     WHERE rs.is_active = true
-      AND rs.device_brand = '${brand.replace(/'/g, "''")}'
+      AND rs.device_brand = ${brand}
       AND rs.device_slug IS NOT NULL
-      ${typeFilter}
+      ${typeCondition}
     GROUP BY rs.device_brand, rs.device_model, rs.device_slug, rs.device_type
     ORDER BY rs.device_model
-  `));
+  `);
 
   return (rows as unknown[]).map((r: unknown) => {
     const row = r as Record<string, unknown>;
