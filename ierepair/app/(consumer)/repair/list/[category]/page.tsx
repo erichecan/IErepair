@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, ChevronRight, Wrench } from "lucide-react";
+import { ArrowLeft, ChevronRight, ChevronLeft, Wrench } from "lucide-react";
 import { getDevicesByCategory, CATEGORY_GROUPS, DeviceListItem } from "@/lib/db/queries/repair";
+import { PAGE_SIZE } from "@/lib/db/queries/repair-constants";
 
 /* ── Category display config ─────────────────────────── */
 const CATEGORY_META: Record<string, { label: string; description: string }> = {
@@ -15,10 +16,6 @@ const CATEGORY_META: Record<string, { label: string; description: string }> = {
 /* ── Brand priority ordering ────────────────────────── */
 const BRAND_ORDER = ["Apple", "Samsung", "Google", "OnePlus", "Oppo", "XiaoMi", "Gaming Repair", "Computer Repair"];
 
-function slugify(str: string) {
-  return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-}
-
 /* ── Device card ────────────────────────────────────── */
 function DeviceCard({ device }: { device: DeviceListItem }) {
   return (
@@ -27,7 +24,6 @@ function DeviceCard({ device }: { device: DeviceListItem }) {
       className="flex flex-col items-center gap-2 p-4 bg-white rounded-2xl hover:bg-[#f8f8f8] transition-colors group"
       style={{ boxShadow: "rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.03) 0px 2px 8px" }}
     >
-      {/* Device image */}
       <div className="w-20 h-20 flex items-center justify-center relative overflow-hidden">
         {device.imageUrl ? (
           <Image
@@ -42,8 +38,6 @@ function DeviceCard({ device }: { device: DeviceListItem }) {
           <Wrench size={28} className="text-[#898989]" />
         )}
       </div>
-
-      {/* Info */}
       <div className="text-xs font-semibold text-[#242424] text-center leading-tight line-clamp-2">{device.deviceModel}</div>
       {device.minPrice != null ? (
         <div className="text-xs text-[#e05c2a] font-medium">From €{device.minPrice.toFixed(0)}</div>
@@ -68,19 +62,85 @@ function BrandSection({ brand, devices }: { brand: string; devices: DeviceListIt
   );
 }
 
+/* ── Pagination ─────────────────────────────────────── */
+function Pagination({
+  category,
+  page,
+  totalPages,
+  total,
+}: {
+  category: string;
+  page: number;
+  totalPages: number;
+  total: number;
+}) {
+  if (totalPages <= 1) return null;
+
+  const start = (page - 1) * PAGE_SIZE + 1;
+  const end = Math.min(page * PAGE_SIZE, total);
+
+  return (
+    <div className="flex items-center justify-between pt-6 mt-2 border-t border-[rgba(34,42,53,0.08)]">
+      <span className="text-sm text-[#898989]">
+        {start}–{end} of {total} devices
+      </span>
+      <div className="flex items-center gap-2">
+        {page > 1 ? (
+          <Link
+            href={`/repair/list/${category}?page=${page - 1}`}
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-[#242424] bg-white rounded-lg hover:bg-[#f8f8f8] transition-colors"
+            style={{ boxShadow: "rgba(34,42,53,0.08) 0px 0px 0px 1px" }}
+          >
+            <ChevronLeft size={14} aria-hidden="true" />
+            Prev
+          </Link>
+        ) : (
+          <span className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-[#c0c0c0] bg-white rounded-lg cursor-not-allowed"
+            style={{ boxShadow: "rgba(34,42,53,0.08) 0px 0px 0px 1px" }}>
+            <ChevronLeft size={14} aria-hidden="true" />
+            Prev
+          </span>
+        )}
+        <span className="px-3 py-2 text-sm text-[#898989]">
+          {page} / {totalPages}
+        </span>
+        {page < totalPages ? (
+          <Link
+            href={`/repair/list/${category}?page=${page + 1}`}
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-[#242424] bg-white rounded-lg hover:bg-[#f8f8f8] transition-colors"
+            style={{ boxShadow: "rgba(34,42,53,0.08) 0px 0px 0px 1px" }}
+          >
+            Next
+            <ChevronRight size={14} aria-hidden="true" />
+          </Link>
+        ) : (
+          <span className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-[#c0c0c0] bg-white rounded-lg cursor-not-allowed"
+            style={{ boxShadow: "rgba(34,42,53,0.08) 0px 0px 0px 1px" }}>
+            Next
+            <ChevronRight size={14} aria-hidden="true" />
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /* ── Page ───────────────────────────────────────────── */
 export const dynamic = "force-dynamic";
 
 export default async function RepairListPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ category: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
-  const { category } = await params;
+  const [{ category }, { page: pageParam }] = await Promise.all([params, searchParams]);
   const meta = CATEGORY_META[category];
   if (!meta) notFound();
 
-  const devices = await getDevicesByCategory(category);
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
+  const { items: devices, total, totalPages } = await getDevicesByCategory(category, page);
 
   // Group by brand
   const byBrand: Record<string, DeviceListItem[]> = {};
@@ -104,7 +164,7 @@ export default async function RepairListPage({
     <div className="px-5 md:px-8 pt-6 pb-10 max-w-[1600px] mx-auto">
       {/* Back */}
       <Link href="/" className="inline-flex items-center gap-2 text-sm text-[#898989] hover:text-[#242424] transition-colors mb-6">
-        <ArrowLeft size={16} />
+        <ArrowLeft size={16} aria-hidden="true" />
         Back
       </Link>
 
@@ -131,6 +191,8 @@ export default async function RepairListPage({
           ))}
         </div>
       )}
+
+      <Pagination category={category} page={page} totalPages={totalPages} total={total} />
     </div>
   );
 }

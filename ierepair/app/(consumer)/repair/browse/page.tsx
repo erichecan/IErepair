@@ -7,15 +7,16 @@ import BrowseClient from "./BrowseClient";
 export default async function BrowsePage({
   searchParams,
 }: {
-  searchParams: Promise<{ type?: string; brand?: string }>;
+  searchParams: Promise<{ type?: string; brand?: string; page?: string }>;
 }) {
-  const { type, brand } = await searchParams;
+  const { type, brand, page: pageParam } = await searchParams;
   const deviceType = type === "tablet" ? "tablet" : "phone";
   const selectedBrand = brand ?? null;
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
 
-  const [brands, devices] = await Promise.all([
+  const [brands, result] = await Promise.all([
     getBrandsWithCounts(deviceType),
-    selectedBrand ? getDevicesByBrand(selectedBrand, deviceType) : Promise.resolve([]),
+    selectedBrand ? getDevicesByBrand(selectedBrand, deviceType, page) : Promise.resolve(null),
   ]);
 
   return (
@@ -46,7 +47,10 @@ export default async function BrowsePage({
           deviceType={deviceType}
           brands={brands}
           selectedBrand={selectedBrand}
-          devices={devices}
+          devices={result?.items ?? []}
+          page={page}
+          totalPages={result?.totalPages ?? 1}
+          total={result?.total ?? 0}
         />
       </Suspense>
     </div>

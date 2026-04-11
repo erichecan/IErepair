@@ -1,5 +1,9 @@
 import { db } from "@/lib/db";
 import { sql } from "drizzle-orm";
+import { unstable_cache } from "next/cache";
+import { PAGE_SIZE } from "./repair-constants";
+
+export { PAGE_SIZE } from "./repair-constants";
 
 /** Category slug groups: maps a canonical category to DB slug fragments */
 export const CATEGORY_GROUPS: Record<string, string[]> = {
@@ -34,35 +38,78 @@ export type DeviceDetail = {
   services: RepairServiceItem[];
 };
 
-/** Returns distinct devices that have at least one service in the given category group */
-export async function getDevicesByCategory(category: string): Promise<DeviceListItem[]> {
-  const fragments = CATEGORY_GROUPS[category];
-  if (!fragments) return [];
+export type BrandWithCount = {
+  brand: string;
+  deviceType: "phone" | "tablet";
+  count: number;
+  imageUrl: string | null;
+};
 
-  // Build parameterized LIKE conditions for category slug matching
+export type DeviceBrowseItem = {
+  deviceBrand: string;
+  deviceModel: string;
+  deviceSlug: string;
+  deviceType: "phone" | "tablet";
+  minPrice: number | null;
+  imageUrl: string | null;
+};
+
+export type PaginatedResult<T> = {
+  items: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+};
+
+/* ─── Internal query functions ─────────────────────────── */
+
+async function _getDevicesByCategory(
+  category: string,
+  page: number = 1
+): Promise<PaginatedResult<DeviceListItem>> {
+  const fragments = CATEGORY_GROUPS[category];
+  if (!fragments) return { items: [], total: 0, page, pageSize: PAGE_SIZE, totalPages: 0 };
+
   const likeConditions = sql.join(
     fragments.map((f) => sql`c.slug ILIKE ${"%" + f + "%"}`),
     sql` OR `
   );
 
-  const rows = await db.execute(sql`
-    SELECT
-      rs.device_brand,
-      rs.device_model,
-      rs.device_slug,
-      MIN(rs.base_price::numeric) as min_price,
-      MAX(rs.image_url) as image_url
-    FROM repair_services rs
-    LEFT JOIN categories c ON rs.category_id = c.id
-    WHERE rs.is_active = true
-      AND rs.device_slug IS NOT NULL
-      AND rs.device_model IS NOT NULL
-      AND (${likeConditions})
-    GROUP BY rs.device_brand, rs.device_model, rs.device_slug
-    ORDER BY rs.device_brand, rs.device_model
-  `);
+  const offset = (page - 1) * PAGE_SIZE;
 
-  return (rows as unknown[]).map((r: unknown) => {
+  const [countRows, rows] = await Promise.all([
+    db.execute(sql`
+      SELECT COUNT(DISTINCT rs.device_slug) as total
+      FROM repair_services rs
+      LEFT JOIN categories c ON rs.category_id = c.id
+      WHERE rs.is_active = true
+        AND rs.device_slug IS NOT NULL
+        AND rs.device_model IS NOT NULL
+        AND (${likeConditions})
+    `),
+    db.execute(sql`
+      SELECT
+        rs.device_brand,
+        rs.device_model,
+        rs.device_slug,
+        MIN(rs.base_price::numeric) as min_price,
+        MAX(rs.image_url) as image_url
+      FROM repair_services rs
+      LEFT JOIN categories c ON rs.category_id = c.id
+      WHERE rs.is_active = true
+        AND rs.device_slug IS NOT NULL
+        AND rs.device_model IS NOT NULL
+        AND (${likeConditions})
+      GROUP BY rs.device_brand, rs.device_model, rs.device_slug
+      ORDER BY rs.device_brand, rs.device_model
+      LIMIT ${PAGE_SIZE} OFFSET ${offset}
+    `),
+  ]);
+
+  const total = Number((countRows[0] as Record<string, unknown>)?.total ?? 0);
+
+  const items = (rows as unknown[]).map((r: unknown) => {
     const row = r as Record<string, unknown>;
     return {
       deviceBrand: String(row.device_brand ?? ""),
@@ -72,10 +119,11 @@ export async function getDevicesByCategory(category: string): Promise<DeviceList
       imageUrl:    row.image_url ? String(row.image_url) : null,
     };
   });
+
+  return { items, total, page, pageSize: PAGE_SIZE, totalPages: Math.ceil(total / PAGE_SIZE) };
 }
 
-/** Returns all services for a device, grouped by service category */
-export async function getDeviceBySlug(slug: string): Promise<DeviceDetail | null> {
+async function _getDeviceBySlug(slug: string): Promise<DeviceDetail | null> {
   const rows = await db.execute(sql`
     SELECT
       rs.id,
@@ -120,24 +168,7 @@ export async function getDeviceBySlug(slug: string): Promise<DeviceDetail | null
   };
 }
 
-export type BrandWithCount = {
-  brand: string;
-  deviceType: "phone" | "tablet";
-  count: number;
-  imageUrl: string | null;
-};
-
-export type DeviceBrowseItem = {
-  deviceBrand: string;
-  deviceModel: string;
-  deviceSlug: string;
-  deviceType: "phone" | "tablet";
-  minPrice: number | null;
-  imageUrl: string | null;
-};
-
-/** Returns all brands with device counts, optionally filtered by deviceType */
-export async function getBrandsWithCounts(deviceType?: string): Promise<BrandWithCount[]> {
+async function _getBrandsWithCounts(deviceType?: string): Promise<BrandWithCount[]> {
   const typeCondition = deviceType ? sql` AND rs.device_type = ${deviceType}` : sql``;
 
   const rows = await db.execute(sql`
@@ -166,31 +197,45 @@ export async function getBrandsWithCounts(deviceType?: string): Promise<BrandWit
   });
 }
 
-/** Returns all devices for a brand, optionally filtered by deviceType */
-export async function getDevicesByBrand(
+async function _getDevicesByBrand(
   brand: string,
-  deviceType?: string
-): Promise<DeviceBrowseItem[]> {
+  deviceType?: string,
+  page: number = 1
+): Promise<PaginatedResult<DeviceBrowseItem>> {
   const typeCondition = deviceType ? sql` AND rs.device_type = ${deviceType}` : sql``;
+  const offset = (page - 1) * PAGE_SIZE;
 
-  const rows = await db.execute(sql`
-    SELECT
-      rs.device_brand,
-      rs.device_model,
-      rs.device_slug,
-      rs.device_type,
-      MIN(rs.base_price::numeric) as min_price,
-      MAX(rs.image_url) as image_url
-    FROM repair_services rs
-    WHERE rs.is_active = true
-      AND rs.device_brand = ${brand}
-      AND rs.device_slug IS NOT NULL
-      ${typeCondition}
-    GROUP BY rs.device_brand, rs.device_model, rs.device_slug, rs.device_type
-    ORDER BY rs.device_model
-  `);
+  const [countRows, rows] = await Promise.all([
+    db.execute(sql`
+      SELECT COUNT(DISTINCT rs.device_slug) as total
+      FROM repair_services rs
+      WHERE rs.is_active = true
+        AND rs.device_brand = ${brand}
+        AND rs.device_slug IS NOT NULL
+        ${typeCondition}
+    `),
+    db.execute(sql`
+      SELECT
+        rs.device_brand,
+        rs.device_model,
+        rs.device_slug,
+        rs.device_type,
+        MIN(rs.base_price::numeric) as min_price,
+        MAX(rs.image_url) as image_url
+      FROM repair_services rs
+      WHERE rs.is_active = true
+        AND rs.device_brand = ${brand}
+        AND rs.device_slug IS NOT NULL
+        ${typeCondition}
+      GROUP BY rs.device_brand, rs.device_model, rs.device_slug, rs.device_type
+      ORDER BY rs.device_model
+      LIMIT ${PAGE_SIZE} OFFSET ${offset}
+    `),
+  ]);
 
-  return (rows as unknown[]).map((r: unknown) => {
+  const total = Number((countRows[0] as Record<string, unknown>)?.total ?? 0);
+
+  const items = (rows as unknown[]).map((r: unknown) => {
     const row = r as Record<string, unknown>;
     return {
       deviceBrand: String(row.device_brand ?? ""),
@@ -201,4 +246,32 @@ export async function getDevicesByBrand(
       imageUrl:    row.image_url ? String(row.image_url) : null,
     };
   });
+
+  return { items, total, page, pageSize: PAGE_SIZE, totalPages: Math.ceil(total / PAGE_SIZE) };
 }
+
+/* ─── Cached exports ────────────────────────────────────── */
+
+export const getDevicesByCategory = unstable_cache(
+  _getDevicesByCategory,
+  ["devices-by-category"],
+  { revalidate: 300, tags: ["repair-services"] }
+);
+
+export const getDeviceBySlug = unstable_cache(
+  _getDeviceBySlug,
+  ["device-by-slug"],
+  { revalidate: 300, tags: ["repair-services"] }
+);
+
+export const getBrandsWithCounts = unstable_cache(
+  _getBrandsWithCounts,
+  ["brands-with-counts"],
+  { revalidate: 300, tags: ["repair-services"] }
+);
+
+export const getDevicesByBrand = unstable_cache(
+  _getDevicesByBrand,
+  ["devices-by-brand"],
+  { revalidate: 300, tags: ["repair-services"] }
+);
