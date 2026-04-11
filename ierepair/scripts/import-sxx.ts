@@ -260,7 +260,7 @@ async function main() {
         skippedItem++;
         continue;
       }
-      const serviceSlug = `${deviceSlug}-${catSlug}-${item.pmid}`;
+      const serviceSlug = `${deviceSlug}-${catSlug}-${item.pmid}`.slice(0, 300);
       if (seenSlugs.has(serviceSlug)) continue;
       seenSlugs.add(serviceSlug);
 
