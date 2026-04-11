@@ -128,7 +128,7 @@ export type DeviceBrowseItem = {
   deviceBrand: string;
   deviceModel: string;
   deviceSlug: string;
-  deviceType: string;
+  deviceType: "phone" | "tablet";
   minPrice: number | null;
   imageUrl: string | null;
 };
@@ -193,7 +193,7 @@ export async function getDevicesByBrand(
       deviceBrand: String(row.device_brand ?? ""),
       deviceModel: String(row.device_model ?? ""),
       deviceSlug:  String(row.device_slug ?? ""),
-      deviceType:  String(row.device_type ?? "phone"),
+      deviceType:  (String(row.device_type ?? "phone")) as "phone" | "tablet",
       minPrice:    row.min_price != null ? Number(row.min_price) : null,
       imageUrl:    row.image_url ? String(row.image_url) : null,
     };
