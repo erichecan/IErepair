@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Upload } from "lucide-react";
 
 const DAYS = ["mon","tue","wed","thu","fri","sat","sun"] as const;
 const DAY_LABELS: Record<string, string> = { mon:"Mon", tue:"Tue", wed:"Wed", thu:"Thu", fri:"Fri", sat:"Sat", sun:"Sun" };
@@ -23,6 +24,11 @@ export default function MerchantSettingsPage() {
   const [hours, setHours] = useState<Hours>(() =>
     Object.fromEntries(DAYS.map((d) => [d, { open: d !== "sun", from: "09:00", to: "18:00" }]))
   );
+  const [logoUrl, setLogoUrl]   = useState<string | null>(null);
+  const [coverUrl, setCoverUrl] = useState<string | null>(null);
+  const [uploading, setUploading] = useState<"logo" | "cover" | null>(null);
+  const logoInputRef  = useRef<HTMLInputElement>(null);
+  const coverInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetch("/api/v1/merchant/settings")
@@ -34,10 +40,29 @@ export default function MerchantSettingsPage() {
             address: m.address ?? "", city: m.city ?? "", eircode: m.eircode ?? "",
             slotDurationMin: m.slotDurationMin ?? 30, maxAdvanceDays: m.maxAdvanceDays ?? 14 });
           if (m.businessHours) setHours(m.businessHours);
+          setLogoUrl(m.logoUrl ?? null);
+          setCoverUrl(m.coverUrl ?? null);
         }
         setSLoading(false);
       });
   }, []);
+
+  async function handleImageUpload(kind: "logo" | "cover", file: File) {
+    setUploading(kind);
+    const fd = new FormData();
+    fd.append("file", file);
+    fd.append("kind", kind);
+    try {
+      const r = await fetch("/api/v1/merchant/upload", { method: "POST", body: fd });
+      const d = await r.json();
+      if (d.success) {
+        if (kind === "logo") setLogoUrl(d.url);
+        else setCoverUrl(d.url);
+      }
+    } finally {
+      setUploading(null);
+    }
+  }
 
   async function handleSave() {
     setSaving(true);
@@ -62,6 +87,74 @@ export default function MerchantSettingsPage() {
           <CheckCircle2 size={16} />Settings saved successfully
         </div>
       )}
+
+      {/* Images */}
+      <section className="space-y-4">
+        <h2 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">Shop Images</h2>
+        <div className="grid grid-cols-2 gap-6">
+          {/* Logo */}
+          <div className="space-y-2">
+            <Label>Logo</Label>
+            <div
+              className="relative w-24 h-24 rounded-xl border border-border bg-secondary overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => logoInputRef.current?.click()}
+            >
+              {logoUrl ? (
+                <Image src={logoUrl} alt="Logo" fill className="object-cover" sizes="96px" />
+              ) : (
+                <div className="flex items-center justify-center h-full text-muted-foreground">
+                  <Upload size={20} />
+                </div>
+              )}
+            </div>
+            <input
+              ref={logoInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleImageUpload("logo", f);
+                e.target.value = "";
+              }}
+            />
+            <p className="text-xs text-muted-foreground">
+              {uploading === "logo" ? "Uploading…" : "JPEG / PNG / WEBP, max 5 MB"}
+            </p>
+          </div>
+
+          {/* Cover */}
+          <div className="space-y-2">
+            <Label>Cover Photo</Label>
+            <div
+              className="relative w-full h-24 rounded-xl border border-border bg-secondary overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => coverInputRef.current?.click()}
+            >
+              {coverUrl ? (
+                <Image src={coverUrl} alt="Cover" fill className="object-cover" sizes="100vw" />
+              ) : (
+                <div className="flex items-center justify-center h-full text-muted-foreground gap-2">
+                  <Upload size={20} /><span className="text-sm">Click to upload</span>
+                </div>
+              )}
+            </div>
+            <input
+              ref={coverInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleImageUpload("cover", f);
+                e.target.value = "";
+              }}
+            />
+            <p className="text-xs text-muted-foreground">
+              {uploading === "cover" ? "Uploading…" : "JPEG / PNG / WEBP, max 5 MB"}
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Basic info */}
       <section className="space-y-4">

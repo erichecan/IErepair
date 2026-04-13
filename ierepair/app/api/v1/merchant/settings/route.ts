@@ -31,6 +31,7 @@ export async function PATCH(request: NextRequest) {
   const {
     shopName, phone, description, address, city, eircode,
     businessHours, slotDurationMin, maxAdvanceDays,
+    logoUrl, coverUrl,
   } = body;
 
   const updates: Record<string, unknown> = { updatedAt: new Date() };
@@ -42,6 +43,8 @@ export async function PATCH(request: NextRequest) {
   if (businessHours)    updates.businessHours = businessHours;
   if (slotDurationMin)  updates.slotDurationMin = slotDurationMin;
   if (maxAdvanceDays)   updates.maxAdvanceDays = maxAdvanceDays;
+  if (logoUrl !== undefined)  updates.logoUrl = logoUrl;
+  if (coverUrl !== undefined) updates.coverUrl = coverUrl;
 
   // If eircode changed, geocode it and update PostGIS location
   if (eircode) {
