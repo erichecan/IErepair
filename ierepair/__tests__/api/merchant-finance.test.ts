@@ -54,6 +54,12 @@ describe("GET /api/v1/merchant/finance", () => {
     expect(res.status).toBe(401);
   });
 
+  it("returns 401 when merchant has no merchantId", async () => {
+    vi.mocked(auth).mockResolvedValue({ user: { role: "merchant", merchantId: null } } as never);
+    const res = await GET(makeRequest("2026-04"));
+    expect(res.status).toBe(401);
+  });
+
   it("returns 400 when month param format is invalid", async () => {
     vi.mocked(auth).mockResolvedValue({
       user: { role: "merchant", merchantId: "m1" },
