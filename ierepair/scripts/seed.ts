@@ -205,7 +205,7 @@ async function main() {
     if (merchant) {
       // Update PostGIS location
       await db.execute(
-        sql`UPDATE merchants SET location = ST_MakePoint(${m.lng}, ${m.lat})::geography WHERE id = ${merchant.id}`
+        sql`UPDATE merchants SET location = ST_MakePoint(${m.lng}, ${m.lat})::geometry WHERE id = ${merchant.id}`
       );
 
       // Assign products
