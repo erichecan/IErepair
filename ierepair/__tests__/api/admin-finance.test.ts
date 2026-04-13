@@ -43,7 +43,7 @@ describe("GET /api/v1/admin/finance", () => {
   beforeEach(() => { vi.clearAllMocks(); });
 
   it("returns 401 when not authenticated", async () => {
-    vi.mocked(auth).mockResolvedValue(null);
+    vi.mocked(auth).mockResolvedValue(null as never);
     const res = await GET(makeRequest());
     expect(res.status).toBe(401);
     const body = await res.json();
