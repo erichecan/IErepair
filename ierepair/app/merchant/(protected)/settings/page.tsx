@@ -96,8 +96,8 @@ export default function MerchantSettingsPage() {
           <div className="space-y-2">
             <Label>Logo</Label>
             <div
-              className="relative w-24 h-24 rounded-xl border border-border bg-secondary overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
-              onClick={() => logoInputRef.current?.click()}
+              className={`relative w-24 h-24 rounded-xl border border-border bg-secondary overflow-hidden transition-opacity ${uploading === "logo" ? "opacity-50 pointer-events-none" : "cursor-pointer hover:opacity-80"}`}
+              onClick={() => uploading !== "logo" && logoInputRef.current?.click()}
             >
               {logoUrl ? (
                 <Image src={logoUrl} alt="Logo" fill className="object-cover" sizes="96px" />
@@ -127,8 +127,8 @@ export default function MerchantSettingsPage() {
           <div className="space-y-2">
             <Label>Cover Photo</Label>
             <div
-              className="relative w-full h-24 rounded-xl border border-border bg-secondary overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
-              onClick={() => coverInputRef.current?.click()}
+              className={`relative w-full h-24 rounded-xl border border-border bg-secondary overflow-hidden transition-opacity ${uploading === "cover" ? "opacity-50 pointer-events-none" : "cursor-pointer hover:opacity-80"}`}
+              onClick={() => uploading !== "cover" && coverInputRef.current?.click()}
             >
               {coverUrl ? (
                 <Image src={coverUrl} alt="Cover" fill className="object-cover" sizes="100vw" />
