@@ -6,6 +6,8 @@ export default defineConfig({
   test: {
     environment: "node",
     globals: true,
+    include: ["__tests__/**/*.{test,spec}.{ts,tsx}"],
+    exclude: ["tests/**", "node_modules/**"],
     setupFiles: [],
     coverage: { reporter: ["text", "json"] },
   },
