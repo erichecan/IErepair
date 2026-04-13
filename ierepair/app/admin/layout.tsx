@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Store, Package, Tag, ShieldCheck, LogOut, LayoutDashboard } from "lucide-react";
+import { Store, Package, Tag, ShieldCheck, LogOut, LayoutDashboard, BarChart3 } from "lucide-react";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -20,6 +20,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <SidebarLink href="/admin/merchants"  icon={<Store size={18} />}       label="Merchants" />
           <SidebarLink href="/admin/products"   icon={<Package size={18} />}     label="Product Library" />
           <SidebarLink href="/admin/categories" icon={<Tag size={18} />}         label="Categories" />
+          <SidebarLink href="/admin/finance"    icon={<BarChart3 size={18} />}   label="Finance" />
         </nav>
         <div className="px-3 py-4 border-t border-border">
           <form action="/api/auth/signout" method="POST">
