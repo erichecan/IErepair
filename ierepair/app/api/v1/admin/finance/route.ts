@@ -9,7 +9,9 @@ function parseMonth(raw: string | null): { start: Date; end: Date; label: string
   const input = raw ?? new Date().toISOString().slice(0, 7);
   const m = input.match(/^(\d{4})-(\d{2})$/);
   if (!m) return null;
-  const [, y, mo] = m.map(Number);
+  const [, yStr, moStr] = m;
+  const y = Number(yStr);
+  const mo = Number(moStr);
   if (mo < 1 || mo > 12) return null;
   return {
     start: new Date(Date.UTC(y, mo - 1, 1)),
@@ -20,8 +22,11 @@ function parseMonth(raw: string | null): { start: Date; end: Date; label: string
 
 export async function GET(request: NextRequest) {
   const session = await auth();
-  if (!session || session.user.role !== "admin") {
+  if (!session) {
     return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
+  if (session.user.role !== "admin") {
+    return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
   }
 
   const monthParam = request.nextUrl.searchParams.get("month");

@@ -50,12 +50,12 @@ describe("GET /api/v1/admin/finance", () => {
     expect(body.success).toBe(false);
   });
 
-  it("returns 401 when role is merchant (not admin)", async () => {
+  it("returns 403 when role is merchant (not admin)", async () => {
     vi.mocked(auth).mockResolvedValue({
       user: { role: "merchant", merchantId: "m1" },
     } as never);
     const res = await GET(makeRequest());
-    expect(res.status).toBe(401);
+    expect(res.status).toBe(403);
   });
 
   it("returns 400 for invalid month format", async () => {
