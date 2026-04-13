@@ -25,8 +25,9 @@ interface FinanceSummary {
   entries: FinanceEntry[];
 }
 
-function fmt(n: string) {
-  return `€${parseFloat(n).toFixed(2)}`;
+function fmt(n: string | null | undefined) {
+  const v = parseFloat(n ?? "0");
+  return `€${(isNaN(v) ? 0 : v).toFixed(2)}`;
 }
 
 export default function MerchantFinancePage() {
@@ -34,15 +35,22 @@ export default function MerchantFinancePage() {
   const [month, setMonth]     = useState(currentMonth);
   const [data, setData]       = useState<FinanceSummary | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError]     = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
+    setError(null);
     fetch(`/api/v1/merchant/finance?month=${month}`)
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
       .then((d) => {
         if (d.success) setData(d.data);
-        setLoading(false);
-      });
+        else setError(d.error ?? "Failed to load finance data");
+      })
+      .catch((err: Error) => setError(err.message))
+      .finally(() => setLoading(false));
   }, [month]);
 
   return (
@@ -60,6 +68,12 @@ export default function MerchantFinancePage() {
 
       {loading && (
         <div className="text-center py-12 text-muted-foreground text-sm">Loading…</div>
+      )}
+
+      {!loading && error && (
+        <div className="bg-destructive/10 border border-destructive/30 rounded-xl px-4 py-3 text-sm text-destructive">
+          {error}
+        </div>
       )}
 
       {!loading && data && (
