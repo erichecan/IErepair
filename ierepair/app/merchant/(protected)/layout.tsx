@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { LayoutDashboard, Package, CalendarClock, Settings, LogOut, Wrench } from "lucide-react";
+import { LayoutDashboard, Package, CalendarClock, Settings, LogOut, Wrench, BarChart3 } from "lucide-react";
 
 export default async function MerchantLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -23,6 +23,7 @@ export default async function MerchantLayout({ children }: { children: React.Rea
           <SidebarLink href="/merchant/bookings"  icon={<CalendarClock size={18} />}  label="Bookings" />
           <SidebarLink href="/merchant/products"  icon={<Package size={18} />}        label="My Products" />
           <SidebarLink href="/merchant/products/catalog" icon={<Wrench size={18} />}  label="Browse Catalog" />
+          <SidebarLink href="/merchant/finance"  icon={<BarChart3 size={18} />}       label="Finance" />
           <SidebarLink href="/merchant/settings"  icon={<Settings size={18} />}       label="Settings" />
         </nav>
 
