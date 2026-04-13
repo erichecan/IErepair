@@ -5,11 +5,26 @@ vi.mock("@/lib/auth", () => ({
   auth: vi.fn(),
 }));
 
-vi.mock("@/lib/db", () => ({
-  db: {
-    select: vi.fn(),
-  },
-}));
+vi.mock("@/lib/db", () => {
+  const orderByStep = {
+    orderBy: vi.fn().mockResolvedValue([]),
+  };
+  const whereAfterJoin = {
+    where: vi.fn().mockReturnValue(orderByStep),
+  };
+  const leftJoinStep = {
+    leftJoin: vi.fn().mockReturnValue(whereAfterJoin),
+    where: vi.fn().mockResolvedValue([]),
+  };
+  const fromStep = {
+    from: vi.fn().mockReturnValue(leftJoinStep),
+  };
+  return {
+    db: {
+      select: vi.fn().mockReturnValue(fromStep),
+    },
+  };
+});
 
 import { auth } from "@/lib/auth";
 import { GET } from "@/app/api/v1/merchant/finance/route";
@@ -48,5 +63,26 @@ describe("GET /api/v1/merchant/finance", () => {
     const body = await res.json();
     expect(body.success).toBe(false);
     expect(body.error).toMatch(/invalid month/i);
+  });
+
+  it("returns 200 with zeros when no ledger entries exist", async () => {
+    vi.mocked(auth).mockResolvedValue({
+      user: { role: "merchant", merchantId: "m1" },
+    } as never);
+
+    const res = await GET(makeRequest("2026-04"));
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.success).toBe(true);
+    expect(body.data).toMatchObject({
+      month: "2026-04",
+      repairRevenue: expect.any(String),
+      commissionAmount: expect.any(String),
+      netAmount: expect.any(String),
+      completedBookings: expect.any(Number),
+      pendingSettlement: expect.any(String),
+      depositCollected: expect.any(String),
+      entries: expect.any(Array),
+    });
   });
 });
