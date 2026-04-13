@@ -26,7 +26,8 @@ export default function MerchantSettingsPage() {
   );
   const [logoUrl, setLogoUrl]   = useState<string | null>(null);
   const [coverUrl, setCoverUrl] = useState<string | null>(null);
-  const [uploading, setUploading] = useState<"logo" | "cover" | null>(null);
+  const [uploading, setUploading]     = useState<"logo" | "cover" | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const logoInputRef  = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
 
@@ -49,6 +50,7 @@ export default function MerchantSettingsPage() {
 
   async function handleImageUpload(kind: "logo" | "cover", file: File) {
     setUploading(kind);
+    setUploadError(null);
     const fd = new FormData();
     fd.append("file", file);
     fd.append("kind", kind);
@@ -58,7 +60,11 @@ export default function MerchantSettingsPage() {
       if (d.success) {
         if (kind === "logo") setLogoUrl(d.url);
         else setCoverUrl(d.url);
+      } else {
+        setUploadError(d.error ?? "Upload failed");
       }
+    } catch {
+      setUploadError("Network error — please try again");
     } finally {
       setUploading(null);
     }
@@ -91,6 +97,11 @@ export default function MerchantSettingsPage() {
       {/* Images */}
       <section className="space-y-4">
         <h2 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">Shop Images</h2>
+        {uploadError && (
+          <div className="bg-destructive/10 border border-destructive/30 rounded-xl px-4 py-3 text-sm text-destructive">
+            {uploadError}
+          </div>
+        )}
         <div className="grid grid-cols-2 gap-6">
           {/* Logo */}
           <div className="space-y-2">
