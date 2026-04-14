@@ -122,7 +122,7 @@ export default async function DevicePage({
         className="relative w-full"
         style={{ background: "linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 45%, #0f3460 100%)" }}
       >
-        <div className="max-w-[1600px] mx-auto px-5 md:px-8 pt-6 pb-8 relative">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 xl:px-16 pt-6 pb-8 relative">
           {/* Back link */}
           <Link
             href="/"
@@ -169,7 +169,7 @@ export default async function DevicePage({
       </div>
 
       {/* ── Services ─────────────────────────────────── */}
-      <div className="max-w-[1600px] mx-auto px-5 md:px-8 pt-6 space-y-4">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 xl:px-16 pt-6 space-y-4">
         {grouped.length === 0 ? (
           <div className="text-center py-16 text-[#898989] text-sm">
             No services available for this device.

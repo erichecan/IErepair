@@ -6,7 +6,7 @@ export default function ConsumerLayout({ children }: { children: React.ReactNode
     <div className="flex flex-col min-h-screen bg-white">
       {/* Desktop header */}
       <header className="hidden md:block sticky top-0 z-50 bg-white border-b border-[rgba(34,42,53,0.08)]">
-        <div className="max-w-5xl mx-auto px-8 h-14 flex items-center justify-between">
+        <div className="max-w-screen-2xl mx-auto px-4 md:px-8 lg:px-12 xl:px-16 h-14 flex items-center justify-between">
           <Link href="/" className="font-bold text-[#242424] text-lg tracking-tight" style={{ fontFamily: "'Cal Sans', Inter, sans-serif" }}>
             IERepair
           </Link>
@@ -26,12 +26,12 @@ export default function ConsumerLayout({ children }: { children: React.ReactNode
       </header>
 
       {/* Content */}
-      <main className="flex-1 pb-20 md:pb-0 w-full max-w-[430px] md:max-w-5xl mx-auto">
+      <main className="flex-1 pb-20 md:pb-0 w-full">
         {children}
       </main>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-white border-t border-[rgba(34,42,53,0.08)] z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-[rgba(34,42,53,0.08)] z-50">
         <div className="flex items-center justify-around py-2">
           <MobileNavItem href="/"                      icon={<Search size={22} />} label="Search"  />
           <MobileNavItem href="/repair"                icon={<Wrench size={22} />} label="Repair"  />

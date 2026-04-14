@@ -251,7 +251,7 @@ export default function HomePage() {
                backgroundSize: "40px 40px",
              }} />
 
-        <div className="relative max-w-5xl mx-auto px-5 md:px-8 pt-12 md:pt-20 pb-0">
+        <div className="relative max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 xl:px-16 pt-12 md:pt-20 pb-0">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold text-white/70 border border-white/20 mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
@@ -316,7 +316,7 @@ export default function HomePage() {
       </section>
 
       {/* ══ SELLING POINTS ════════════════════════════════ */}
-      <section className="max-w-5xl mx-auto px-5 md:px-8 pt-10 md:pt-14 pb-2">
+      <section className="max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 xl:px-16 pt-10 md:pt-14 pb-2">
         <div className="grid grid-cols-3 gap-3 md:gap-5">
           {/* Battery — green */}
           <Link href="/repair/list/battery"
@@ -366,7 +366,7 @@ export default function HomePage() {
       </section>
 
       {/* ══ REPAIR SECTIONS ════════════════════════════════ */}
-      <section className="max-w-5xl mx-auto px-5 md:px-8 py-10 md:py-14 space-y-6">
+      <section className="max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 xl:px-16 py-10 md:py-14 space-y-6">
 
         <RepairSection
           title="iPhone Repair"

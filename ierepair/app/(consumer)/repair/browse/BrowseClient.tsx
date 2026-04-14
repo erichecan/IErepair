@@ -50,7 +50,7 @@ export default function BrowseClient({
     <div className="pb-10">
       {/* ── Device Type Tabs ────────────────────────────────── */}
       <div className="sticky top-0 z-10 bg-white border-b border-[rgba(34,42,53,0.08)]">
-        <div className="max-w-[1600px] mx-auto px-5 md:px-8">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12 xl:px-16">
           <div className="flex gap-0">
             {DEVICE_TYPES.map((t) => (
               <button
@@ -69,7 +69,7 @@ export default function BrowseClient({
         </div>
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-5 md:px-8 pt-6">
+      <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12 xl:px-16 pt-6">
         {/* ── Brand Pills ──────────────────────────────────── */}
         <div className="flex flex-wrap gap-2 mb-8">
           <button
@@ -111,7 +111,7 @@ export default function BrowseClient({
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-3">
               {devices.map((device) => (
                 <Link
                   key={device.deviceSlug}
