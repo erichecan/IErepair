@@ -60,7 +60,7 @@ export const FAQ_ITEMS: FAQItem[] = [
     category: "Parts",
     question: "Will my repair affect my device warranty?",
     answer:
-      "Third-party repairs may void the manufacturer's warranty. However, Fonfix repairs come with our own 180-day warranty, which in most cases provides better coverage than what remains on a manufacturer warranty.",
+      "Third-party repairs may void the manufacturer's warranty. However, IErepair repairs come with our own 180-day warranty, which in most cases provides better coverage than what remains on a manufacturer warranty.",
   },
   {
     id: "faq-9",

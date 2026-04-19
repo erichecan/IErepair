@@ -20,14 +20,26 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-const STORAGE_KEY = "fonfix_cart";
+const STORAGE_KEY = "ierepair_cart";
+const LEGACY_STORAGE_KEYS = ["fonfix_cart"];
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      let raw = localStorage.getItem(STORAGE_KEY);
+      // Migrate legacy cart data from previous brand names.
+      if (!raw) {
+        for (const legacy of LEGACY_STORAGE_KEYS) {
+          const v = localStorage.getItem(legacy);
+          if (v) {
+            raw = v;
+            localStorage.removeItem(legacy);
+            break;
+          }
+        }
+      }
       if (raw) setItems(JSON.parse(raw));
     } catch {
       // ignore corrupt storage

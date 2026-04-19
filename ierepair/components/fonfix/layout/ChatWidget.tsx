@@ -12,7 +12,7 @@ export default function ChatWidget() {
         <div className="w-80 rounded-2xl shadow-2xl border border-[var(--fonfix-border)] bg-white overflow-hidden">
           <div className="bg-[var(--fonfix-blue)] px-4 py-3 flex items-center justify-between">
             <div>
-              <p className="text-white font-semibold text-sm">Fonfix Support</p>
+              <p className="text-white font-semibold text-sm">IErepair Support</p>
               <p className="text-white/80 text-xs">Usually replies in minutes</p>
             </div>
             <button

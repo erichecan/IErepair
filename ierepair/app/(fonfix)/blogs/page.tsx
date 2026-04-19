@@ -18,7 +18,7 @@ export default function BlogIndexPage() {
       <div className="bg-white border-b border-[var(--fonfix-border)]">
         <div className="max-w-7xl mx-auto px-6 py-12 text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold text-[var(--fonfix-text)] mb-3">
-            The Fonfix Blog
+            The IErepair Blog
           </h1>
           <p className="text-[var(--fonfix-text-muted)] text-lg max-w-xl mx-auto">
             Repair guides, device tips, and advice for every smartphone owner.

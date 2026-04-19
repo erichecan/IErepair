@@ -9,7 +9,7 @@ const REVIEWS = [
     name: "Ciarán O'B.",
     location: "Cork",
     rating: 5,
-    text: "Dropped my Samsung in a puddle. Brought it to Fonfix the same day — they cleaned it up perfectly. No data lost. Amazing service.",
+    text: "Dropped my Samsung in a puddle. Brought it to IErepair the same day — they cleaned it up perfectly. No data lost. Amazing service.",
   },
   {
     name: "Emma L.",

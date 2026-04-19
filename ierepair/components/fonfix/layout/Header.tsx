@@ -2,197 +2,225 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ShoppingCart, Menu, X, ChevronDown, Phone, MapPin } from "lucide-react";
+import { ShoppingCart, Menu, X, ChevronDown } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
-import { BRANDS } from "@/data/fonfix/brands";
 
-const REPAIR_TYPES = [
-  { label: "Screen Replacement", slug: "screen" },
-  { label: "Battery Replacement", slug: "battery" },
-  { label: "Charging Port", slug: "charging-port" },
-  { label: "Water Damage", slug: "water-damage" },
-  { label: "Back Cover", slug: "back-cover" },
+/**
+ * Nav routes are grounded in what the app actually renders today:
+ *   /repair/browse?type=phone|tablet&brand=Apple|Samsung|Google|OnePlus|… (server-rendered device catalog)
+ *   /repair/list/{screen|battery|back-glass|charging}                    (category landing pages)
+ *   /pages/stores /pages/warranty /pages/business /pages/faq /pages/contact /pages/about
+ *
+ * Everything else used to 404 — removed.
+ */
+const NAV_ITEMS: {
+  label: string;
+  href?: string;
+  items?: { name: string; href: string }[];
+}[] = [
+  {
+    label: "Phones",
+    items: [
+      { name: "Apple iPhone",      href: "/repair/browse?type=phone&brand=Apple" },
+      { name: "Samsung Galaxy",    href: "/repair/browse?type=phone&brand=Samsung" },
+      { name: "Google Pixel",      href: "/repair/browse?type=phone&brand=Google" },
+      { name: "OnePlus",           href: "/repair/browse?type=phone&brand=OnePlus" },
+      { name: "All phone models",  href: "/repair/browse?type=phone" },
+    ],
+  },
+  {
+    label: "Tablets",
+    items: [
+      { name: "iPad",              href: "/repair/browse?type=tablet&brand=Apple" },
+      { name: "Samsung Tab",       href: "/repair/browse?type=tablet&brand=Samsung" },
+      { name: "All tablet models", href: "/repair/browse?type=tablet" },
+    ],
+  },
+  {
+    label: "Repairs",
+    items: [
+      { name: "Screen repair",       href: "/repair/list/screen" },
+      { name: "Battery replacement", href: "/repair/list/battery" },
+      { name: "Back glass",          href: "/repair/list/back-glass" },
+      { name: "Charging port",       href: "/repair/list/charging" },
+    ],
+  },
+  { label: "Stores",    href: "/pages/stores" },
+  { label: "Business",  href: "/pages/business" },
+  { label: "Warranty",  href: "/pages/warranty" },
 ];
 
-export default function FonfixHeader() {
+export default function IErepairHeader() {
   const { count } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [megaOpen, setMegaOpen] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-[var(--fonfix-border)] shadow-sm">
-      {/* Desktop */}
-      <div className="hidden md:flex items-center justify-between max-w-7xl mx-auto px-6 h-16">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 shrink-0">
-          <span className="text-[var(--fonfix-blue)] font-extrabold text-2xl tracking-tight">
-            Fonfix
-          </span>
-          <span className="text-xs text-[var(--fonfix-text-muted)] border border-[var(--fonfix-border)] rounded px-1.5 py-0.5 font-medium">
-            .ie
-          </span>
+    <header className="sticky top-0 z-50 bg-[#1c3230]">
+      {/* Desktop — single dark bar */}
+      <div className="hidden md:flex items-center justify-between max-w-7xl mx-auto px-6 h-14">
+        <Link href="/" className="flex items-center gap-1.5 shrink-0 mr-6">
+          <span className="text-white font-extrabold text-xl tracking-tight">IErepair</span>
+          <span className="text-white/40 text-xs border border-white/20 rounded px-1 py-0.5 font-medium">.ie</span>
         </Link>
 
-        {/* Nav */}
-        <nav className="flex items-center gap-1">
-          {/* Repairs mega-menu */}
-          <div
-            className="relative"
-            onMouseEnter={() => setMegaOpen(true)}
-            onMouseLeave={() => setMegaOpen(false)}
-          >
-            <button className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium text-[var(--fonfix-text)] hover:bg-[var(--fonfix-blue-light)] transition-colors">
-              Repairs <ChevronDown size={14} className={`transition-transform ${megaOpen ? "rotate-180" : ""}`} />
-            </button>
+        <nav className="flex items-center gap-0 flex-1">
+          {NAV_ITEMS.map((item) => {
+            if (item.href) {
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="px-3 py-2 text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 rounded transition-colors"
+                >
+                  {item.label}
+                </Link>
+              );
+            }
+            return (
+              <div
+                key={item.label}
+                className="relative"
+                onMouseEnter={() => setActiveMenu(item.label)}
+                onMouseLeave={() => setActiveMenu(null)}
+              >
+                <button
+                  className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 rounded transition-colors"
+                  aria-expanded={activeMenu === item.label}
+                  aria-haspopup="menu"
+                >
+                  {item.label}
+                  <ChevronDown
+                    size={12}
+                    className={`transition-transform ${activeMenu === item.label ? "rotate-180" : ""}`}
+                  />
+                </button>
 
-            {megaOpen && (
-              <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[640px]">
-                <div className="bg-white rounded-2xl shadow-xl border border-[var(--fonfix-border)] p-6 grid grid-cols-2 gap-6">
-                  <div>
-                    <p className="text-xs font-semibold text-[var(--fonfix-text-muted)] uppercase tracking-widest mb-3">
-                      By Brand
-                    </p>
-                    <div className="space-y-1">
-                      {BRANDS.map((b) => (
+                {activeMenu === item.label && item.items && (
+                  <div className="absolute top-full left-0 pt-1 min-w-[220px] z-50" role="menu">
+                    <div className="bg-white rounded-xl shadow-xl border border-gray-100 py-2">
+                      {item.items.map((sub) => (
                         <Link
-                          key={b.slug}
-                          href={`/collections/${b.slug}`}
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-[var(--fonfix-blue-light)] transition-colors text-sm text-[var(--fonfix-text)] font-medium"
+                          key={sub.name}
+                          href={sub.href}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#1c3230] font-medium transition-colors"
+                          role="menuitem"
                         >
-                          {b.name}
+                          {sub.name}
                         </Link>
                       ))}
                     </div>
                   </div>
-                  <div>
-                    <p className="text-xs font-semibold text-[var(--fonfix-text-muted)] uppercase tracking-widest mb-3">
-                      By Repair Type
-                    </p>
-                    <div className="space-y-1">
-                      {REPAIR_TYPES.map((r) => (
-                        <Link
-                          key={r.slug}
-                          href={`/repair/browse?type=${r.slug}`}
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-[var(--fonfix-blue-light)] transition-colors text-sm text-[var(--fonfix-text)]"
-                        >
-                          {r.label}
-                        </Link>
-                      ))}
-                    </div>
-                    <div className="mt-4 pt-4 border-t border-[var(--fonfix-border)]">
-                      <Link
-                        href="/repair/book"
-                        className="block w-full text-center bg-[var(--fonfix-blue)] text-white rounded-xl py-2.5 text-sm font-semibold hover:bg-[var(--fonfix-blue-dark)] transition-colors"
-                      >
-                        Book a Repair →
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
-            )}
-          </div>
-
-          <NavLink href="/pages/about">About</NavLink>
-          <NavLink href="/pages/faq">FAQ</NavLink>
-          <NavLink href="/pages/stores">Stores</NavLink>
-          <NavLink href="/blogs">Blog</NavLink>
+            );
+          })}
         </nav>
 
         {/* Right actions */}
-        <div className="flex items-center gap-3">
-          <a
-            href="tel:+35312345678"
-            className="hidden lg:flex items-center gap-1.5 text-sm text-[var(--fonfix-text-muted)] hover:text-[var(--fonfix-blue)] transition-colors font-medium"
+        <div className="flex items-center gap-3 ml-4">
+          <Link
+            href="/repair/browse"
+            className="px-4 py-1.5 text-xs font-semibold bg-white text-[#1c3230] rounded-lg hover:bg-gray-100 transition-colors"
           >
-            <Phone size={14} />
-            +353 1 234 5678
-          </a>
+            Book a Repair
+          </Link>
           <Link
             href="/cart"
-            className="relative flex items-center justify-center w-10 h-10 rounded-xl hover:bg-[var(--fonfix-blue-light)] transition-colors"
+            className="relative flex items-center justify-center w-8 h-8"
             aria-label="Cart"
           >
-            <ShoppingCart size={20} className="text-[var(--fonfix-text)]" />
+            <ShoppingCart size={18} className="text-white/80 hover:text-white" />
             {count > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-[var(--fonfix-blue)] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-white text-[#1c3230] text-[9px] font-bold rounded-full flex items-center justify-center">
                 {count}
               </span>
             )}
           </Link>
           <Link
             href="/account"
-            className="px-4 py-2 text-sm font-semibold text-white bg-[var(--fonfix-blue)] rounded-xl hover:bg-[var(--fonfix-blue-dark)] transition-colors"
+            className="text-sm font-medium text-white/80 hover:text-white transition-colors"
           >
             Sign In
           </Link>
         </div>
       </div>
 
-      {/* Mobile */}
-      <div className="md:hidden flex items-center justify-between px-4 h-14">
-        <Link href="/" className="font-extrabold text-xl text-[var(--fonfix-blue)]">
-          Fonfix
+      {/* Mobile top bar */}
+      <div className="md:hidden flex items-center justify-between px-4 h-12">
+        <Link href="/" className="font-extrabold text-lg text-white">
+          IErepair<span className="text-white/40 text-xs">.ie</span>
         </Link>
         <div className="flex items-center gap-2">
-          <Link href="/cart" className="relative w-10 h-10 flex items-center justify-center">
-            <ShoppingCart size={20} />
+          <Link
+            href="/cart"
+            className="relative w-8 h-8 flex items-center justify-center"
+            aria-label="Cart"
+          >
+            <ShoppingCart size={18} className="text-white/80" />
             {count > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[var(--fonfix-blue)] text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-white text-[#1c3230] text-[9px] font-bold rounded-full flex items-center justify-center">
                 {count}
               </span>
             )}
           </Link>
           <button
             onClick={() => setMobileOpen((v) => !v)}
-            className="w-10 h-10 flex items-center justify-center"
-            aria-label="Menu"
+            className="w-8 h-8 flex items-center justify-center"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
           >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+            {mobileOpen ? <X size={20} className="text-white" /> : <Menu size={20} className="text-white" />}
           </button>
         </div>
       </div>
 
       {/* Mobile drawer */}
       {mobileOpen && (
-        <div className="md:hidden absolute top-14 left-0 right-0 bg-white border-b border-[var(--fonfix-border)] shadow-lg z-50">
+        <div className="md:hidden absolute top-12 left-0 right-0 bg-white border-b border-gray-100 shadow-lg z-50 max-h-[80vh] overflow-y-auto">
           <div className="px-4 py-4 space-y-1">
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-[var(--fonfix-text-muted)] px-3 mb-2">
-              Repairs by Brand
-            </p>
-            {BRANDS.map((b) => (
-              <Link
-                key={b.slug}
-                href={`/collections/${b.slug}`}
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--fonfix-text)] hover:bg-[var(--fonfix-blue-light)]"
-              >
-                {b.name}
-              </Link>
+            {NAV_ITEMS.map((item) => (
+              <div key={item.label}>
+                {item.items ? (
+                  <>
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 px-3 pt-3 pb-1">
+                      {item.label}
+                    </p>
+                    {item.items.map((sub) => (
+                      <Link
+                        key={sub.name}
+                        href={sub.href}
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+                      >
+                        {sub.name}
+                      </Link>
+                    ))}
+                  </>
+                ) : (
+                  <Link
+                    href={item.href!}
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    {item.label}
+                  </Link>
+                )}
+              </div>
             ))}
-            <div className="h-px bg-[var(--fonfix-border)] my-2" />
-            {[
-              { href: "/pages/about", label: "About" },
-              { href: "/pages/faq", label: "FAQ" },
-              { href: "/pages/stores", label: "Stores", icon: <MapPin size={14} /> },
-              { href: "/blogs", label: "Blog" },
-              { href: "/account", label: "Account" },
-            ].map(({ href, label, icon }) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--fonfix-text)] hover:bg-[var(--fonfix-blue-light)]"
-              >
-                {icon}
-                {label}
-              </Link>
-            ))}
+            <div className="h-px bg-gray-100 my-2" />
+            <Link
+              href="/account"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+            >
+              Account
+            </Link>
             <div className="pt-2">
               <Link
-                href="/repair/book"
+                href="/repair/browse"
                 onClick={() => setMobileOpen(false)}
-                className="block w-full text-center bg-[var(--fonfix-blue)] text-white py-3 rounded-xl font-semibold text-sm"
+                className="block w-full text-center bg-[#1c3230] text-white py-3 rounded-xl font-semibold text-sm"
               >
                 Book a Repair
               </Link>
@@ -201,16 +229,5 @@ export default function FonfixHeader() {
         </div>
       )}
     </header>
-  );
-}
-
-function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <Link
-      href={href}
-      className="px-3 py-2 rounded-lg text-sm font-medium text-[var(--fonfix-text)] hover:bg-[var(--fonfix-blue-light)] transition-colors"
-    >
-      {children}
-    </Link>
   );
 }

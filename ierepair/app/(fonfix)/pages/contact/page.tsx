@@ -23,8 +23,8 @@ export default function ContactPage() {
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-3">
                 <span className="text-[var(--fonfix-blue)]">✉</span>
-                <a href="mailto:hello@fonfix.ie" className="text-[var(--fonfix-blue)] hover:underline">
-                  hello@fonfix.ie
+                <a href="mailto:hello@ierepair.ie" className="text-[var(--fonfix-blue)] hover:underline">
+                  hello@ierepair.ie
                 </a>
               </div>
               <div className="flex items-center gap-3">
@@ -38,8 +38,8 @@ export default function ContactPage() {
             <h2 className="text-xl font-extrabold text-[var(--fonfix-text)] mb-4">Business enquiries</h2>
             <div className="flex items-center gap-3 text-sm">
               <span className="text-[var(--fonfix-blue)]">✉</span>
-              <a href="mailto:business@fonfix.ie" className="text-[var(--fonfix-blue)] hover:underline">
-                business@fonfix.ie
+              <a href="mailto:business@ierepair.ie" className="text-[var(--fonfix-blue)] hover:underline">
+                business@ierepair.ie
               </a>
             </div>
           </div>

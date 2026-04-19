@@ -189,7 +189,7 @@ export default async function DevicePage({
             <div className="text-white/50 text-sm mt-1">Pay only 20% deposit to secure your slot</div>
           </div>
           <Link
-            href={`/repair/book?device=${encodeURIComponent(device.deviceModel)}`}
+            href={`/repair/device/${device.deviceSlug}/book`}
             className="px-6 py-3 bg-[#e05c2a] text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-opacity flex items-center gap-2 shrink-0"
           >
             Book Repair

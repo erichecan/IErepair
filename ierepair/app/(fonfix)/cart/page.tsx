@@ -67,7 +67,7 @@ export default function CartPage() {
             Secure your booking with a small deposit. Pay the remaining balance in-store after your repair.
           </p>
           <Link
-            href="/repair/book"
+            href="/repair/browse"
             className="block text-center px-6 py-4 bg-[var(--fonfix-blue)] text-white font-bold rounded-xl hover:bg-[var(--fonfix-blue-dark)] transition-colors mb-3"
           >
             Proceed to Booking →

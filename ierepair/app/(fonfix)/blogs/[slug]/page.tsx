@@ -62,7 +62,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             Same-day service · 180-day warranty · No Fix, No Fee
           </p>
           <Link
-            href="/repair/book"
+            href="/repair/browse"
             className="inline-block px-8 py-4 bg-[var(--fonfix-blue)] text-white font-bold rounded-xl hover:bg-[var(--fonfix-blue-dark)] transition-colors"
           >
             Book a Repair →

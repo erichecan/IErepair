@@ -42,7 +42,7 @@ export default function FAQPage() {
             Frequently Asked Questions
           </h1>
           <p className="text-[var(--fonfix-text-muted)] text-lg">
-            Everything you need to know about Fonfix repairs.
+            Everything you need to know about IErepair repairs.
           </p>
         </div>
       </div>
@@ -76,7 +76,7 @@ export default function FAQPage() {
         <div className="mt-12 text-center">
           <p className="text-[var(--fonfix-text-muted)] mb-4">Still have questions?</p>
           <a
-            href="mailto:hello@fonfix.ie"
+            href="mailto:hello@ierepair.ie"
             className="inline-block px-6 py-3 border-2 border-[var(--fonfix-blue)] text-[var(--fonfix-blue)] font-bold rounded-xl hover:bg-[var(--fonfix-blue-light)] transition-colors"
           >
             Email us →

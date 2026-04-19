@@ -10,7 +10,7 @@ export default function PrivacyPolicyPage() {
         <div className="prose prose-slate max-w-none prose-headings:font-extrabold prose-headings:text-[var(--fonfix-text)] prose-p:text-[var(--fonfix-text-muted)] prose-p:leading-relaxed">
           <h2>1. Who we are</h2>
           <p>
-            Fonfix Ireland Ltd ("Fonfix", "we", "us") operates repair centres in Ireland and the Fonfix.ie
+            IErepair Ireland Ltd ("IErepair", "we", "us") operates repair centres in Ireland and the IErepair.ie
             website. Our registered address is 14 Henry Street, Dublin 1, D01 F9X6.
           </p>
 
@@ -31,13 +31,13 @@ export default function PrivacyPolicyPage() {
           <h2>4. Data retention</h2>
           <p>
             Booking records are retained for 3 years for warranty and legal compliance purposes. You may
-            request deletion at any time (subject to legal obligations) by emailing privacy@fonfix.ie.
+            request deletion at any time (subject to legal obligations) by emailing privacy@ierepair.ie.
           </p>
 
           <h2>5. Your rights (GDPR)</h2>
           <p>
             Under GDPR you have the right to access, correct, delete, or port your personal data. Contact
-            privacy@fonfix.ie to exercise any of these rights. You also have the right to lodge a complaint
+            privacy@ierepair.ie to exercise any of these rights. You also have the right to lodge a complaint
             with the Data Protection Commission (dataprotection.ie).
           </p>
 
@@ -49,7 +49,7 @@ export default function PrivacyPolicyPage() {
 
           <h2>7. Contact</h2>
           <p>
-            For privacy-related queries: <a href="mailto:privacy@fonfix.ie">privacy@fonfix.ie</a>
+            For privacy-related queries: <a href="mailto:privacy@ierepair.ie">privacy@ierepair.ie</a>
           </p>
         </div>
       </div>

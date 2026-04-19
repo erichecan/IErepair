@@ -61,7 +61,7 @@ function LoginPageInner() {
         {/* Blue top bar */}
         <div className="bg-[var(--fonfix-blue)] px-6 py-8 text-center">
           <span className="text-white text-2xl font-extrabold tracking-tight">
-            Fonfix<span className="opacity-60">.ie</span>
+            IErepair<span className="opacity-60">.ie</span>
           </span>
           <p className="text-white/70 text-sm mt-1">
             {step === "phone"

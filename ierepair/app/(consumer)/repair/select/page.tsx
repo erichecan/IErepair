@@ -396,7 +396,7 @@ function SelectDeviceContent() {
           {visibleDevices.map((device) => (
             <Link
               key={device.name}
-              href={`/repair/book?device=${encodeURIComponent(device.name)}`}
+              href={`/repair/browse?brand=${encodeURIComponent(brand)}`}
               className="bg-white rounded-xl overflow-hidden hover:scale-[1.02] transition-transform"
               style={{ boxShadow: "rgba(34,42,53,0.08) 0px 0px 0px 1px, rgba(34,42,53,0.04) 0px 4px 8px" }}
             >

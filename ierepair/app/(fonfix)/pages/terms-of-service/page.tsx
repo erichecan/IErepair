@@ -10,8 +10,8 @@ export default function TermsPage() {
         <div className="prose prose-slate max-w-none prose-headings:font-extrabold prose-headings:text-[var(--fonfix-text)] prose-p:text-[var(--fonfix-text-muted)] prose-p:leading-relaxed">
           <h2>1. Service description</h2>
           <p>
-            Fonfix provides phone and device repair services at our Irish retail locations and facilitates
-            online booking through Fonfix.ie. By booking a repair, you agree to these terms.
+            IErepair provides phone and device repair services at our Irish retail locations and facilitates
+            online booking through IErepair.ie. By booking a repair, you agree to these terms.
           </p>
 
           <h2>2. Booking and payment</h2>
@@ -36,7 +36,7 @@ export default function TermsPage() {
 
           <h2>5. Liability</h2>
           <p>
-            Fonfix's liability for any claim arising from a repair is limited to the price paid for that
+            IErepair's liability for any claim arising from a repair is limited to the price paid for that
             repair. We are not liable for data loss — please back up your device before bringing it in.
           </p>
 

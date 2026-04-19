@@ -9,7 +9,7 @@ export default function BusinessCTA() {
             Repairing phones for your business?
           </h2>
           <p className="text-white/60 max-w-lg">
-            Fonfix Business offers bulk repair pricing, dedicated account managers, and priority
+            IErepair Business offers bulk repair pricing, dedicated account managers, and priority
             scheduling for companies with 10+ devices.
           </p>
         </div>
@@ -17,7 +17,7 @@ export default function BusinessCTA() {
           href="/pages/business"
           className="shrink-0 px-8 py-4 bg-[var(--fonfix-blue)] text-white font-bold rounded-xl hover:bg-[var(--fonfix-blue-dark)] transition-colors text-sm"
         >
-          Learn about Fonfix Business →
+          Learn about IErepair Business →
         </Link>
       </div>
     </section>

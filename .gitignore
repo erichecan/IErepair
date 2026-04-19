@@ -23,3 +23,14 @@ dist-ssr
 *.sln
 *.sw?
 .next/
+
+# FUSE mount artifacts (sandbox-only, not real files)
+.fuse_hidden*
+
+# Playwright / test output
+.playwright-mcp/
+test-results/
+playwright-report/
+
+# Tool worktrees
+.claude/worktrees/

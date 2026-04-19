@@ -8,7 +8,7 @@ import NewsletterSection from "@/components/fonfix/sections/NewsletterSection";
 import { COLLECTIONS } from "@/data/fonfix/products";
 import Link from "next/link";
 
-export default function FonfixHomePage() {
+export default function IErepairHomePage() {
   return (
     <>
       <HeroSection />

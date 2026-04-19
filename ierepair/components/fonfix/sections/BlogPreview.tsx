@@ -10,7 +10,7 @@ export default function BlogPreview() {
         <div className="flex items-end justify-between mb-10">
           <div>
             <h2 className="text-3xl md:text-4xl font-extrabold text-[var(--fonfix-text)] mb-2">
-              From the Fonfix blog
+              From the IErepair blog
             </h2>
             <p className="text-[var(--fonfix-text-muted)]">
               Repair guides, tips, and advice for every device.

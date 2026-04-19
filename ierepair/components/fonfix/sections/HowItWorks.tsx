@@ -30,7 +30,7 @@ export default function HowItWorks() {
             How it works
           </h2>
           <p className="text-[var(--fonfix-text-muted)] text-lg max-w-xl mx-auto">
-            Getting your phone repaired at Fonfix is quick, transparent, and hassle-free.
+            Getting your phone repaired at IErepair is quick, transparent, and hassle-free.
           </p>
         </div>
 

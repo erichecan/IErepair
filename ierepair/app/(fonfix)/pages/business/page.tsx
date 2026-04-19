@@ -16,17 +16,17 @@ export default function BusinessPage() {
       <section className="bg-[var(--fonfix-footer-bg)] py-24 px-6">
         <div className="max-w-3xl mx-auto text-center text-white">
           <span className="inline-block text-xs font-semibold bg-white/10 rounded-full px-3 py-1 mb-4">
-            Fonfix Business
+            IErepair Business
           </span>
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
             Phone repair, at scale.
           </h1>
           <p className="text-white/70 text-lg max-w-xl mx-auto mb-8">
-            Fonfix Business offers bulk pricing, dedicated account management, and priority booking for
+            IErepair Business offers bulk pricing, dedicated account management, and priority booking for
             companies with 10 or more devices.
           </p>
           <a
-            href="mailto:business@fonfix.ie"
+            href="mailto:business@ierepair.ie"
             className="inline-block px-8 py-4 bg-[var(--fonfix-blue)] text-white font-bold rounded-xl hover:bg-[var(--fonfix-blue-dark)] transition-colors"
           >
             Contact Business Team →
@@ -60,10 +60,10 @@ export default function BusinessPage() {
           Email our business team and we'll set up an account within one business day.
         </p>
         <a
-          href="mailto:business@fonfix.ie"
+          href="mailto:business@ierepair.ie"
           className="inline-block px-8 py-4 bg-[var(--fonfix-blue)] text-white font-bold rounded-xl hover:bg-[var(--fonfix-blue-dark)] transition-colors"
         >
-          business@fonfix.ie
+          business@ierepair.ie
         </a>
       </section>
     </div>

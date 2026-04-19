@@ -36,7 +36,7 @@ export default function AboutPage() {
             We fix phones. Simply.
           </h1>
           <p className="text-white/80 text-lg max-w-xl mx-auto">
-            Fonfix is Ireland's fastest-growing phone repair service — built on transparent pricing,
+            IErepair is Ireland's fastest-growing phone repair service — built on transparent pricing,
             quality parts, and a no-nonsense warranty.
           </p>
         </div>
@@ -60,7 +60,7 @@ export default function AboutPage() {
           <h2 className="text-3xl font-extrabold text-[var(--fonfix-text)] mb-6">Our story</h2>
           <div className="space-y-4 text-[var(--fonfix-text-muted)] leading-relaxed">
             <p>
-              Fonfix started in Dublin in 2019 with a single goal: make quality phone repair accessible to
+              IErepair started in Dublin in 2019 with a single goal: make quality phone repair accessible to
               everyone in Ireland. We were frustrated by the lack of transparent pricing, long wait times,
               and repairs that failed within weeks.
             </p>
@@ -100,7 +100,7 @@ export default function AboutPage() {
           Ready to get your device fixed?
         </h2>
         <Link
-          href="/repair/book"
+          href="/repair/browse"
           className="inline-block px-8 py-4 bg-[var(--fonfix-blue)] text-white font-bold rounded-xl hover:bg-[var(--fonfix-blue-dark)] transition-colors"
         >
           Book a Repair →

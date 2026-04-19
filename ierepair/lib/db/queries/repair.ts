@@ -62,6 +62,58 @@ export type PaginatedResult<T> = {
   totalPages: number;
 };
 
+export type MerchantForDevice = {
+  merchantId: string;
+  merchantSlug: string;
+  shopName: string;
+  city: string | null;
+  logoUrl: string | null;
+  rating: string | null;
+  reviewCount: number;
+  serviceCount: number;
+  minPrice: number | null;
+  maxPrice: number | null;
+};
+
+async function _getMerchantsForDevice(deviceSlug: string): Promise<MerchantForDevice[]> {
+  const rows = await db.execute(sql`
+    SELECT
+      m.id              AS "merchantId",
+      m.slug            AS "merchantSlug",
+      m.shop_name       AS "shopName",
+      m.city,
+      m.logo_url        AS "logoUrl",
+      m.rating,
+      m.review_count    AS "reviewCount",
+      COUNT(ms.id)::int AS "serviceCount",
+      MIN(ms.price)::numeric AS "minPrice",
+      MAX(ms.price)::numeric AS "maxPrice"
+    FROM merchants m
+    INNER JOIN merchant_services ms ON ms.merchant_id = m.id AND ms.is_available = true
+    INNER JOIN repair_services rs   ON rs.id = ms.repair_service_id AND rs.is_active = true
+    WHERE m.status = 'active'
+      AND rs.device_slug = ${deviceSlug}
+    GROUP BY m.id, m.slug, m.shop_name, m.city, m.logo_url, m.rating, m.review_count
+    ORDER BY m.rating DESC NULLS LAST, m.review_count DESC
+  `);
+
+  return (rows as unknown[]).map((r) => {
+    const row = r as Record<string, unknown>;
+    return {
+      merchantId:   String(row.merchantId ?? ""),
+      merchantSlug: String(row.merchantSlug ?? ""),
+      shopName:     String(row.shopName ?? ""),
+      city:         row.city ? String(row.city) : null,
+      logoUrl:      row.logoUrl ? String(row.logoUrl) : null,
+      rating:       row.rating != null ? String(row.rating) : null,
+      reviewCount:  Number(row.reviewCount ?? 0),
+      serviceCount: Number(row.serviceCount ?? 0),
+      minPrice:     row.minPrice != null ? Number(row.minPrice) : null,
+      maxPrice:     row.maxPrice != null ? Number(row.maxPrice) : null,
+    };
+  });
+}
+
 /* ─── Internal query functions ─────────────────────────── */
 
 async function _getDevicesByCategory(
@@ -274,4 +326,10 @@ export const getDevicesByBrand = unstable_cache(
   _getDevicesByBrand,
   ["devices-by-brand"],
   { revalidate: 300, tags: ["repair-services"] }
+);
+
+export const getMerchantsForDevice = unstable_cache(
+  _getMerchantsForDevice,
+  ["merchants-for-device"],
+  { revalidate: 120, tags: ["repair-services", "merchants"] }
 );

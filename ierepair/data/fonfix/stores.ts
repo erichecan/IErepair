@@ -16,13 +16,13 @@ export type Store = {
 
 export const STORES: Store[] = [
   {
-    id: "fonfix-dublin-city",
-    name: "Fonfix Dublin City",
+    id: "ierepair-dublin-city",
+    name: "IErepair Dublin City",
     address: "14 Henry Street",
     city: "Dublin 1",
     eircode: "D01 F9X6",
     phone: "+353 1 234 5678",
-    email: "dublin@fonfix.ie",
+    email: "dublin@ierepair.ie",
     hours: {
       "Mon–Fri": "9:00 – 18:00",
       "Saturday": "10:00 – 17:00",
@@ -35,13 +35,13 @@ export const STORES: Store[] = [
     reviewCount: 312,
   },
   {
-    id: "fonfix-cork",
-    name: "Fonfix Cork",
+    id: "ierepair-cork",
+    name: "IErepair Cork",
     address: "22 St. Patrick's Street",
     city: "Cork",
     eircode: "T12 DF28",
     phone: "+353 21 456 7890",
-    email: "cork@fonfix.ie",
+    email: "cork@ierepair.ie",
     hours: {
       "Mon–Fri": "9:00 – 18:00",
       "Saturday": "10:00 – 17:00",
@@ -54,13 +54,13 @@ export const STORES: Store[] = [
     reviewCount: 198,
   },
   {
-    id: "fonfix-galway",
-    name: "Fonfix Galway",
+    id: "ierepair-galway",
+    name: "IErepair Galway",
     address: "8 Shop Street",
     city: "Galway",
     eircode: "H91 YD65",
     phone: "+353 91 123 456",
-    email: "galway@fonfix.ie",
+    email: "galway@ierepair.ie",
     hours: {
       "Mon–Fri": "9:00 – 18:00",
       "Saturday": "10:00 – 17:00",
@@ -73,13 +73,13 @@ export const STORES: Store[] = [
     reviewCount: 145,
   },
   {
-    id: "fonfix-limerick",
-    name: "Fonfix Limerick",
+    id: "ierepair-limerick",
+    name: "IErepair Limerick",
     address: "45 O'Connell Street",
     city: "Limerick",
     eircode: "V94 N6E5",
     phone: "+353 61 234 567",
-    email: "limerick@fonfix.ie",
+    email: "limerick@ierepair.ie",
     hours: {
       "Mon–Fri": "9:00 – 18:00",
       "Saturday": "10:00 – 17:00",

@@ -24,10 +24,10 @@ export const BLOG_POSTS: BlogPost[] = [
 <p>OEM-quality parts are manufactured to the same specifications as the original Apple screen, but not made by Apple itself. They offer the same brightness, colour accuracy, and touch sensitivity as the factory display.</p>
 <h2>How to Prepare</h2>
 <ul><li>Back up your device via iCloud or iTunes before your appointment</li><li>Remove your case and screen protector</li><li>Note your current battery health percentage (Settings → Battery)</li></ul>
-<p>At Fonfix, most iPhone screen repairs are done in under 45 minutes. Book online and pay just a 20% deposit.</p>
+<p>At IErepair, most iPhone screen repairs are done in under 45 minutes. Book online and pay just a 20% deposit.</p>
     `.trim(),
     coverImage: "/images/devices/20260212-9a5cef9e3bc4480d910af7d07380e001.jpg",
-    author: "Fonfix Editorial",
+    author: "IErepair Editorial",
     publishedAt: "2026-04-10",
     category: "Repair Guides",
     readTime: 4,
@@ -49,10 +49,10 @@ export const BLOG_POSTS: BlogPost[] = [
 <p>This is the most urgent sign. A swollen battery can crack the screen and poses a safety risk. Bring your device in immediately.</p>
 <h2>5. Slow performance despite recent software updates</h2>
 <p>Android may throttle performance to compensate for poor battery delivery. A new battery often restores previous performance levels.</p>
-<p>Fonfix battery replacements come with a 180-day warranty. Same-day service available at all our stores.</p>
+<p>IErepair battery replacements come with a 180-day warranty. Same-day service available at all our stores.</p>
     `.trim(),
     coverImage: "/images/devices/20260205-d668a073f19b43a0babc3ebf878b56af.jpg",
-    author: "Fonfix Editorial",
+    author: "IErepair Editorial",
     publishedAt: "2026-04-03",
     category: "Tips & Advice",
     readTime: 3,
@@ -73,10 +73,10 @@ export const BLOG_POSTS: BlogPost[] = [
 <h2>4. Pat dry gently</h2>
 <p>Use a lint-free cloth to absorb surface moisture. Tilt the device to let water drain from ports naturally.</p>
 <h2>5. Get to a repair shop within 24 hours</h2>
-<p>Professional ultrasonic cleaning removes mineral deposits before they cause permanent corrosion. The sooner you bring it in, the higher the success rate. Fonfix offers water damage assessment with no diagnostic fee.</p>
+<p>Professional ultrasonic cleaning removes mineral deposits before they cause permanent corrosion. The sooner you bring it in, the higher the success rate. IErepair offers water damage assessment with no diagnostic fee.</p>
     `.trim(),
     coverImage: "/images/devices/20260209-959958bcbf6e4b9886d80b6f1b1cebef.jpg",
-    author: "Fonfix Editorial",
+    author: "IErepair Editorial",
     publishedAt: "2026-03-28",
     category: "Tips & Advice",
     readTime: 3,
@@ -88,7 +88,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "Not all screen protectors are equal. We break down the real differences between tempered glass and plastic film so you can make the right choice for your device.",
     content: `<p>Full content coming soon.</p>`,
     coverImage: "/images/devices/20260130-499c3126bbb54779933327e617e7c7a7.jpg",
-    author: "Fonfix Editorial",
+    author: "IErepair Editorial",
     publishedAt: "2026-03-20",
     category: "Buying Guides",
     readTime: 5,
@@ -100,7 +100,7 @@ export const BLOG_POSTS: BlogPost[] = [
       "We compared real repair costs and part availability for both brands across screen, battery, and charging port repairs.",
     content: `<p>Full content coming soon.</p>`,
     coverImage: "/images/devices/20260209-e8823b5010274226a2ef2674c436833a.jpg",
-    author: "Fonfix Editorial",
+    author: "IErepair Editorial",
     publishedAt: "2026-03-14",
     category: "Repair Guides",
     readTime: 6,

@@ -75,7 +75,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 Pay just €{product.depositAmount} now to secure your booking. Remaining balance due in-store.
               </p>
               <Link
-                href="/repair/book"
+                href={`/repair/browse?type=phone&brand=${encodeURIComponent(product.brand)}`}
                 className="block text-center px-6 py-4 bg-[var(--fonfix-blue)] text-white font-bold rounded-xl hover:bg-[var(--fonfix-blue-dark)] transition-colors"
               >
                 Book This Repair →

@@ -17,7 +17,7 @@ export default function StoresPage() {
       <div className="bg-white border-b border-[var(--fonfix-border)]">
         <div className="max-w-5xl mx-auto px-6 py-12 text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold text-[var(--fonfix-text)] mb-3">
-            Find a Fonfix Store
+            Find a IErepair Store
           </h1>
           <p className="text-[var(--fonfix-text-muted)] text-lg">
             {STORES.length} repair centres across Ireland — all offering same-day service.
@@ -81,7 +81,7 @@ export default function StoresPage() {
                   Get directions
                 </a>
                 <Link
-                  href="/repair/book"
+                  href="/repair/browse"
                   className="flex-1 text-center py-2.5 bg-[var(--fonfix-blue)] text-white text-sm font-bold rounded-xl hover:bg-[var(--fonfix-blue-dark)] transition-colors"
                 >
                   Book here

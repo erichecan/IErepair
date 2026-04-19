@@ -22,7 +22,7 @@ export default function HeroSection() {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
           <Link
-            href="/repair/book"
+            href="/repair/browse"
             className="px-8 py-4 bg-white text-[var(--fonfix-blue)] font-bold rounded-xl hover:bg-white/90 transition-colors text-base"
           >
             Book a Repair →

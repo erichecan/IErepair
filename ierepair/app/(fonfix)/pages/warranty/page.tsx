@@ -26,7 +26,7 @@ export default function WarrantyPage() {
             180-Day Repair Warranty
           </h1>
           <p className="text-[var(--fonfix-text-muted)] text-lg">
-            Every Fonfix repair is backed by our 180-day warranty covering parts and labour.
+            Every IErepair repair is backed by our 180-day warranty covering parts and labour.
           </p>
         </div>
       </div>
@@ -62,7 +62,7 @@ export default function WarrantyPage() {
         <div className="bg-[var(--fonfix-blue-light)] rounded-2xl p-6">
           <h2 className="text-xl font-extrabold text-[var(--fonfix-text)] mb-3">How to make a claim</h2>
           <p className="text-[var(--fonfix-text-muted)] text-sm leading-relaxed mb-4">
-            Bring your device and your original repair receipt to any Fonfix store. We'll assess the fault
+            Bring your device and your original repair receipt to any IErepair store. We'll assess the fault
             and, if it's covered under warranty, fix it at no charge. No booking required for warranty claims.
           </p>
           <Link

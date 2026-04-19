@@ -41,7 +41,7 @@ export default function WhyChooseUs() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-14">
           <h2 className="text-3xl md:text-4xl font-extrabold text-[var(--fonfix-text)] mb-3">
-            Why choose Fonfix?
+            Why choose IErepair?
           </h2>
           <p className="text-[var(--fonfix-text-muted)] text-lg max-w-xl mx-auto">
             We've repaired over 50,000 devices across Ireland. Here's what makes us different.
