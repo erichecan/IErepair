@@ -6,11 +6,12 @@ export function generateStaticParams() {
   return COLLECTIONS.map((c) => ({ slug: c.slug }));
 }
 
-export default function CollectionPage({ params }: { params: { slug: string } }) {
-  const collection = getCollectionBySlug(params.slug);
+export default async function CollectionPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const collection = getCollectionBySlug(slug);
   if (!collection) notFound();
 
-  const products = getProductsByBrand(params.slug);
+  const products = getProductsByBrand(slug);
 
   return (
     <div className="min-h-screen bg-[#F8FAFD]">
