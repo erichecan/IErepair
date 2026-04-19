@@ -84,6 +84,18 @@
   --sidebar-ring: #242424;
 }
 
+/* Fonfix Design Tokens */
+:root {
+  --fonfix-blue: #0066B3;
+  --fonfix-blue-dark: #004F8C;
+  --fonfix-blue-light: #E8F2FA;
+  --fonfix-footer-bg: #1E2A38;
+  --fonfix-text: #1A1A1A;
+  --fonfix-text-muted: #6B7280;
+  --fonfix-border: #E5E7EB;
+  --fonfix-radius: 8px;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

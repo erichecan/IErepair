@@ -4,7 +4,7 @@ import FonfixFooter from "@/components/fonfix/layout/Footer";
 import ChatWidget from "@/components/fonfix/layout/ChatWidget";
 import { CartProvider } from "@/contexts/CartContext";
 
-export default function ConsumerLayout({ children }: { children: React.ReactNode }) {
+export default function FonfixLayout({ children }: { children: React.ReactNode }) {
   return (
     <CartProvider>
       <div className="flex flex-col min-h-screen bg-white">

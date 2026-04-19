@@ -56,21 +56,23 @@ function LoginPageInner() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-sm bg-card border-border">
-        <CardHeader className="text-center space-y-2">
-          <div className="text-3xl font-bold font-heading text-primary">IERepair</div>
-          <CardTitle className="text-xl">Sign In</CardTitle>
-          <CardDescription className="text-muted-foreground">
+    <div className="min-h-screen bg-[#F8FAFD] flex items-center justify-center p-4">
+      <div className="w-full max-w-sm bg-white rounded-2xl border border-[var(--fonfix-border)] shadow-sm overflow-hidden">
+        {/* Blue top bar */}
+        <div className="bg-[var(--fonfix-blue)] px-6 py-8 text-center">
+          <span className="text-white text-2xl font-extrabold tracking-tight">
+            Fonfix<span className="opacity-60">.ie</span>
+          </span>
+          <p className="text-white/70 text-sm mt-1">
             {step === "phone"
-              ? "Enter your Irish mobile number to get a verification code"
-              : `We sent a 6-digit code to ${phone}`}
-          </CardDescription>
-        </CardHeader>
+              ? "Sign in with your Irish mobile number"
+              : `Code sent to ${phone}`}
+          </p>
+        </div>
 
-        <CardContent className="space-y-4">
+        <div className="px-6 py-8 space-y-4">
           {error && (
-            <div className="bg-destructive/15 border border-destructive/30 text-destructive text-sm rounded-md px-3 py-2">
+            <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3">
               {error}
             </div>
           )}
@@ -78,7 +80,9 @@ function LoginPageInner() {
           {step === "phone" ? (
             <div className="space-y-3">
               <div>
-                <Label htmlFor="phone">Phone Number</Label>
+                <Label htmlFor="phone" className="text-[var(--fonfix-text)] font-semibold text-sm">
+                  Phone Number
+                </Label>
                 <Input
                   id="phone"
                   type="tel"
@@ -86,13 +90,13 @@ function LoginPageInner() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSendOTP()}
-                  className="mt-1 bg-secondary border-border"
+                  className="mt-1 border-[var(--fonfix-border)] focus-visible:ring-[var(--fonfix-blue)]"
                 />
               </div>
               <Button
                 onClick={handleSendOTP}
                 disabled={loading || !phone}
-                className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                className="w-full bg-[var(--fonfix-blue)] hover:bg-[var(--fonfix-blue-dark)] text-white font-bold rounded-xl h-11"
               >
                 {loading ? "Sending…" : "Send Code"}
               </Button>
@@ -100,7 +104,9 @@ function LoginPageInner() {
           ) : (
             <div className="space-y-3">
               <div>
-                <Label htmlFor="code">Verification Code</Label>
+                <Label htmlFor="code" className="text-[var(--fonfix-text)] font-semibold text-sm">
+                  Verification Code
+                </Label>
                 <Input
                   id="code"
                   type="text"
@@ -110,26 +116,26 @@ function LoginPageInner() {
                   value={code}
                   onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
                   onKeyDown={(e) => e.key === "Enter" && handleVerifyOTP()}
-                  className="mt-1 bg-secondary border-border text-center text-2xl tracking-widest"
+                  className="mt-1 border-[var(--fonfix-border)] focus-visible:ring-[var(--fonfix-blue)] text-center text-2xl tracking-widest"
                 />
               </div>
               <Button
                 onClick={handleVerifyOTP}
                 disabled={loading || code.length !== 6}
-                className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                className="w-full bg-[var(--fonfix-blue)] hover:bg-[var(--fonfix-blue-dark)] text-white font-bold rounded-xl h-11"
               >
                 {loading ? "Verifying…" : "Verify & Sign In"}
               </Button>
               <button
                 onClick={() => { setStep("phone"); setCode(""); setError(""); }}
-                className="w-full text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="w-full text-sm text-[var(--fonfix-text-muted)] hover:text-[var(--fonfix-text)] transition-colors"
               >
                 Use a different number
               </button>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
