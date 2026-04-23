@@ -47,7 +47,7 @@ const NAV_ITEMS: {
   },
   { label: "Stores",    href: "/pages/stores" },
   { label: "Business",  href: "/pages/business" },
-  { label: "Warranty",  href: "/pages/warranty" },
+  { label: "Help",      href: "/help" },
 ];
 
 export default function IErepairHeader() {

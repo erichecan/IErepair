@@ -21,6 +21,7 @@ const FOOTER_LINKS = {
     { label: "Blog",             href: "/blogs" },
   ],
   Support: [
+    { label: "Help Centre",     href: "/help" },
     { label: "FAQ",             href: "/pages/faq" },
     { label: "Contact us",      href: "/pages/contact" },
     { label: "Warranty policy", href: "/pages/warranty" },
