@@ -7,6 +7,12 @@ import { FAQ_ITEMS } from "@/data/fonfix/faq";
 
 const CATEGORIES = [
   {
+    title: "How it works",
+    emoji: "🗺️",
+    desc: "Step-by-step guide from booking to collection",
+    href: "/pages/how-it-works",
+  },
+  {
     title: "Repairs",
     emoji: "🔧",
     desc: "How long repairs take, warranties, parts quality",
@@ -78,7 +84,7 @@ export default function HelpPage() {
         <h2 className="text-xl font-extrabold text-[var(--fonfix-text)] mb-6">
           Browse by topic
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-14">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-14">
           {CATEGORIES.map((cat) => (
             <Link
               key={cat.title}
