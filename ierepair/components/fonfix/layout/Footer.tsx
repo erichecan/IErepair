@@ -23,6 +23,7 @@ const FOOTER_LINKS = {
   Support: [
     { label: "Help Centre",     href: "/help" },
     { label: "How it works",    href: "/pages/how-it-works" },
+    { label: "Partner with us", href: "/pages/partner" },
     { label: "FAQ",             href: "/pages/faq" },
     { label: "Contact us",      href: "/pages/contact" },
     { label: "Warranty policy", href: "/pages/warranty" },
