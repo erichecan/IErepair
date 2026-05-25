@@ -1,0 +1,41 @@
+{
+  "id": "4F89EBE5C15D4F8EBE2A4AE3FDE892D3",
+  "title": "MacBook Air Battery Repair",
+  "cover": "images/model/20260205-2b3530b0e507495a99bdec32e95fd3da.jpg",
+  "order": 5,
+  "keyword": "macbookairbattery",
+  "description": "<p>MacBook Battery Repair – Fast, Professional &amp; Reliable</p><p><span style=\"color: black;\">&nbsp;</span></p><p>Your MacBook battery life is weak? Don't worry,</p><p><span style=\"color: rgb(0, 0, 0);\">At E-Tech, we specialise in professional MacBook repair</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Why Choose E-Tech</span></p><p><span style=\"color: black;\">Screen Repair?</span></p><p><span style=\"color: black;\">• 2-24 hours Repair</span></p><p><span style=\"color: black;\">• OEM Replacement Parts</span></p><p><span style=\"color: black;\">• Expert Technicians</span></p><p><span style=\"color: black;\">• 3-Month Warranty</span></p><p><span style=\"color: black;\">• No Fix, No Fee</span></p><p><span style=\"color: black;\">• Free Diagnostics</span></p><p>&nbsp;</p><p><span style=\"color: black;\">Get Your MacBook </span></p><p><span style=\"color: black;\">Back to Perfect Condition</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: rgb(0, 0, 0);\">Bring your MacBook to E-Tech and have it repaired quickly, professionally, and affordably. Walk in today and get your phone back to normal — fast</span></p>",
+  "categories": [
+    181
+  ],
+  "options": [
+    {
+      "id": 297,
+      "modelId": null,
+      "name": "MacBook Air 2013-2017(A1465,A1466)Battery replacement ",
+      "picture": "images/model/20260205-17776309b2dd4359af040bdaea51854d.jpg",
+      "price": "120"
+    },
+    {
+      "id": 298,
+      "modelId": null,
+      "name": "MacBook Air 2018-2020(A1932,A2179,A2337)Battery replacement ",
+      "picture": "images/model/20260205-36e24ff8c44a49c488ef563fa4da9470.jpg",
+      "price": "150"
+    },
+    {
+      "id": 299,
+      "modelId": null,
+      "name": "MacBook Air 13' 2022-2025(A2681,A3113,A3240)Battery replacement ",
+      "picture": "images/model/20260205-0a32bbf2121d4df2afbd942a5325bcf4.jpg",
+      "price": "190"
+    },
+    {
+      "id": 300,
+      "modelId": null,
+      "name": "MacBook Air 15' 2023-2025(A2941,A3114,A3241)Battery replacement ",
+      "picture": "images/model/20260205-79b229af56024868b1c04ed3dffdb3b5.jpg",
+      "price": "200"
+    }
+  ]
+}

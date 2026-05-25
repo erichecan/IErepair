@@ -1,0 +1,298 @@
+[
+  {
+    "id": 501,
+    "name": "Laptop Screen Replacement ",
+    "parentId": 483,
+    "path": "0-483",
+    "picture": "images/category/20220117-73b51b221a29451698d8977cc55b0386.jpg",
+    "order": 0
+  },
+  {
+    "id": 864,
+    "name": "Apple",
+    "parentId": 509,
+    "path": "0-509",
+    "picture": "images/category/20230816-b6e8a5d373da48f285c872ec11c411f9.png",
+    "order": 0
+  },
+  {
+    "id": 42,
+    "name": "Affiliates",
+    "parentId": 29,
+    "path": "0-29",
+    "picture": null,
+    "order": 0
+  },
+  {
+    "id": 733,
+    "name": "XBOX",
+    "parentId": 500,
+    "path": "0-500",
+    "picture": "images/category/20220907-6b62dd7b958d4480a5b3925704e7dec8.png",
+    "order": 0
+  },
+  {
+    "id": 173,
+    "name": "iPhone ",
+    "parentId": 1,
+    "path": "0-1",
+    "picture": "images/category/20260203-8c7a9f2da7a7416da9d5b9f38daa3f43.jpg",
+    "order": 0
+  },
+  {
+    "id": 732,
+    "name": "NINTENDO SWITCH",
+    "parentId": 500,
+    "path": "0-500",
+    "picture": "images/category/20220907-532f16b94ec940f4a34398d775d40ac7.png",
+    "order": 0
+  },
+  {
+    "id": 731,
+    "name": "PS5 SERIES",
+    "parentId": 500,
+    "path": "0-500",
+    "picture": "images/category/20220907-b7f48f33ef0b400bb9de181770c23921.jpg",
+    "order": 0
+  },
+  {
+    "id": 730,
+    "name": "PS4 SERIES",
+    "parentId": 500,
+    "path": "0-500",
+    "picture": "images/category/20220907-8323b5baa836461698cdf09676d04456.png",
+    "order": 0
+  },
+  {
+    "id": 193,
+    "name": "Galaxy A Series",
+    "parentId": 2,
+    "path": "0-2",
+    "picture": "images/category/20211123-0cdbd595e7b54a29940e79210342f316.jpg",
+    "order": 0
+  },
+  {
+    "id": 194,
+    "name": "Galaxy S Series",
+    "parentId": 2,
+    "path": "0-2",
+    "picture": "images/category/20211123-74a5b960920b43229b884a11eab1909c.jpg",
+    "order": 0
+  },
+  {
+    "id": 195,
+    "name": "Galaxy Note Series",
+    "parentId": 2,
+    "path": "0-2",
+    "picture": "images/category/20211123-5ee804c3c2be49d1b62ce6db618fc6eb.jpg",
+    "order": 0
+  },
+  {
+    "id": 503,
+    "name": "Laptop Battery Replacement ",
+    "parentId": 483,
+    "path": "0-483",
+    "picture": "images/category/20220117-9ff6092a784942249e3980c4466b771f.png",
+    "order": 1
+  },
+  {
+    "id": 511,
+    "name": "Remax",
+    "parentId": 509,
+    "path": "0-509",
+    "picture": "images/category/20220117-506ddcd12dff4854b91759cdd179553c.png",
+    "order": 1
+  },
+  {
+    "id": 178,
+    "name": "iPad",
+    "parentId": 1,
+    "path": "0-1",
+    "picture": "images/category/20211119-c8330ef4a3a24f80a56957c241a0077a.jpg",
+    "order": 1
+  },
+  {
+    "id": 1017,
+    "name": "Phone",
+    "parentId": 0,
+    "path": "0",
+    "picture": "images/category/20260209-1963cae7b7cf4be4bcb852331203270a.jpg",
+    "order": 1
+  },
+  {
+    "id": 512,
+    "name": "Hoco ",
+    "parentId": 509,
+    "path": "0-509",
+    "picture": "images/category/20220117-3e06c4d114904136a4ae0ce30501fda2.png",
+    "order": 2
+  },
+  {
+    "id": 2,
+    "name": "Samsung",
+    "parentId": 1017,
+    "path": "0-1017",
+    "picture": "images/category/20211119-e8b5b81dfbda417f98369a35998be72f.png",
+    "order": 2
+  },
+  {
+    "id": 1,
+    "name": "Apple",
+    "parentId": 0,
+    "path": "0",
+    "picture": "images/category/20260209-dcc1a16bfc694d3daffb92331b25f19c.png",
+    "order": 2
+  },
+  {
+    "id": 181,
+    "name": "MacBook ",
+    "parentId": 1,
+    "path": "0-1",
+    "picture": "images/category/20221219-8f623fa733fa425ba065d0426da67c83.jpg",
+    "order": 2
+  },
+  {
+    "id": 502,
+    "name": "Laptop Keyboard Replacement ",
+    "parentId": 483,
+    "path": "0-483",
+    "picture": "images/category/20220117-8201889adbdf4675a4995cf32e7beb37.png",
+    "order": 2
+  },
+  {
+    "id": 483,
+    "name": "Computer Repair",
+    "parentId": 0,
+    "path": "0",
+    "picture": "images/category/20211208-09b900a35255476fb456d8cd95562e63.jpg",
+    "order": 3
+  },
+  {
+    "id": 776,
+    "name": "Huawei",
+    "parentId": 509,
+    "path": "0-509",
+    "picture": "images/category/20221229-29e20767bf224aaa996714bab9b0c7f3.jpg",
+    "order": 3
+  },
+  {
+    "id": 192,
+    "name": "Google",
+    "parentId": 1017,
+    "path": "0-1017",
+    "picture": "images/category/20211120-85ea36685c854e14b8b91c0a9b76d4d9.png",
+    "order": 3
+  },
+  {
+    "id": 180,
+    "name": "iPod Touch",
+    "parentId": 1,
+    "path": "0-1",
+    "picture": "images/category/20220507-f44b5b18154d428db2aa0e9d33d7b9e8.png",
+    "order": 3
+  },
+  {
+    "id": 760,
+    "name": "Laptop HD/SSD Upgrade/ Replacement ",
+    "parentId": 483,
+    "path": "0-483",
+    "picture": "images/category/20221205-dfb5f80045d34806985d5c4e55b3b707.jpg",
+    "order": 3
+  },
+  {
+    "id": 1011,
+    "name": "Tablet Repair",
+    "parentId": 0,
+    "path": "0",
+    "picture": "images/category/20260209-b34be690f1564dedb4e2d84e3e52d131.jpg",
+    "order": 4
+  },
+  {
+    "id": 146,
+    "name": "OnePlus",
+    "parentId": 1017,
+    "path": "0-1017",
+    "picture": "images/category/20211119-8320f8ce267c487fbf5d99ce132844ad.png",
+    "order": 4
+  },
+  {
+    "id": 765,
+    "name": "Flash Memory",
+    "parentId": 509,
+    "path": "0-509",
+    "picture": "images/category/20221213-a4eb65b46c494add8786422033c44424.png",
+    "order": 4
+  },
+  {
+    "id": 739,
+    "name": "Charome",
+    "parentId": 509,
+    "path": "0-509",
+    "picture": "images/category/20221005-bbe0b1741fb84e63a099f712553a24db.jpg",
+    "order": 5
+  },
+  {
+    "id": 777,
+    "name": "Operating System Install",
+    "parentId": 483,
+    "path": "0-483",
+    "picture": "images/category/20260209-1362b5d6f3bc49039cc5efa0a1cb6dfc.jpeg",
+    "order": 5
+  },
+  {
+    "id": 500,
+    "name": "Gaming Repair",
+    "parentId": 0,
+    "path": "0",
+    "picture": "images/category/20220117-eaf674886e8645438cf19ecb762c239e.jpg",
+    "order": 5
+  },
+  {
+    "id": 513,
+    "name": "Ugreen",
+    "parentId": 509,
+    "path": "0-509",
+    "picture": "images/category/20220117-cf1c868bf7c540f49564866424f98b7e.jpg",
+    "order": 6
+  },
+  {
+    "id": 878,
+    "name": "Virus and Spyware Remove",
+    "parentId": 483,
+    "path": "0-483",
+    "picture": "images/category/20260209-3c448ba11348477eac9f5c2e6b9e5279.jpeg",
+    "order": 6
+  },
+  {
+    "id": 509,
+    "name": "Accessories",
+    "parentId": 0,
+    "path": "0",
+    "picture": "images/category/20220117-888fd7a5e935470690af0c03814e5807.png",
+    "order": 6
+  },
+  {
+    "id": 740,
+    "name": "Other Brand",
+    "parentId": 509,
+    "path": "0-509",
+    "picture": "images/category/20250312-518ef5c5596a443a9baa550f29d3f4af.jpg",
+    "order": 7
+  },
+  {
+    "id": 505,
+    "name": "XiaoMi",
+    "parentId": 1017,
+    "path": "0-1017",
+    "picture": "images/category/20220117-f3445460cb6a4bd09a89e87ef4b28dc6.jpg",
+    "order": 8
+  },
+  {
+    "id": 5,
+    "name": "Oppo",
+    "parentId": 1017,
+    "path": "0-1017",
+    "picture": "images/category/20211208-42ee4a464dc849788021b5a9f5a53264.png",
+    "order": 9
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ierepair-worktree",
+      "cwd": "/Volumes/datacenter/ericworkspace/IErepair/.claude/worktrees/recursing-spence/ierepair",
+      "runtimeExecutable": "/bin/bash",
+      "runtimeArgs": ["-c", "export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH && cd /Volumes/datacenter/ericworkspace/IErepair/.claude/worktrees/recursing-spence/ierepair && exec node node_modules/.bin/next dev --port 3004"],
+      "port": 3004,
+      "autoPort": false
+    },
+    {
+      "name": "ierepair-main",
+      "cwd": "ierepair",
+      "runtimeExecutable": "/bin/bash",
+      "runtimeArgs": ["-c", "export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH && exec node node_modules/.bin/next dev --port 3005"],
+      "port": 3005,
+      "autoPort": false
+    }
+  ]
+}

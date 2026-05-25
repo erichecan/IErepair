@@ -1,0 +1,41 @@
+{
+  "id": "0861F886B09C4C158693BD2337C76DFB",
+  "title": "iPad Pro 11' Repair",
+  "cover": "images/model/20260203-a99bfe827786459faada779a0f8dcbd3.jpg",
+  "order": 7,
+  "keyword": "ipadpro11'",
+  "description": "<p>iPad Screen Repair – Fast, Professional &amp; Reliable</p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Dropped your iPad</span></p><p><span style=\"color: black;\">and cracked the screen? No worries. At E-Tech, we specialise in professional</span></p><p><span style=\"color: black;\">iPhone screen repair, using high-quality OEM replacement parts to restore your</span></p><p><span style=\"color: black;\">phone to like-new condition.</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Why Choose E-Tech</span></p><p><span style=\"color: black;\">Screen Repair?</span></p><p><span style=\"color: black;\">• 2-4 hours Repair</span></p><p><span style=\"color: black;\">• OEM Replacement</span></p><p><span style=\"color: black;\">Parts</span></p><p><span style=\"color: black;\">• Expert</span></p><p><span style=\"color: black;\">Technicians</span></p><p><span style=\"color: black;\">• 3-Month Warranty</span></p><p><span style=\"color: black;\">• No Fix, No Fee</span></p><p><span style=\"color: black;\">• Free Diagnostics</span></p><p>&nbsp;</p><p>&nbsp;</p><p><span style=\"color: black;\">Get Your iPhone</span></p><p><span style=\"color: black;\">Back to Perfect Condition</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Bring your iPad to</span></p><p><span style=\"color: black;\">E-Tech and have it repaired quickly, professionally, and affordably. Walk in</span></p><p><span style=\"color: black;\">today and get your phone back to normal — fast.</span></p>",
+  "categories": [
+    178
+  ],
+  "options": [
+    {
+      "id": 246,
+      "modelId": null,
+      "name": "iPad Pro 11' 1/2th gen LCD+Digitizer replacement ",
+      "picture": "images/model/20260203-32647092b1b2468e9fb9e62ec68aab53.jpg",
+      "price": "229"
+    },
+    {
+      "id": 247,
+      "modelId": null,
+      "name": "iPad Pro 11' 1/2th gen Battery replacement ",
+      "picture": "images/model/20260203-f0ab979cd1344f9c88a8000f057968b2.jpg",
+      "price": "150"
+    },
+    {
+      "id": 248,
+      "modelId": null,
+      "name": "iPad Pro 11' 3/4th gen LCD+Digitizer replacement ",
+      "picture": "images/model/20260203-9c3fd44a88014788a18e1c4797e43608.jpg",
+      "price": "259"
+    },
+    {
+      "id": 249,
+      "modelId": null,
+      "name": "iPad Pro 11' 4/5th gen Battery replacement ",
+      "picture": "images/model/20260203-257aaac352b64c878cab118bd29cbf50.jpg",
+      "price": "150"
+    }
+  ]
+}

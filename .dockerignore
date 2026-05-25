@@ -1,0 +1,13 @@
+node_modules
+dist-ssr
+*.local
+.git
+.DS_Store
+server
+# ierepair is now the main app being built — include it
+# but exclude its node_modules and build artifacts
+ierepair/node_modules
+ierepair/.next
+playwright-report
+test-results
+scripts/scraped

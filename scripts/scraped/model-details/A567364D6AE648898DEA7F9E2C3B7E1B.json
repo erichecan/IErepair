@@ -1,0 +1,55 @@
+{
+  "id": "A567364D6AE648898DEA7F9E2C3B7E1B",
+  "title": "MacBook Pro Screen Repair",
+  "cover": "images/model/20260212-ebbe6f0fe3bb408ebf55c5d7c8e708ec.jpg",
+  "order": 6,
+  "keyword": "macbookproscreenrepair",
+  "description": "<p>MacBook Pro Repair – Fast, Professional &amp; Reliable</p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Dropped your MacBook Pro and cracked the screen? No worries. At E-Tech, we specialise in professional MacBook screen repair, using high-quality OEM replacement parts to restore your MacBook to like-new condition.</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Why Choose E-Tech</span></p><p><span style=\"color: black;\">Screen Repair?</span></p><p><span style=\"color: black;\">• 4-24 hours Repair</span></p><p><span style=\"color: black;\">• OEM Replacement Parts</span></p><p><span style=\"color: black;\">• Expert Technicians</span></p><p><span style=\"color: black;\">• 3-Month Warranty</span></p><p><span style=\"color: black;\">• No Fix, No Fee</span></p><p><span style=\"color: black;\">• Free Diagnostics</span></p><p>&nbsp;</p><p><span style=\"color: black;\">Get Your MacBook</span></p><p><span style=\"color: black;\">Back to Perfect Condition</span></p><p><span style=\"color: black;\">&nbsp;</span></p><p><span style=\"color: black;\">Bring your Macbook to</span></p><p><span style=\"color: black;\">E-Tech and have it repaired quickly, professionally, and affordably. </span></p><p><span style=\"color: black;\">Walk in today and get your phone back to normal — fast.</span></p>",
+  "categories": [
+    181
+  ],
+  "options": [
+    {
+      "id": 553,
+      "modelId": null,
+      "name": "MacBook pro 13'2012-2015(A1425,A1502)screen replacement ",
+      "picture": "images/model/20260212-b512b67f29ae41029f95cb6f6ab96051.png",
+      "price": "450"
+    },
+    {
+      "id": 554,
+      "modelId": null,
+      "name": "MacBook pro 13' 2016-2020(A1706, A1708, A1989, A2159, A2251, A2289)screen replacement ",
+      "picture": "images/model/20260212-12f35fb111de470998fab11c871f3e7c.jpg",
+      "price": "380"
+    },
+    {
+      "id": 555,
+      "modelId": null,
+      "name": "MacBook pro 13' 2020-2022(A2338)screen replacement ",
+      "picture": "images/model/20260212-1b6dbdb6407a4def965884723c3f7672.jpg",
+      "price": "420"
+    },
+    {
+      "id": 556,
+      "modelId": null,
+      "name": "MacBook pro 14'2021-2024(A2442,A2779,A2918,A2992,A3112,A3401)screen replacement",
+      "picture": "images/model/20260212-a63aae2cbfd246dabe6f7cebd8bcb509.jpg",
+      "price": "800"
+    },
+    {
+      "id": 557,
+      "modelId": null,
+      "name": "MacBook pro 15' 2012-2020(A1398,A1707,A1990)screen replacement ",
+      "picture": "images/model/20260212-1549fea92dd541908d32969aa72c7f63.jpg",
+      "price": "650"
+    },
+    {
+      "id": 558,
+      "modelId": null,
+      "name": "MacBook pro 16'2019-2024(A2141,A2485,A2780,A2991,A3185)screen replacement ",
+      "picture": "images/model/20260212-7e0ff2c2dd64436fbbf3273ddb933dca.jpg",
+      "price": "0"
+    }
+  ]
+}

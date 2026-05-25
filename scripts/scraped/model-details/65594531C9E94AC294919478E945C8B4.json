@@ -1,0 +1,55 @@
+{
+  "id": "65594531C9E94AC294919478E945C8B4",
+  "title": "iPhone 11 Repair",
+  "cover": "images/model/20260203-98f5f6ddb35a48bf9178a587c63bc58d.jpg",
+  "order": 8,
+  "keyword": "iphone11",
+  "description": "<p>Phone 11 Screen Repair – Fast, Professional &amp; Reliable</p><p>&nbsp;</p><p>Dropped your iPhone and cracked the screen? No worries. At E-Tech, we specialise in professional iPhone screen repair, using high-quality OEM replacement parts to restore your phone to like-new condition.</p><p>&nbsp;</p><p>Why Choose E-Tech Screen Repair?</p><p>• 30-Minute Repair</p><p>• OEM Replacement Parts</p><p>• Expert Technicians</p><p>• 3-Month Warranty</p><p>• No Fix, No Fee</p><p>• Free Diagnostics</p><p><br></p><p>Get Your iPhone Back to Perfect Condition</p><p>&nbsp;</p><p>Bring your iPhone to E-Tech and have it repaired quickly, professionally, and affordably. Walk in today and get your phone back to normal — fast.</p>",
+  "categories": [
+    173
+  ],
+  "options": [
+    {
+      "id": 166,
+      "modelId": null,
+      "name": "LCD Screen replacement",
+      "picture": null,
+      "price": "60"
+    },
+    {
+      "id": 167,
+      "modelId": null,
+      "name": "Battery replacement ",
+      "picture": null,
+      "price": "60"
+    },
+    {
+      "id": 168,
+      "modelId": null,
+      "name": "Charging Port replacement",
+      "picture": null,
+      "price": "60"
+    },
+    {
+      "id": 169,
+      "modelId": null,
+      "name": "Main Camera replacement",
+      "picture": "images/model/20260203-b5a6192face541b394c67e894b6e00fb.png",
+      "price": "50"
+    },
+    {
+      "id": 170,
+      "modelId": null,
+      "name": "Back Glass replacement ",
+      "picture": null,
+      "price": "80"
+    },
+    {
+      "id": 171,
+      "modelId": null,
+      "name": "Water Damage repair",
+      "picture": null,
+      "price": "50"
+    }
+  ]
+}

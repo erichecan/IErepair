@@ -1,0 +1,11 @@
+.gcloudignore
+.git
+node_modules
+dist
+dist-ssr
+server
+.next
+playwright-report
+test-results
+*.local
+.DS_Store

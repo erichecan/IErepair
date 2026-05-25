@@ -1,0 +1,62 @@
+{
+  "id": "1569D262776F40C5B8DE3E0DD6767B0D",
+  "title": "iPhone 11 Pro Repair",
+  "cover": "images/model/20260203-21953e312f60434c91e1e69e1a6a703e.jpg",
+  "order": 8,
+  "keyword": "iphone11pro",
+  "description": "<p>iPhone 11 Pro Screen Repair – Fast, Professional &amp; Reliable</p><p>&nbsp;</p><p>Dropped your iPhone and cracked the screen? No worries. At E-Tech, we specialise in professional iPhone screen repair, using high-quality OEM replacement parts to restore your phone to like-new condition.</p><p>&nbsp;</p><p>Why Choose E-Tech Screen Repair?</p><p>• 30-Minute Repair</p><p>• OEM Replacement Parts</p><p>• Expert Technicians</p><p>• 3-Month Warranty</p><p>• No Fix, No Fee</p><p>• Free Diagnostics</p><p>&nbsp;</p><p>OLED Screen Advantages</p><p>• Rich colours &amp; true blacks</p><p>• Slim, original iPhone design</p><p>• Smooth, fast response</p><p>• Power efficient</p><p>• Wide viewing angles</p><p>&nbsp;</p><p>Get Your iPhone Back to Perfect Condition</p><p>&nbsp;</p><p>Bring your iPhone to E-Tech and have it repaired quickly, professionally, and affordably. Walk in today and get your phone back to normal — fast.</p>",
+  "categories": [
+    173
+  ],
+  "options": [
+    {
+      "id": 172,
+      "modelId": null,
+      "name": "LCD Screen replacement",
+      "picture": null,
+      "price": "60"
+    },
+    {
+      "id": 173,
+      "modelId": null,
+      "name": "OLED Screen replacement ",
+      "picture": null,
+      "price": "90"
+    },
+    {
+      "id": 174,
+      "modelId": null,
+      "name": "Battery replacement ",
+      "picture": null,
+      "price": "60"
+    },
+    {
+      "id": 175,
+      "modelId": null,
+      "name": "Charging Port replacement",
+      "picture": null,
+      "price": "70"
+    },
+    {
+      "id": 176,
+      "modelId": null,
+      "name": "Main Camera replacement ",
+      "picture": "images/model/20260203-9db03f264ab749b2a926aebb1826710b.jpg",
+      "price": "80"
+    },
+    {
+      "id": 177,
+      "modelId": null,
+      "name": "Back Glass replacement ",
+      "picture": null,
+      "price": "80"
+    },
+    {
+      "id": 178,
+      "modelId": null,
+      "name": "Water Damage repair",
+      "picture": null,
+      "price": "50"
+    }
+  ]
+}
