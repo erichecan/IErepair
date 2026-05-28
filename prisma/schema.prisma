@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model DeviceCategory {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  nameEn      String        @unique
+  slug        String        @unique
+  sortOrder   Int           @default(0)
+  brands      DeviceBrand[]
+  repairTypes RepairType[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model DeviceBrand {
+  id         Int            @id @default(autoincrement())
+  name       String
+  slug       String
+  categoryId Int
+  category   DeviceCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  sortOrder  Int            @default(0)
+  models     DeviceModel[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@unique([categoryId, slug])
+}
+
+model DeviceModel {
+  id             Int             @id @default(autoincrement())
+  name           String
+  brandId        Int
+  brand          DeviceBrand     @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  year           Int?
+  isActive       Boolean         @default(true)
+  repairServices RepairService[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@unique([brandId, name])
+}
+
+model RepairType {
+  id             Int             @id @default(autoincrement())
+  name           String
+  nameEn         String
+  categoryId     Int
+  category       DeviceCategory  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  sortOrder      Int             @default(0)
+  repairServices RepairService[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@unique([categoryId, nameEn])
+}
+
+model RepairService {
+  id              Int         @id @default(autoincrement())
+  deviceModelId   Int
+  deviceModel     DeviceModel @relation(fields: [deviceModelId], references: [id], onDelete: Cascade)
+  repairTypeId    Int
+  repairType      RepairType  @relation(fields: [repairTypeId], references: [id], onDelete: Cascade)
+  basePriceMin    Decimal     @db.Decimal(10, 2)
+  basePriceMax    Decimal     @db.Decimal(10, 2)
+  durationMinutes Int         @default(60)
+  isActive        Boolean     @default(true)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@unique([deviceModelId, repairTypeId])
+}
+
+model AdminUser {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  role         String   @default("admin")
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Merchant {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  phone        String?
+  address      String?
+  eircode      String?
+  lat          Float?
+  lng          Float?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model ProductCategory {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  nameEn    String    @unique
+  slug      String    @unique
+  sortOrder Int       @default(0)
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id           Int             @id @default(autoincrement())
+  name         String
+  nameEn       String?
+  description  String?
+  brand        String?
+  categoryId   Int
+  category     ProductCategory @relation(fields: [categoryId], references: [id])
+  images       String[]
+  basePriceMin Decimal?        @db.Decimal(10, 2)
+  basePriceMax Decimal?        @db.Decimal(10, 2)
+  isActive     Boolean         @default(true)
+  status       String          @default("active")
+  notes        String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+}
