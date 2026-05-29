@@ -62,17 +62,19 @@ model RepairType {
 }
 
 model RepairService {
-  id              Int         @id @default(autoincrement())
+  id              Int               @id @default(autoincrement())
   deviceModelId   Int
-  deviceModel     DeviceModel @relation(fields: [deviceModelId], references: [id], onDelete: Cascade)
+  deviceModel     DeviceModel       @relation(fields: [deviceModelId], references: [id], onDelete: Cascade)
   repairTypeId    Int
-  repairType      RepairType  @relation(fields: [repairTypeId], references: [id], onDelete: Cascade)
-  basePriceMin    Decimal     @db.Decimal(10, 2)
-  basePriceMax    Decimal     @db.Decimal(10, 2)
-  durationMinutes Int         @default(60)
-  isActive        Boolean     @default(true)
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  repairType      RepairType        @relation(fields: [repairTypeId], references: [id], onDelete: Cascade)
+  basePriceMin    Decimal           @db.Decimal(10, 2)
+  basePriceMax    Decimal           @db.Decimal(10, 2)
+  durationMinutes Int               @default(60)
+  isActive         Boolean           @default(true)
+  merchantServices MerchantService[]
+  repairBookings   RepairBooking[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
 
   @@unique([deviceModelId, repairTypeId])
 }
@@ -89,18 +91,24 @@ model AdminUser {
 }
 
 model Merchant {
-  id           Int      @id @default(autoincrement())
-  name         String
-  email        String   @unique
-  passwordHash String
-  phone        String?
-  address      String?
-  eircode      String?
-  lat          Float?
-  lng          Float?
-  isActive     Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                 Int               @id @default(autoincrement())
+  name               String
+  email              String            @unique
+  passwordHash       String
+  phone              String?
+  address            String?
+  eircode            String?
+  description        String?
+  lat                Float?
+  lng                Float?
+  isActive           Boolean           @default(true)
+  mustChangePassword Boolean           @default(true)
+  merchantProducts   MerchantProduct[]
+  merchantServices   MerchantService[]
+  merchantHours      MerchantHours[]
+  repairBookings     RepairBooking[]
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
 }
 
 model ProductCategory {
@@ -115,19 +123,89 @@ model ProductCategory {
 }
 
 model Product {
-  id           Int             @id @default(autoincrement())
-  name         String
-  nameEn       String?
-  description  String?
-  brand        String?
-  categoryId   Int
-  category     ProductCategory @relation(fields: [categoryId], references: [id])
-  images       String[]
-  basePriceMin Decimal?        @db.Decimal(10, 2)
-  basePriceMax Decimal?        @db.Decimal(10, 2)
-  isActive     Boolean         @default(true)
-  status       String          @default("active")
-  notes        String?
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
+  id               Int               @id @default(autoincrement())
+  name             String
+  nameEn           String?
+  description      String?
+  brand            String?
+  categoryId       Int
+  category         ProductCategory   @relation(fields: [categoryId], references: [id])
+  images           String[]
+  basePriceMin     Decimal?          @db.Decimal(10, 2)
+  basePriceMax     Decimal?          @db.Decimal(10, 2)
+  isActive         Boolean           @default(true)
+  status           String            @default("active")
+  notes            String?
+  merchantProducts MerchantProduct[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model MerchantProduct {
+  id         Int      @id @default(autoincrement())
+  merchantId Int
+  merchant   Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  productId  Int
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  price      Decimal  @db.Decimal(10, 2)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([merchantId, productId])
+  @@index([merchantId])
+  @@index([productId])
+}
+
+model MerchantService {
+  id              Int           @id @default(autoincrement())
+  merchantId      Int
+  merchant        Merchant      @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  repairServiceId Int
+  repairService   RepairService @relation(fields: [repairServiceId], references: [id], onDelete: Cascade)
+  price           Decimal       @db.Decimal(10, 2)
+  isActive        Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@unique([merchantId, repairServiceId])
+  @@index([merchantId])
+  @@index([repairServiceId])
+}
+
+model MerchantHours {
+  id         Int      @id @default(autoincrement())
+  merchantId Int
+  merchant   Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  dayOfWeek  Int
+  openTime   String?
+  closeTime  String?
+  isClosed   Boolean  @default(false)
+
+  @@unique([merchantId, dayOfWeek])
+  @@index([merchantId])
+}
+
+model RepairBooking {
+  id               Int      @id @default(autoincrement())
+  orderNumber      String   @unique
+  merchantId       Int
+  merchant         Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  repairServiceId  Int
+  repairService    RepairService @relation(fields: [repairServiceId], references: [id])
+  status           String   @default("pending_confirm")
+  userName         String
+  userPhone        String
+  userEmail        String?
+  appointmentTime  DateTime
+  quotedPrice      Decimal  @db.Decimal(10, 2)
+  actualPrice      Decimal? @db.Decimal(10, 2)
+  notes            String?
+  cancelReason     String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([merchantId])
+  @@index([status])
+  @@index([appointmentTime])
 }

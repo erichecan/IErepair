@@ -34,6 +34,27 @@ export default function AdminLoginPage() {
     }
   }
 
+  async function quickLogin() {
+    setEmail("admin@ierepair.ie");
+    setPassword("Admin@123456");
+    setError("");
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: "admin@ierepair.ie", password: "Admin@123456" }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || "登录失败"); return; }
+      router.push("/admin/repair-catalog");
+    } catch {
+      setError("网络错误，请重试");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f5f5f7" }}>
       <div style={{ background: "#fff", borderRadius: 12, padding: "48px 40px", width: 380, boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>
@@ -46,6 +67,14 @@ export default function AdminLoginPage() {
           <h1 style={{ fontSize: 22, fontWeight: 700, color: "#1d1d1f", margin: 0 }}>IERepair 管理后台</h1>
           <p style={{ fontSize: 14, color: "#6e6e73", marginTop: 4 }}>请使用管理员账号登录</p>
         </div>
+
+        <button
+          onClick={quickLogin}
+          disabled={loading}
+          style={{ width: "100%", padding: "10px", background: "#f0faf5", border: "1.5px dashed #146345", borderRadius: 8, fontSize: 13, fontWeight: 600, color: "#146345", cursor: loading ? "not-allowed" : "pointer", marginBottom: 20 }}
+        >
+          🚀 一键登录（测试用）
+        </button>
 
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <div>

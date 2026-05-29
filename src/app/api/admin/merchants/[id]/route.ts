@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireAdminSession } from "@/lib/auth";
+import { geocodeEircode } from "@/lib/geocode";
 import bcrypt from "bcryptjs";
 
 export async function PATCH(
@@ -19,7 +20,16 @@ export async function PATCH(
     if (typeof body.name === "string" && body.name.trim()) updates.name = body.name.trim();
     if (typeof body.phone === "string") updates.phone = body.phone.trim() || null;
     if (typeof body.address === "string") updates.address = body.address.trim() || null;
-    if (typeof body.eircode === "string") updates.eircode = body.eircode.trim().toUpperCase() || null;
+    if (typeof body.eircode === "string") {
+      const newEircode = body.eircode.trim().toUpperCase() || null;
+      updates.eircode = newEircode;
+      if (newEircode) {
+        const coords = await geocodeEircode(newEircode);
+        if (coords) { updates.lat = coords.lat; updates.lng = coords.lng; }
+      } else {
+        updates.lat = null; updates.lng = null;
+      }
+    }
     if (typeof body.password === "string" && body.password.trim()) {
       updates.passwordHash = await bcrypt.hash(body.password, 10);
     }

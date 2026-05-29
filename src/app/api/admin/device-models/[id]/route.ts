@@ -1,6 +1,30 @@
 import { prisma } from "@/lib/prisma";
 import { requireAdminSession } from "@/lib/auth";
 
+export async function DELETE(
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    await requireAdminSession();
+    const { id } = await params;
+    const modelId = parseInt(id);
+    if (isNaN(modelId)) return Response.json({ error: "无效ID" }, { status: 400 });
+
+    const count = await prisma.repairService.count({ where: { deviceModelId: modelId } });
+    if (count > 0) {
+      return Response.json({ error: `无法删除：该型号下还有 ${count} 条维修服务` }, { status: 409 });
+    }
+
+    await prisma.deviceModel.delete({ where: { id: modelId } });
+    return Response.json({ ok: true });
+  } catch (error) {
+    if (error instanceof Response) return error;
+    console.error("[DeviceModel DELETE]", error);
+    return Response.json({ error: "服务器错误" }, { status: 500 });
+  }
+}
+
 export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import Modal from "./Modal";
 import FormField, { TextInput } from "./FormField";
 
@@ -123,12 +124,20 @@ export default function MerchantList({ initialMerchants }: { initialMerchants: M
                     {new Date(m.createdAt).toLocaleDateString("zh-CN")}
                   </td>
                   <td style={{ padding: "12px 16px" }}>
-                    <button
-                      onClick={() => { setResetId(m.id); setNewPwd(""); }}
-                      style={{ fontSize: 12, color: "#146345", background: "none", border: "none", cursor: "pointer", padding: 0 }}
-                    >
-                      重置密码
-                    </button>
+                    <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                      <Link
+                        href={`/admin/merchants/${m.id}`}
+                        style={{ fontSize: 12, color: "#146345", textDecoration: "none" }}
+                      >
+                        详情
+                      </Link>
+                      <button
+                        onClick={() => { setResetId(m.id); setNewPwd(""); }}
+                        style={{ fontSize: 12, color: "#146345", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                      >
+                        重置密码
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import ModelAccordion, { type DeviceModel } from "@/components/admin/ModelAccordion";
+import ModelAccordion, { type DeviceModel, type RepairTypeOption } from "@/components/admin/ModelAccordion";
 
 export default async function BrandModelsPage({
   params,
@@ -13,21 +13,28 @@ export default async function BrandModelsPage({
   const brdId = parseInt(brandId);
   if (isNaN(catId) || isNaN(brdId)) notFound();
 
-  const brand = await prisma.deviceBrand.findUnique({
-    where: { id: brdId },
-    include: {
-      category: { select: { id: true, name: true } },
-      models: {
-        orderBy: [{ year: "desc" }, { name: "asc" }],
-        include: {
-          repairServices: {
-            orderBy: { repairType: { sortOrder: "asc" } },
-            include: { repairType: { select: { name: true, nameEn: true } } },
+  const [brand, repairTypesRaw] = await Promise.all([
+    prisma.deviceBrand.findUnique({
+      where: { id: brdId },
+      include: {
+        category: { select: { id: true, name: true } },
+        models: {
+          orderBy: [{ year: "desc" }, { name: "asc" }],
+          include: {
+            repairServices: {
+              orderBy: { repairType: { sortOrder: "asc" } },
+              include: { repairType: { select: { name: true, nameEn: true } } },
+            },
           },
         },
       },
-    },
-  });
+    }),
+    prisma.repairType.findMany({
+      where: { categoryId: catId },
+      orderBy: { sortOrder: "asc" },
+      select: { id: true, name: true, nameEn: true },
+    }),
+  ]);
 
   if (!brand || brand.categoryId !== catId) notFound();
 
@@ -45,6 +52,8 @@ export default async function BrandModelsPage({
       isActive: s.isActive,
     })),
   }));
+
+  const repairTypesData: RepairTypeOption[] = repairTypesRaw;
 
   const totalServices = modelsData.reduce((sum, m) => sum + m.repairServices.length, 0);
 
@@ -73,7 +82,7 @@ export default async function BrandModelsPage({
         </p>
       </div>
 
-      <ModelAccordion initialModels={modelsData} />
+      <ModelAccordion initialModels={modelsData} brandId={brdId} repairTypes={repairTypesData} />
     </div>
   );
 }

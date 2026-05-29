@@ -1,7 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import CatalogTree, { type CatalogBrand } from "@/components/admin/CatalogTree";
+import CatalogTree, { type CatalogBrand, type RepairTypeOption } from "@/components/admin/CatalogTree";
+import AddBrandButton from "@/components/admin/AddBrandButton";
+import RepairTypeManager from "@/components/admin/RepairTypeManager";
 
 export default async function CategoryBrandsPage({
   params,
@@ -34,6 +36,12 @@ export default async function CategoryBrandsPage({
   });
 
   if (!category) notFound();
+
+  const repairTypesData: RepairTypeOption[] = category.repairTypes.map(rt => ({
+    id: rt.id,
+    name: rt.name,
+    nameEn: rt.nameEn,
+  }));
 
   const brandsData: CatalogBrand[] = category.brands.map(b => ({
     id: b.id,
@@ -72,25 +80,17 @@ export default async function CategoryBrandsPage({
             {brandsData.length} 个品牌 · {totalModels} 个型号 · {totalServices} 项服务
           </p>
         </div>
-        <p style={{ fontSize: 12, color: "#aeaeb2", marginBottom: 4 }}>
-          点击品牌展开 → 展开型号 → 点击价格 / 时长 / 名称可直接编辑
-        </p>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <p style={{ fontSize: 12, color: "#aeaeb2", margin: 0 }}>
+            点击品牌展开 → 展开型号 → 点击价格 / 时长 / 名称可直接编辑
+          </p>
+          <AddBrandButton categoryId={id} />
+        </div>
       </div>
 
-      {category.repairTypes.length > 0 && (
-        <div style={{ marginBottom: 28 }}>
-          <h2 style={{ fontSize: 13, fontWeight: 600, color: "#aeaeb2", marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.05em" }}>维修类型</h2>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {category.repairTypes.map((rt) => (
-              <span key={rt.id} style={{ padding: "5px 12px", background: "#f5f5f7", borderRadius: 20, fontSize: 13, color: "#1d1d1f" }}>
-                {rt.name}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
+      <RepairTypeManager categoryId={id} initialRepairTypes={repairTypesData} />
 
-      <CatalogTree initialBrands={brandsData} />
+      <CatalogTree initialBrands={brandsData} categoryId={id} repairTypes={repairTypesData} />
     </div>
   );
 }

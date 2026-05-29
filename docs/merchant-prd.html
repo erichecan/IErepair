@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IERepair — Merchant 端产品需求文档</title>
+  <style>
+    :root {
+      --green: #146345;
+      --green-light: #e8f7f0;
+      --green-mid: #17db66;
+      --header-bg: #1c3830;
+      --text: #1d1d1f;
+      --text-2: #6e6e73;
+      --border: #e5e5ea;
+      --bg: #f5f5f7;
+      --red: #c0392b;
+      --red-light: #fff5f5;
+      --orange: #d97706;
+      --orange-light: #fffbeb;
+      --blue: #1d6fa4;
+      --blue-light: #eff6ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    /* ── Layout ── */
+    .sidebar {
+      position: fixed; top: 0; left: 0; width: 240px; height: 100vh;
+      background: var(--header-bg); color: #fff; overflow-y: auto;
+      padding: 24px 0; z-index: 100;
+    }
+    .sidebar-logo {
+      padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+      font-size: 18px; font-weight: 700; color: var(--green-mid);
+    }
+    .sidebar-logo span { display: block; font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 400; margin-top: 2px; }
+    .nav-section { padding: 16px 20px 4px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.35); }
+    .nav-item { display: block; padding: 8px 20px; font-size: 13px; color: rgba(255,255,255,0.75); text-decoration: none; transition: all 0.15s; }
+    .nav-item:hover, .nav-item.active { color: var(--green-mid); background: rgba(23,219,102,0.08); }
+    .main { margin-left: 240px; padding: 40px 48px; max-width: 1100px; }
+    /* ── Typography ── */
+    h1 { font-size: 32px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+    h2 { font-size: 24px; font-weight: 700; color: var(--text); margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--green); }
+    h3 { font-size: 17px; font-weight: 700; color: var(--text); margin: 28px 0 10px; }
+    h4 { font-size: 14px; font-weight: 700; color: var(--text); margin: 18px 0 8px; }
+    p { margin-bottom: 12px; font-size: 14px; color: #3a3a3f; }
+    /* ── Components ── */
+    .meta-bar {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      margin-bottom: 40px; padding: 16px 20px;
+      background: #fff; border-radius: 10px; border: 1px solid var(--border);
+    }
+    .meta-item { font-size: 12px; color: var(--text-2); }
+    .meta-item strong { color: var(--text); display: block; font-size: 13px; }
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;
+    }
+    .badge-p0 { background: #fef2f2; color: #dc2626; }
+    .badge-p1 { background: #fffbeb; color: #d97706; }
+    .badge-p2 { background: #eff6ff; color: #2563eb; }
+    .badge-done { background: var(--green-light); color: var(--green); }
+    .badge-missing { background: #fff5f5; color: var(--red); }
+    .badge-partial { background: #fffbeb; color: var(--orange); }
+    .badge-auth { background: #fce7f3; color: #9d174d; }
+    .badge-pub { background: var(--green-light); color: var(--green); }
+    .card {
+      background: #fff; border-radius: 12px; border: 1px solid var(--border);
+      padding: 24px; margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 16px; font-weight: 700; color: var(--text);
+      margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th {
+      background: var(--bg); padding: 10px 12px; text-align: left;
+      font-size: 11px; font-weight: 600; color: var(--text-2);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: #3a3a3f; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafafa; }
+    .alert {
+      padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 16px;
+    }
+    .alert-red { background: var(--red-light); border-left: 3px solid var(--red); color: var(--red); }
+    .alert-green { background: var(--green-light); border-left: 3px solid var(--green); color: var(--green); }
+    .alert-orange { background: var(--orange-light); border-left: 3px solid var(--orange); color: var(--orange); }
+    .alert-blue { background: var(--blue-light); border-left: 3px solid var(--blue); color: var(--blue); }
+    /* ── API spec ── */
+    .api-method {
+      display: inline-block; padding: 2px 7px; border-radius: 4px;
+      font-size: 11px; font-weight: 700; font-family: monospace; margin-right: 4px;
+    }
+    .get { background: #e0f2fe; color: #0369a1; }
+    .post { background: #dcfce7; color: #15803d; }
+    .patch { background: #fef9c3; color: #854d0e; }
+    .put { background: #ede9fe; color: #5b21b6; }
+    .delete { background: #fee2e2; color: #b91c1c; }
+    .api-row { display: flex; align-items: flex-start; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border); }
+    .api-row:last-child { border-bottom: none; }
+    .api-row-method { flex-shrink: 0; width: 62px; }
+    .api-row-path { font-family: "SF Mono", monospace; font-size: 12px; color: var(--text); flex: 1; }
+    .api-row-desc { font-size: 12px; color: var(--text-2); flex: 1.2; }
+    .api-row-auth { font-size: 11px; flex-shrink: 0; }
+    code {
+      font-family: "SF Mono", "Fira Code", monospace;
+      background: var(--bg); border: 1px solid var(--border);
+      padding: 1px 5px; border-radius: 4px; font-size: 12px; color: var(--red);
+    }
+    pre {
+      background: #1c1c1e; color: #e5e5ea; border-radius: 10px;
+      padding: 20px; overflow-x: auto; font-size: 12px; line-height: 1.7;
+      margin: 12px 0;
+    }
+    .kw  { color: #ff79c6; }
+    .ty  { color: #8be9fd; }
+    .cm  { color: #6272a4; }
+    .st  { color: #f1fa8c; }
+    .fn  { color: #50fa7b; }
+    /* ── Summary Grid ── */
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+    .stat-card {
+      background: #fff; border: 1px solid var(--border); border-radius: 10px;
+      padding: 16px; text-align: center;
+    }
+    .stat-num { font-size: 28px; font-weight: 800; }
+    .stat-label { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+    .stat-card.green .stat-num { color: var(--green); }
+    .stat-card.red .stat-num { color: var(--red); }
+    .stat-card.blue .stat-num { color: var(--blue); }
+    /* ── Schema ── */
+    .schema-field { display: flex; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--bg); font-size: 13px; }
+    .schema-name { font-family: monospace; color: var(--blue); width: 160px; flex-shrink: 0; }
+    .schema-type { color: var(--orange); width: 110px; flex-shrink: 0; }
+    .schema-desc { color: var(--text-2); }
+    /* ── Journey Flow ── */
+    .journey {
+      display: flex; gap: 0; overflow-x: auto;
+      padding: 24px; align-items: flex-start;
+    }
+    .journey-step { flex-shrink: 0; text-align: center; width: 140px; }
+    .step-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--header-bg); color: #fff;
+      font-size: 12px; font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-bottom: 8px;
+    }
+    .step-box {
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 10px 12px;
+      font-size: 12px; font-weight: 600; color: var(--text);
+      min-height: 56px; display: flex; align-items: center; justify-content: center;
+      text-align: center;
+    }
+    .step-box.active { background: var(--header-bg); color: #fff; border-color: var(--header-bg); }
+    .step-box.warn   { background: #fef3c7; border-color: #fcd34d; color: #92400e; }
+    .step-box.block  { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
+    .step-sub { font-size: 11px; color: var(--text-2); margin-top: 6px; line-height: 1.4; }
+    .j-arrow { flex-shrink: 0; padding: 0 4px; font-size: 18px; color: #c7c7cc; margin-top: 42px; }
+    /* ── Checklist ── */
+    .checklist { list-style: none; padding: 0; margin: 0; }
+    .checklist li {
+      padding: 9px 14px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 10px; font-size: 13px;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist .cb {
+      width: 16px; height: 16px; border: 1.5px solid #c7c7cc;
+      border-radius: 4px; flex-shrink: 0; margin-top: 1px;
+    }
+    /* ── Two-col ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    /* ── Section intro ── */
+    .section-intro { font-size: 14px; color: var(--text-2); margin-top: -8px; margin-bottom: 24px; }
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 24px; }
+      .stat-grid { grid-template-columns: 1fr 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar Nav -->
+<nav class="sidebar">
+  <div class="sidebar-logo">IERepair<span>商家端产品需求文档 v1.0</span></div>
+  <div class="nav-section">总览</div>
+  <a class="nav-item" href="#s1">旅程概览</a>
+  <a class="nav-item" href="#s2">路由地图</a>
+  <div class="nav-section">页面规格</div>
+  <a class="nav-item" href="#s3">登录 &amp; 初始化</a>
+  <a class="nav-item" href="#s4">选品上架</a>
+  <a class="nav-item" href="#s5">维修服务</a>
+  <a class="nav-item" href="#s6">预约管理</a>
+  <a class="nav-item" href="#s7">工作台</a>
+  <a class="nav-item" href="#s8">门店设置</a>
+  <div class="nav-section">技术规格</div>
+  <a class="nav-item" href="#s9">API 路由</a>
+  <a class="nav-item" href="#s10">数据库 Schema</a>
+  <a class="nav-item" href="#s11">鉴权设计</a>
+  <a class="nav-item" href="#s12">开发任务</a>
+</nav>
+
+<!-- Main Content -->
+<main class="main">
+
+  <!-- Title -->
+  <h1>Merchant 端产品需求文档</h1>
+  <p class="section-intro" style="margin-bottom: 0;">商家从加盟到日常运营的完整路径、页面规格、API 定义与 Schema 设计</p>
+
+  <div class="meta-bar">
+    <div class="meta-item"><strong>生成日期</strong>2026-05-29</div>
+    <div class="meta-item"><strong>版本</strong>v1.0 MVP</div>
+    <div class="meta-item"><strong>对照文档</strong>02-用户角色、03-各端页面、04-数据库、08-MVP范围</div>
+    <div class="meta-item"><strong>状态</strong><span class="badge badge-done">已实现</span></div>
+  </div>
+
+  <!-- S1: 旅程概览 -->
+  <section id="s1">
+    <h2>商家完整旅程概览</h2>
+    <p class="section-intro">模拟一个都柏林手机维修店老板 Mike，从收到 IERepair 平台账号邮件，到店铺正常运营的完整过程。</p>
+
+    <div class="stat-grid">
+      <div class="stat-card green"><div class="stat-num">7</div><div class="stat-label">前端页面</div></div>
+      <div class="stat-card blue"><div class="stat-num">18</div><div class="stat-label">API 路由</div></div>
+      <div class="stat-card red"><div class="stat-num">3</div><div class="stat-label">新增数据库表</div></div>
+    </div>
+
+    <h3>阶段一：收到账号，首次登录</h3>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <div class="journey">
+        <div class="journey-step">
+          <div class="step-num">1</div>
+          <div class="step-box">收到平台邮件<br>含账号密码</div>
+          <div class="step-sub">Admin 在后台<br>创建门店账号</div>
+        </div>
+        <div class="j-arrow">→</div>
+        <div class="journey-step">
+          <div class="step-num">2</div>
+          <div class="step-box">打开登录页<br>/merchant/login</div>
+          <div class="step-sub">输入邮箱<br>+ 初始密码</div>
+        </div>
+        <div class="j-arrow">→</div>
+        <div class="journey-step">
+          <div class="step-num">3</div>
+          <div class="step-box warn">强制修改密码</div>
+          <div class="step-sub">首次登录必须<br>重置密码</div>
+        </div>
+        <div class="j-arrow">→</div>
+        <div class="journey-step">
+          <div class="step-num">4</div>
+          <div class="step-box active">进入工作台</div>
+          <div class="step-sub">看到"配置未完成"<br>引导提示</div>
+        </div>
+        <div class="j-arrow">→</div>
+        <div class="journey-step">
+          <div class="step-num">5</div>
+          <div class="step-box">完善店铺信息<br>+ 营业时间</div>
+          <div class="step-sub">门店设置页<br>/merchant/settings</div>
+        </div>
+        <div class="j-arrow">→</div>
+        <div class="journey-step">
+          <div class="step-num">6</div>
+          <div class="step-box active">配置完成<br>门店上线</div>
+          <div class="step-sub">消费者端<br>可搜索到该门店</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>阶段二：选品 &amp; 配置维修服务</h3>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <div class="journey">
+        <div class="journey-step">
+          <div class="step-num">1</div>
+          <div class="step-box">浏览商品母库<br>/merchant/products/catalog</div>
+          <div class="step-sub">按品类/品牌<br>搜索过滤</div>
+        </div>
+        <div class="j-arrow">→</div>
+        <div class="journey-step">
+          <div class="step-num">2</div>
+          <div class="step-box">选择商品<br>添加到本店</div>
+          <div class="step-sub">点击"添加"<br>进入定价弹窗</div>
+        </div>
+        <div class="j-arrow">→</div>
+        <div class="journey-step">
+          <div class="step-num">3</div>
+          <div class="step-box warn">设置本店售价</div>
+          <div class="step-sub">不能低于<br>平台最低参考价</div>
+        </div>
+        <div class="j-arrow">→</div>
+        <div class="journey-step">
+          <div class="step-num">4</div>
+          <div class="step-box">商品上架<br>到本店</div>
+          <div class="step-sub">出现在<br>/merchant/products</div>
+        </div>
+        <div class="j-arrow">→</div>
+        <div class="journey-step">
+          <div class="step-num">5</div>
+          <div class="step-box">浏览维修服务<br>目录</div>
+          <div class="step-sub">/merchant/services<br>选择服务 + 定价</div>
+        </div>
+        <div class="j-arrow">→</div>
+        <div class="journey-step">
+          <div class="step-num">6</div>
+          <div class="step-box active">门店已有<br>商品 &amp; 服务</div>
+          <div class="step-sub">消费者可搜到<br>并预约维修</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>阶段三：日常运营（维修预约接单）</h3>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <div class="journey">
+        <div class="journey-step">
+          <div class="step-num">1</div>
+          <div class="step-box">消费者提交<br>维修预约</div>
+          <div class="step-sub">Consumer 端操作<br>（另一端）</div>
+        </div>
+        <div class="j-arrow">→</div>
+        <div class="journey-step">
+          <div class="step-num">2</div>
+          <div class="step-box warn">工作台出现<br>待处理提醒</div>
+          <div class="step-sub">红点提示<br>新预约到达</div>
+        </div>
+        <div class="j-arrow">→</div>
+        <div class="journey-step">
+          <div class="step-num">3</div>
+          <div class="step-box">查看预约详情<br>用户信息/机型/故障</div>
+          <div class="step-sub">/merchant/bookings</div>
+        </div>
+        <div class="j-arrow">→</div>
+        <div class="journey-step">
+          <div class="step-num">4</div>
+          <div class="step-box active">接受预约</div>
+          <div class="step-sub">用户收到<br>SMS 确认</div>
+        </div>
+        <div class="j-arrow">→</div>
+        <div class="journey-step">
+          <div class="step-num">5</div>
+          <div class="step-box">用户到店<br>完成维修</div>
+          <div class="step-sub">记录实际收费</div>
+        </div>
+        <div class="j-arrow">→</div>
+        <div class="journey-step">
+          <div class="step-num">6</div>
+          <div class="step-box active">核销完成</div>
+          <div class="step-sub">订单状态<br>→ completed</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S2: 路由地图 -->
+  <section id="s2">
+    <h2>路由 &amp; 页面地图</h2>
+    <p class="section-intro">Merchant 端 7 个页面全部 P0，均需登录（除 login）。布局使用桌面端 Sidebar，左侧固定导航，右侧内容区。</p>
+
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table>
+        <thead>
+          <tr>
+            <th>路由</th>
+            <th>页面名称</th>
+            <th>优先级</th>
+            <th>鉴权</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>/merchant/login</code></td>
+            <td>商家登录</td>
+            <td><span class="badge badge-p0">P0</span></td>
+            <td>无需</td>
+            <td>邮箱 + 密码；首次登录强制修改密码</td>
+          </tr>
+          <tr>
+            <td><code>/merchant/dashboard</code></td>
+            <td>工作台</td>
+            <td><span class="badge badge-p0">P0</span></td>
+            <td><span class="badge badge-auth">需登录</span></td>
+            <td>数据概览、待处理提醒、快捷入口、配置完整度引导</td>
+          </tr>
+          <tr>
+            <td><code>/merchant/products</code></td>
+            <td>我的商品</td>
+            <td><span class="badge badge-p0">P0</span></td>
+            <td><span class="badge badge-auth">需登录</span></td>
+            <td>已选品列表、价格管理、上下架操作</td>
+          </tr>
+          <tr>
+            <td><code>/merchant/products/catalog</code></td>
+            <td>浏览商品母库</td>
+            <td><span class="badge badge-p0">P0</span></td>
+            <td><span class="badge badge-auth">需登录</span></td>
+            <td>按品类/关键词浏览母库，选品添加到本店</td>
+          </tr>
+          <tr>
+            <td><code>/merchant/services</code></td>
+            <td>维修服务管理</td>
+            <td><span class="badge badge-p0">P0</span></td>
+            <td><span class="badge badge-auth">需登录</span></td>
+            <td>从平台维修目录选择本店提供的服务，设置定价</td>
+          </tr>
+          <tr>
+            <td><code>/merchant/bookings</code></td>
+            <td>预约管理</td>
+            <td><span class="badge badge-p0">P0</span></td>
+            <td><span class="badge badge-auth">需登录</span></td>
+            <td>预约列表（待确认/已确认/已完成）、接受/拒绝/完成核销</td>
+          </tr>
+          <tr>
+            <td><code>/merchant/settings</code></td>
+            <td>门店设置</td>
+            <td><span class="badge badge-p0">P0</span></td>
+            <td><span class="badge badge-auth">需登录</span></td>
+            <td>基础信息、营业时间配置、修改密码</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert alert-orange">
+      <strong>布局说明：</strong>未登录时所有 <code>/merchant/*</code>（除 login）重定向到登录页，保留原始 <code>next</code> 参数。侧边栏导航项：工作台 / 我的商品 / 维修服务 / 预约管理 / 门店设置。
+    </div>
+  </section>
+
+  <!-- S3: 登录 & 初始化 -->
+  <section id="s3">
+    <h2>登录 &amp; 首次初始化配置</h2>
+    <p class="section-intro">商家通过邮箱密码登录，首次登录强制修改密码后才能进入工作台。</p>
+
+    <h3>3.1 登录页 <code>/merchant/login</code></h3>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">页面功能</div>
+        <table>
+          <tbody>
+            <tr><td style="width:35%; font-weight:500">邮箱输入</td><td>type=email，自动 trim/lowercase</td></tr>
+            <tr><td style="font-weight:500">密码输入</td><td>type=password，眼睛图标切换明文</td></tr>
+            <tr><td style="font-weight:500">登录按钮</td><td>loading 状态防重复提交</td></tr>
+            <tr><td style="font-weight:500">错误提示</td><td>邮箱不存在/密码错误/账号停用，统一显示"邮箱或密码错误"（安全）</td></tr>
+            <tr><td style="font-weight:500">首次登录</td><td>后端检测 <code>mustChangePassword=true</code>，响应中返回标记</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">交互逻辑</div>
+        <table>
+          <tbody>
+            <tr><td style="width:35%; font-weight:500">登录成功</td><td>写 HttpOnly Cookie（merchantSession），跳转 <code>/merchant/dashboard</code></td></tr>
+            <tr><td style="font-weight:500">首次登录</td><td>跳转 <code>/merchant/settings?tab=security&amp;firstLogin=1</code>，强制修改密码，不允许跳过</td></tr>
+            <tr><td style="font-weight:500">会话过期</td><td>受保护页面返回 401 时，重定向回登录页，保留原始 <code>next</code> 路径</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3>3.2 Onboarding 引导（工作台顶部进度条）</h3>
+    <div class="alert alert-blue">
+      首次完成登录后，工作台顶部展示配置进度条（3 步）：<strong>① 完善店铺信息</strong>（店名/地址/Eircode/电话）→ <strong>② 设置营业时间</strong>（7 天每天开关门）→ <strong>③ 选择至少 1 件商品或 1 项维修服务上架</strong>。3 步全部完成前，进度条持续显示（不可关闭）。完成后自动消失，门店进入"营业"状态。
+    </div>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table>
+        <thead><tr><th>步骤</th><th>完成条件</th><th>跳转目标</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>① 完善店铺信息</td>
+            <td>name + address + eircode + phone 均不为空</td>
+            <td><code>/merchant/settings?tab=info</code></td>
+          </tr>
+          <tr>
+            <td>② 设置营业时间</td>
+            <td><code>MerchantHours</code> 表中该门店至少有 1 天 <code>isClosed=false</code></td>
+            <td><code>/merchant/settings?tab=hours</code></td>
+          </tr>
+          <tr>
+            <td>③ 上架商品或服务</td>
+            <td><code>MerchantProduct</code> 或 <code>MerchantService</code> 中有至少 1 条 <code>isActive=true</code></td>
+            <td><code>/merchant/products/catalog</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- S4: 选品上架 -->
+  <section id="s4">
+    <h2>选品上架</h2>
+    <p class="section-intro">商家不能自己创建商品，所有商品必须来自平台母库（Admin 维护）。</p>
+
+    <h3>4.1 我的商品列表 <code>/merchant/products</code></h3>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table>
+        <thead><tr><th>区块</th><th>内容</th><th>交互</th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:500">工具栏</td>
+            <td>品类筛选下拉 / 上架状态筛选（全部/已上架/已下架）/ 搜索框</td>
+            <td>实时过滤（前端），搜索防抖 300ms</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">"去选品"按钮</td>
+            <td>右上角主要操作按钮</td>
+            <td>跳转 <code>/merchant/products/catalog</code></td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">商品列表</td>
+            <td>商品名称（含品牌）、品类、本店售价、平台参考价区间、上架状态开关</td>
+            <td>状态开关：PATCH 切换 isActive；点击售价展开价格编辑</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">价格内联编辑</td>
+            <td>点击售价数字 → 输入框，显示平台最低参考价提示</td>
+            <td>失焦或回车保存；低于 <code>basePriceMin</code> 时显示警告，阻止保存</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">移除商品</td>
+            <td>每行末尾"移除"按钮</td>
+            <td>确认弹窗 → DELETE；仅从本店下架，不影响母库</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">空状态</td>
+            <td>"还没有上架商品"插图 + "去选品"按钮</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>4.2 浏览商品母库 <code>/merchant/products/catalog</code></h3>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table>
+        <thead><tr><th>区块</th><th>内容</th><th>交互</th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:500">品类侧边栏</td>
+            <td>ProductCategory 列表，点击过滤右侧商品</td>
+            <td>单选，"全部"为默认</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">搜索框</td>
+            <td>按商品名称/英文名/品牌搜索</td>
+            <td>300ms 防抖，API 请求 <code>?q=keyword</code></td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">商品卡片</td>
+            <td>图片、名称、品牌、品类、平台参考价区间</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">已选标记</td>
+            <td>已加入本店的商品显示绿色"已上架"角标，按钮变为"管理"</td>
+            <td>点击"管理" → 跳到 /merchant/products 并高亮该行</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">"添加到本店"按钮</td>
+            <td>每个商品卡片右下角</td>
+            <td>点击 → 打开定价弹窗</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">定价弹窗</td>
+            <td>商品名称、图片、平台参考价区间、本店售价输入框</td>
+            <td>价格低于 basePriceMin → 红色提示，禁止确认；成功后商品卡片变为"已上架"</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">分页</td>
+            <td>每页 20 条，底部分页组件</td>
+            <td>切页时滚动到顶部</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert alert-orange">
+      <strong>业务规则：</strong>商家不能自己创建商品，所有商品必须来自平台母库（Admin 维护）。母库中 <code>status !== 'active'</code> 的商品不出现在此页面。
+    </div>
+  </section>
+
+  <!-- S5: 维修服务 -->
+  <section id="s5">
+    <h2>维修服务配置</h2>
+    <p class="section-intro">商家从平台维修目录中选择本店提供的服务并自由定价，无平台最低价限制。</p>
+
+    <h3>5.1 我的维修服务 <code>/merchant/services</code></h3>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table>
+        <thead><tr><th>区块</th><th>内容</th><th>交互</th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:500">设备品类标签页</td>
+            <td>按 DeviceCategory 分组（iPhone / iPad / Samsung / 其他）</td>
+            <td>Tab 切换，各 Tab 内显示该品类下本店已配置的服务</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">"添加服务"按钮</td>
+            <td>右上角</td>
+            <td>打开服务选择弹窗（从平台维修目录选）</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">服务列表行</td>
+            <td>品牌 · 型号 · 维修类型（如 iPhone 15 Pro 换屏）、平台参考价区间、本店报价、是否开放</td>
+            <td>价格内联编辑；是否开放开关（isActive toggle）；移除按钮</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">服务选择弹窗</td>
+            <td>4 级联动选择：设备品类 → 品牌 → 型号 → 维修类型；显示平台参考价区间</td>
+            <td>选中后输入本店报价 → 确认添加；支持批量（一次选多个型号的同类维修）</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">空状态</td>
+            <td>"还没有配置维修服务" + "添加服务"按钮</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert alert-green">
+      <strong>价格规则：</strong>本店维修报价可以自由设定，无平台最低价限制（维修服务的定价灵活性高于商品）。平台参考价区间（basePriceMin/basePriceMax 来自 RepairService 表）会显示在旁边供参考。
+    </div>
+  </section>
+
+  <!-- S6: 预约管理 -->
+  <section id="s6">
+    <h2>维修预约管理</h2>
+    <p class="section-intro">商家查看、接受、拒绝消费者提交的维修预约，并完成到店核销。</p>
+
+    <h3>6.1 预约列表 <code>/merchant/bookings</code></h3>
+
+    <div class="alert alert-orange">
+      <strong>前置依赖：</strong>此页面需要 <code>RepairBooking</code> 表存在，且 Consumer 端提交预约功能已上线。MVP 阶段可先做页面框架 + 空状态，待 Consumer 端完成后联调。
+    </div>
+
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table>
+        <thead><tr><th>区块</th><th>内容</th><th>交互</th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:500">状态 Tab 栏</td>
+            <td>待确认（红点数字角标）/ 已确认 / 已完成 / 已取消</td>
+            <td>Tab 切换，各 Tab 独立请求 API <code>?status=xxx</code></td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">日期范围筛选</td>
+            <td>今天 / 本周 / 自定义日期区间</td>
+            <td>筛选更新 API 查询参数</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">预约卡片</td>
+            <td>预约编号、用户姓名 + 手机号（脱敏显示）、设备型号、维修类型、预约时间、报价金额</td>
+            <td>点击展开详情</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">接受预约（待确认）</td>
+            <td>"接受"按钮（绿色）</td>
+            <td>PATCH status → confirmed；触发 SMS 给消费者（后端处理）</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">拒绝预约（待确认）</td>
+            <td>"拒绝"按钮（红色）</td>
+            <td>弹窗输入拒绝原因（必填）→ PATCH status → cancelled；触发 SMS 给消费者</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">完成核销（已确认）</td>
+            <td>"完成维修"按钮</td>
+            <td>弹窗填写实际收费金额（到店付款场景）→ PATCH status → completed</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">预约详情展开</td>
+            <td>用户备注、完整联系方式、设备故障描述、历史维修记录（如有）</td>
+            <td>手风琴展开，不跳新页面</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>6.2 预约状态流转</h3>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <div class="journey" style="padding: 20px 24px;">
+        <div class="journey-step">
+          <div class="step-box warn">pending_confirm<br>待确认</div>
+          <div class="step-sub">Consumer 提交预约</div>
+        </div>
+        <div class="j-arrow" style="margin-top: 28px;">→</div>
+        <div class="journey-step">
+          <div class="step-box active">confirmed<br>已确认</div>
+          <div class="step-sub">商家接受<br>SMS → 消费者</div>
+        </div>
+        <div class="j-arrow" style="margin-top: 28px;">→</div>
+        <div class="journey-step">
+          <div class="step-box active">completed<br>已完成</div>
+          <div class="step-sub">商家核销<br>记录实际收费</div>
+        </div>
+      </div>
+      <div class="journey" style="padding: 0 24px 20px;">
+        <div class="journey-step">
+          <div class="step-box warn">pending_confirm</div>
+        </div>
+        <div class="j-arrow" style="margin-top: 28px;">→</div>
+        <div class="journey-step">
+          <div class="step-box block">cancelled<br>已取消</div>
+          <div class="step-sub">商家拒绝<br>须填写原因<br>SMS → 消费者</div>
+        </div>
+      </div>
+      <div style="padding: 0 24px 20px;">
+        <div class="alert alert-blue" style="margin-bottom: 0;">
+          消费者也可以主动取消（在预约确认前）。到时间没来的情况由商家手动标记为 <code>no_show</code>（MVP 可暂时不做，归入已完成处理）。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S7: 工作台 -->
+  <section id="s7">
+    <h2>工作台首页 <code>/merchant/dashboard</code></h2>
+    <p class="section-intro">商家登录后的默认落地页，展示配置进度、今日数据统计、快捷入口和最近预约。</p>
+
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table>
+        <thead><tr><th>区块</th><th>内容</th><th>数据来源</th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:500">Onboarding 进度条</td>
+            <td>3 步配置完成度（见 3.2 节），未完成时置顶显示</td>
+            <td>实时检查 DB 状态</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">今日预约数</td>
+            <td>今天预约时间段内的 RepairBooking 数量</td>
+            <td><code>bookings?date=today</code></td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">待确认预约</td>
+            <td>status=pending_confirm 的数量，红色高亮</td>
+            <td>同上</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">本店在售商品数</td>
+            <td>MerchantProduct isActive=true 的数量</td>
+            <td>直接计数</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">本店维修服务数</td>
+            <td>MerchantService isActive=true 的数量</td>
+            <td>直接计数</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">快捷入口</td>
+            <td>处理预约 / 选品上架 / 维修服务配置 / 门店设置</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">最近 5 条预约</td>
+            <td>按时间倒序，带状态颜色</td>
+            <td><code>bookings?limit=5</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- S8: 门店设置 -->
+  <section id="s8">
+    <h2>门店设置 <code>/merchant/settings</code></h2>
+    <p class="section-intro">使用 Tab 切换：店铺信息 / 营业时间 / 账号安全</p>
+
+    <h3>8.1 Tab — 店铺信息</h3>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table>
+        <thead><tr><th>字段</th><th>类型</th><th>规则</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:500">店铺名称</td><td>文本输入</td><td>必填，最长 100 字符</td></tr>
+          <tr><td style="font-weight:500">联系电话</td><td>文本输入</td><td>必填，爱尔兰格式（+353...）</td></tr>
+          <tr><td style="font-weight:500">门店地址</td><td>文本输入</td><td>必填</td></tr>
+          <tr><td style="font-weight:500">Eircode</td><td>文本输入（大写格式化）</td><td>修改后自动重新调用 geocodeEircode()，更新 lat/lng</td></tr>
+          <tr><td style="font-weight:500">门店简介</td><td>Textarea</td><td>选填，最长 500 字符，显示在消费者端门店详情页</td></tr>
+          <tr><td style="font-weight:500">保存按钮</td><td>—</td><td>PATCH /api/merchant/me；Eircode 变更时 loading 提示"解析地址中…"</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>8.2 Tab — 营业时间</h3>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table>
+        <thead><tr><th>区块</th><th>内容</th><th>交互</th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:500">每日行（周一~周日）</td>
+            <td>左：日期标签；中：开始时间 / 结束时间（time picker）；右：休息日开关（toggle）</td>
+            <td>休息日=ON → 时间选择器 disabled 变灰；默认值：09:00 ~ 18:00</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">批量填充</td>
+            <td>"复制周一到工作日"按钮</td>
+            <td>将周一配置复制到周二~周五</td>
+          </tr>
+          <tr>
+            <td style="font-weight:500">保存按钮</td>
+            <td>一次性 PUT 全部 7 天</td>
+            <td>PUT /api/merchant/hours（幂等覆盖，非增量）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>8.3 Tab — 账号安全</h3>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table>
+        <thead><tr><th>字段</th><th>规则</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:500">当前密码</td><td>必填</td></tr>
+          <tr><td style="font-weight:500">新密码</td><td>最少 8 位，含大小写 + 数字</td></tr>
+          <tr><td style="font-weight:500">确认新密码</td><td>前端实时校验一致性</td></tr>
+          <tr><td style="font-weight:500">保存</td><td>POST /api/merchant/auth/change-password；成功后强制重新登录（清 Cookie）</td></tr>
+          <tr><td style="font-weight:500">登录邮箱（只读）</td><td>展示用，不可修改</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- S9: API 路由 -->
+  <section id="s9">
+    <h2>API 路由完整清单</h2>
+    <p class="section-intro">共 18 个路由。所有 <code>/api/merchant/*</code>（除 login/logout）读取 <code>merchantSession</code> Cookie 并验证。未登录返回 401；账号 isActive=false 返回 403。</p>
+
+    <h3>认证（3 个）</h3>
+    <div class="card">
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method post">POST</span></div>
+        <div class="api-row-path">/api/merchant/auth/login</div>
+        <div class="api-row-desc">邮箱密码登录，写 HttpOnly Cookie（merchantSession）</div>
+        <div class="api-row-auth"><span class="badge badge-pub">公开</span></div>
+      </div>
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method post">POST</span></div>
+        <div class="api-row-path">/api/merchant/auth/logout</div>
+        <div class="api-row-desc">清除 merchantSession Cookie</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method post">POST</span></div>
+        <div class="api-row-path">/api/merchant/auth/change-password</div>
+        <div class="api-row-desc">修改密码（需提供当前密码）；成功后清 Cookie</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+    </div>
+
+    <h3>门店信息（2 个）</h3>
+    <div class="card">
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method get">GET</span></div>
+        <div class="api-row-path">/api/merchant/me</div>
+        <div class="api-row-desc">返回当前门店完整信息（含 onboarding 进度计算）</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method patch">PATCH</span></div>
+        <div class="api-row-path">/api/merchant/me</div>
+        <div class="api-row-desc">更新门店基础信息；Eircode 变更时触发 geocodeEircode()</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+    </div>
+
+    <h3>营业时间（2 个）</h3>
+    <div class="card">
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method get">GET</span></div>
+        <div class="api-row-path">/api/merchant/hours</div>
+        <div class="api-row-desc">返回 7 天营业时间配置（不存在则返回默认空数组）</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method put">PUT</span></div>
+        <div class="api-row-path">/api/merchant/hours</div>
+        <div class="api-row-desc">全量覆盖 7 天配置（deleteMany + createMany，幂等）</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+    </div>
+
+    <h3>商品选品（5 个）</h3>
+    <div class="card">
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method get">GET</span></div>
+        <div class="api-row-path">/api/merchant/products</div>
+        <div class="api-row-desc">本店已选品列表；支持 ?categoryId=&amp;status=&amp;q= 过滤</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method post">POST</span></div>
+        <div class="api-row-path">/api/merchant/products</div>
+        <div class="api-row-desc">从母库添加商品到本店；body: { productId, price }；price 不能低于 basePriceMin</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method patch">PATCH</span></div>
+        <div class="api-row-path">/api/merchant/products/[id]</div>
+        <div class="api-row-desc">更新本店商品价格或 isActive 状态；[id] 为 MerchantProduct.id</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method delete">DELETE</span></div>
+        <div class="api-row-path">/api/merchant/products/[id]</div>
+        <div class="api-row-desc">从本店移除商品（硬删 MerchantProduct 行）</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method get">GET</span></div>
+        <div class="api-row-path">/api/merchant/catalog</div>
+        <div class="api-row-desc">浏览商品母库（status=active）；?categoryId=&amp;q=&amp;page=；包含"是否已被本店选中"字段</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+    </div>
+
+    <h3>维修服务（5 个）</h3>
+    <div class="card">
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method get">GET</span></div>
+        <div class="api-row-path">/api/merchant/services</div>
+        <div class="api-row-desc">本店已配置的维修服务列表；含 repairService 信息（型号/维修类型/参考价）</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method post">POST</span></div>
+        <div class="api-row-path">/api/merchant/services</div>
+        <div class="api-row-desc">添加维修服务；body: { repairServiceId, price }；支持数组批量添加</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method patch">PATCH</span></div>
+        <div class="api-row-path">/api/merchant/services/[id]</div>
+        <div class="api-row-desc">更新报价或 isActive；[id] 为 MerchantService.id</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method delete">DELETE</span></div>
+        <div class="api-row-path">/api/merchant/services/[id]</div>
+        <div class="api-row-desc">从本店移除该维修服务</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method get">GET</span></div>
+        <div class="api-row-path">/api/merchant/repair-catalog</div>
+        <div class="api-row-desc">浏览平台维修目录（4 层级联）；?categoryId=&amp;brandId=&amp;modelId=；含"是否已选"标记</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+    </div>
+
+    <h3>预约管理（2 个）</h3>
+    <div class="card">
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method get">GET</span></div>
+        <div class="api-row-path">/api/merchant/bookings</div>
+        <div class="api-row-desc">本店预约列表；?status=&amp;dateFrom=&amp;dateTo=&amp;limit=&amp;offset=</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method patch">PATCH</span></div>
+        <div class="api-row-path">/api/merchant/bookings/[id]</div>
+        <div class="api-row-desc">更新预约状态：→ confirmed（接受）/ → cancelled（拒绝，需 body.reason）/ → completed（完成，需 body.actualPriceCents）</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+    </div>
+
+    <h3>工作台数据（1 个）</h3>
+    <div class="card">
+      <div class="api-row">
+        <div class="api-row-method"><span class="api-method get">GET</span></div>
+        <div class="api-row-path">/api/merchant/dashboard</div>
+        <div class="api-row-desc">返回：今日预约数、待确认预约数、在售商品数、维修服务数、onboarding 完成步骤、最近 5 条预约</div>
+        <div class="api-row-auth"><span class="badge badge-auth">需登录</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S10: 数据库 Schema -->
+  <section id="s10">
+    <h2>数据库 Schema — 新增 3 张表</h2>
+    <p class="section-intro">需要新建 Prisma migration。执行前确认 <code>prisma/schema.prisma</code> 中 <code>Merchant</code> 表已存在。</p>
+
+    <div class="alert alert-red">
+      <strong>迁移命令：</strong><code>npx prisma migrate dev --name add-merchant-portal-tables</code>，然后 <code>npx prisma generate</code>
+    </div>
+
+    <h3>MerchantProduct — 门店选品</h3>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <pre><span class="kw">model</span> <span class="ty">MerchantProduct</span> {
+  id          <span class="ty">Int</span>      <span class="fn">@id @default(autoincrement())</span>
+  merchantId  <span class="ty">Int</span>
+  merchant    <span class="ty">Merchant</span> <span class="fn">@relation(fields: [merchantId], references: [id], onDelete: Cascade)</span>
+  productId   <span class="ty">Int</span>
+  product     <span class="ty">Product</span>  <span class="fn">@relation(fields: [productId], references: [id], onDelete: Cascade)</span>
+  price       <span class="ty">Decimal</span>  <span class="fn">@db.Decimal(10, 2)</span>   <span class="cm">// 本店实际售价（€）</span>
+  isActive    <span class="ty">Boolean</span>  <span class="fn">@default(true)</span>
+  createdAt   <span class="ty">DateTime</span> <span class="fn">@default(now())</span>
+  updatedAt   <span class="ty">DateTime</span> <span class="fn">@updatedAt</span>
+
+  <span class="fn">@@unique([merchantId, productId])</span>   <span class="cm">// 同一门店不能重复选同一商品</span>
+  <span class="fn">@@index([merchantId])</span>
+  <span class="fn">@@index([productId])</span>
+}</pre>
+    </div>
+
+    <h3>MerchantService — 门店维修服务定价</h3>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <pre><span class="kw">model</span> <span class="ty">MerchantService</span> {
+  id              <span class="ty">Int</span>           <span class="fn">@id @default(autoincrement())</span>
+  merchantId      <span class="ty">Int</span>
+  merchant        <span class="ty">Merchant</span>      <span class="fn">@relation(fields: [merchantId], references: [id], onDelete: Cascade)</span>
+  repairServiceId <span class="ty">Int</span>
+  repairService   <span class="ty">RepairService</span> <span class="fn">@relation(fields: [repairServiceId], references: [id], onDelete: Cascade)</span>
+  price           <span class="ty">Decimal</span>       <span class="fn">@db.Decimal(10, 2)</span>   <span class="cm">// 本店报价（€）</span>
+  isActive        <span class="ty">Boolean</span>       <span class="fn">@default(true)</span>
+  createdAt       <span class="ty">DateTime</span>      <span class="fn">@default(now())</span>
+  updatedAt       <span class="ty">DateTime</span>      <span class="fn">@updatedAt</span>
+
+  <span class="fn">@@unique([merchantId, repairServiceId])</span>
+  <span class="fn">@@index([merchantId])</span>
+  <span class="fn">@@index([repairServiceId])</span>
+}</pre>
+    </div>
+
+    <h3>MerchantHours — 营业时间</h3>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <pre><span class="kw">model</span> <span class="ty">MerchantHours</span> {
+  id          <span class="ty">Int</span>      <span class="fn">@id @default(autoincrement())</span>
+  merchantId  <span class="ty">Int</span>
+  merchant    <span class="ty">Merchant</span> <span class="fn">@relation(fields: [merchantId], references: [id], onDelete: Cascade)</span>
+  dayOfWeek   <span class="ty">Int</span>      <span class="cm">// 0=周日, 1=周一 ... 6=周六</span>
+  openTime    <span class="ty">String?</span>  <span class="cm">// "09:00"（isClosed=true 时为 null）</span>
+  closeTime   <span class="ty">String?</span>  <span class="cm">// "18:00"</span>
+  isClosed    <span class="ty">Boolean</span>  <span class="fn">@default(false)</span>
+
+  <span class="fn">@@unique([merchantId, dayOfWeek])</span>
+  <span class="fn">@@index([merchantId])</span>
+}</pre>
+    </div>
+
+    <h3>现有表需追加的 back-reference</h3>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <pre><span class="cm">// 在 Merchant model 中追加：</span>
+  merchantProducts   <span class="ty">MerchantProduct[]</span>
+  merchantServices   <span class="ty">MerchantService[]</span>
+  merchantHours      <span class="ty">MerchantHours[]</span>
+  mustChangePassword <span class="ty">Boolean</span> <span class="fn">@default(true)</span>   <span class="cm">// 首次登录强制改密</span>
+
+<span class="cm">// 在 Product model 中追加：</span>
+  merchantProducts   <span class="ty">MerchantProduct[]</span>
+
+<span class="cm">// 在 RepairService model 中追加：</span>
+  merchantServices   <span class="ty">MerchantService[]</span></pre>
+    </div>
+  </section>
+
+  <!-- S11: 鉴权设计 -->
+  <section id="s11">
+    <h2>鉴权设计</h2>
+    <p class="section-intro">Merchant Session 与 Admin Session 完全独立，使用不同 Cookie 名和不同 secret，互不干扰。</p>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Session 机制</div>
+        <table>
+          <tbody>
+            <tr><td style="width:40%; font-weight:500">方案</td><td>HttpOnly Cookie（与 Admin 端相同方案）</td></tr>
+            <tr><td style="font-weight:500">Cookie 名</td><td><code>merchantSession</code>（区别于 adminSession）</td></tr>
+            <tr><td style="font-weight:500">过期时间</td><td>7 天，访问时自动续期</td></tr>
+            <tr><td style="font-weight:500">内容</td><td><code>{ merchantId: number, email: string }</code>（加密）</td></tr>
+            <tr><td style="font-weight:500">实现位置</td><td><code>src/lib/merchant-auth.ts</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">requireMerchantSession()</div>
+        <pre style="font-size:11px; margin:0;"><span class="cm">// src/lib/merchant-auth.ts</span>
+<span class="kw">export async function</span> <span class="fn">requireMerchantSession</span>() {
+  <span class="kw">const</span> session = <span class="kw">await</span> getMerchantSession();
+  <span class="kw">if</span> (!session) {
+    <span class="kw">throw new</span> Response(
+      JSON.stringify({ error: <span class="st">"未登录"</span> }),
+      { status: <span class="ty">401</span> }
+    );
+  }
+  <span class="kw">return</span> session; <span class="cm">// { merchantId, email }</span>
+}</pre>
+      </div>
+    </div>
+
+    <div class="alert alert-blue">
+      <strong>隔离原则：</strong>Admin 登录不赋予商家权限，反之亦然。每个受保护的 API 路由第一行调用 <code>requireMerchantSession()</code>。用管理员 Cookie 访问 <code>/api/merchant/me</code> 应返回 401。
+    </div>
+  </section>
+
+  <!-- S12: 开发任务 -->
+  <section id="s12">
+    <h2>开发任务清单（按顺序执行）</h2>
+    <p class="section-intro">分 6 批，按依赖顺序执行。每批完成后验证再进入下一批。</p>
+
+    <h3>第一批：基础设施（先做，其余依赖它）</h3>
+    <div class="card">
+      <ul class="checklist">
+        <li><div class="cb"></div><span>Prisma schema 新增 MerchantProduct / MerchantService / MerchantHours 3 张表，跑 migrate dev</span></li>
+        <li><div class="cb"></div><span>Merchant 表新增 <code>mustChangePassword Boolean @default(true)</code> 字段</span></li>
+        <li><div class="cb"></div><span>创建 <code>src/lib/merchant-auth.ts</code>（getSession / requireSession / setSession / clearSession）</span></li>
+        <li><div class="cb"></div><span>创建 <code>src/app/merchant/layout.tsx</code>（Sidebar 导航 + 鉴权 redirect）</span></li>
+        <li><div class="cb"></div><span>创建 <code>src/components/merchant/MerchantSidebar.tsx</code></span></li>
+      </ul>
+    </div>
+
+    <h3>第二批：认证流程</h3>
+    <div class="card">
+      <ul class="checklist">
+        <li><div class="cb"></div><span>API: <code>POST /api/merchant/auth/login</code>（bcrypt 校验 + 写 Cookie）</span></li>
+        <li><div class="cb"></div><span>API: <code>POST /api/merchant/auth/logout</code>（清 Cookie）</span></li>
+        <li><div class="cb"></div><span>API: <code>POST /api/merchant/auth/change-password</code></span></li>
+        <li><div class="cb"></div><span>页面: <code>/merchant/login</code>（表单 + 错误提示）</span></li>
+        <li><div class="cb"></div><span>首次登录检测：login API 若 mustChangePassword=true，响应中返回 <code>requirePasswordChange: true</code></span></li>
+      </ul>
+    </div>
+
+    <h3>第三批：门店设置（Onboarding 必须）</h3>
+    <div class="card">
+      <ul class="checklist">
+        <li><div class="cb"></div><span>API: <code>GET /api/merchant/me</code></span></li>
+        <li><div class="cb"></div><span>API: <code>PATCH /api/merchant/me</code>（含 Eircode geocode 调用）</span></li>
+        <li><div class="cb"></div><span>API: <code>GET + PUT /api/merchant/hours</code></span></li>
+        <li><div class="cb"></div><span>页面: <code>/merchant/settings</code>（3 个 Tab：店铺信息 / 营业时间 / 账号安全）</span></li>
+      </ul>
+    </div>
+
+    <h3>第四批：商品选品</h3>
+    <div class="card">
+      <ul class="checklist">
+        <li><div class="cb"></div><span>API: <code>GET /api/merchant/catalog</code>（母库浏览，含 isSelected 标记）</span></li>
+        <li><div class="cb"></div><span>API: <code>GET/POST /api/merchant/products</code></span></li>
+        <li><div class="cb"></div><span>API: <code>PATCH/DELETE /api/merchant/products/[id]</code></span></li>
+        <li><div class="cb"></div><span>页面: <code>/merchant/products/catalog</code>（品类侧边栏 + 商品网格 + 添加弹窗）</span></li>
+        <li><div class="cb"></div><span>页面: <code>/merchant/products</code>（已选品列表 + 价格内联编辑 + 上下架切换）</span></li>
+      </ul>
+    </div>
+
+    <h3>第五批：维修服务配置</h3>
+    <div class="card">
+      <ul class="checklist">
+        <li><div class="cb"></div><span>API: <code>GET /api/merchant/repair-catalog</code>（4 层级联浏览，含 isSelected）</span></li>
+        <li><div class="cb"></div><span>API: <code>GET/POST /api/merchant/services</code></span></li>
+        <li><div class="cb"></div><span>API: <code>PATCH/DELETE /api/merchant/services/[id]</code></span></li>
+        <li><div class="cb"></div><span>页面: <code>/merchant/services</code>（Tab 按品类分组 + 服务列表 + 添加弹窗）</span></li>
+      </ul>
+    </div>
+
+    <h3>第六批：工作台 + 预约</h3>
+    <div class="card">
+      <ul class="checklist">
+        <li><div class="cb"></div><span>API: <code>GET /api/merchant/dashboard</code></span></li>
+        <li><div class="cb"></div><span>页面: <code>/merchant/dashboard</code>（Onboarding 进度条 + 统计卡片 + 快捷入口）</span></li>
+        <li><div class="cb"></div><span>API: <code>GET /api/merchant/bookings</code>（含空状态，RepairBooking 表建好后联调）</span></li>
+        <li><div class="cb"></div><span>API: <code>PATCH /api/merchant/bookings/[id]</code>（accept/decline/complete）</span></li>
+        <li><div class="cb"></div><span>页面: <code>/merchant/bookings</code>（状态 Tab + 预约卡片 + 操作按钮）</span></li>
+      </ul>
+    </div>
+
+    <h3>验收标准（全部通过才算完成）</h3>
+    <div class="card">
+      <ul class="checklist">
+        <li><div class="cb"></div><span>Admin 创建商家账号后，商家能用邮箱密码登录</span></li>
+        <li><div class="cb"></div><span>首次登录强制修改密码，改完后才能进工作台</span></li>
+        <li><div class="cb"></div><span>完成 Onboarding 3 步（信息/时间/选品），进度条消失</span></li>
+        <li><div class="cb"></div><span>从母库选了商品并设价后，能在"我的商品"看到，且价格不能低于平台参考最低价</span></li>
+        <li><div class="cb"></div><span>从维修目录选了维修服务并设价后，能在"维修服务"看到</span></li>
+        <li><div class="cb"></div><span>修改营业时间后，GET /api/merchant/hours 返回更新后的数据</span></li>
+        <li><div class="cb"></div><span>未登录状态访问 /merchant/dashboard → 302 → /merchant/login</span></li>
+        <li><div class="cb"></div><span>用管理员 Cookie 访问 /api/merchant/me → 401（Session 隔离）</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <div style="font-size: 12px; color: #aeaeb2; text-align: center; margin-top: 64px; padding-bottom: 40px;">
+    IERepair Merchant Portal PRD · v1.0 · 2026-05-29
+  </div>
+
+</main>
+
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const navItems = document.querySelectorAll('.nav-item[href^="#"]');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navItems.forEach(n => n.classList.remove('active'));
+        const active = document.querySelector(`.nav-item[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

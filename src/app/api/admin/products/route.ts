@@ -35,7 +35,7 @@ export async function POST(req: Request) {
   try {
     await requireAdminSession();
     const body = await req.json();
-    const { name, nameEn, description, brand, categoryId, basePriceMin, basePriceMax } = body;
+    const { name, nameEn, description, brand, categoryId, basePriceMin, basePriceMax, images } = body;
 
     if (!name?.trim() || !categoryId) {
       return Response.json({ error: "商品名称和品类为必填项" }, { status: 400 });
@@ -50,6 +50,7 @@ export async function POST(req: Request) {
         categoryId: parseInt(categoryId),
         basePriceMin: basePriceMin != null ? basePriceMin : null,
         basePriceMax: basePriceMax != null ? basePriceMax : null,
+        images: Array.isArray(images) ? images.filter((u: unknown) => typeof u === "string") : [],
       },
       include: { category: { select: { id: true, name: true } } },
     });

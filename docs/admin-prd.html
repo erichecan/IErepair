@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IERepair Admin 后台产品需求文档</title>
+  <style>
+    :root {
+      --green: #146345;
+      --green-light: #e8f7f0;
+      --green-mid: #17db66;
+      --header-bg: #1c3830;
+      --text: #1d1d1f;
+      --text-2: #6e6e73;
+      --border: #e5e5ea;
+      --bg: #f5f5f7;
+      --red: #c0392b;
+      --red-light: #fff5f5;
+      --orange: #d97706;
+      --orange-light: #fffbeb;
+      --blue: #1d6fa4;
+      --blue-light: #eff6ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    /* ── Layout ── */
+    .sidebar {
+      position: fixed; top: 0; left: 0; width: 240px; height: 100vh;
+      background: var(--header-bg); color: #fff; overflow-y: auto;
+      padding: 24px 0; z-index: 100;
+    }
+    .sidebar-logo {
+      padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+      font-size: 18px; font-weight: 700; color: var(--green-mid);
+    }
+    .sidebar-logo span { display: block; font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 400; margin-top: 2px; }
+    .nav-section { padding: 16px 20px 4px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.35); }
+    .nav-item { display: block; padding: 8px 20px; font-size: 13px; color: rgba(255,255,255,0.75); text-decoration: none; transition: all 0.15s; }
+    .nav-item:hover, .nav-item.active { color: var(--green-mid); background: rgba(23,219,102,0.08); }
+    .main { margin-left: 240px; padding: 40px 48px; max-width: 1100px; }
+    /* ── Typography ── */
+    h1 { font-size: 32px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+    h2 { font-size: 24px; font-weight: 700; color: var(--text); margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--green); }
+    h3 { font-size: 17px; font-weight: 700; color: var(--text); margin: 28px 0 10px; }
+    h4 { font-size: 14px; font-weight: 700; color: var(--text); margin: 18px 0 8px; }
+    p { margin-bottom: 12px; font-size: 14px; color: #3a3a3f; }
+    /* ── Components ── */
+    .meta-bar {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      margin-bottom: 40px; padding: 16px 20px;
+      background: #fff; border-radius: 10px; border: 1px solid var(--border);
+    }
+    .meta-item { font-size: 12px; color: var(--text-2); }
+    .meta-item strong { color: var(--text); display: block; font-size: 13px; }
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;
+    }
+    .badge-p0 { background: #fef2f2; color: #dc2626; }
+    .badge-p1 { background: #fffbeb; color: #d97706; }
+    .badge-p2 { background: #eff6ff; color: #2563eb; }
+    .badge-done { background: var(--green-light); color: var(--green); }
+    .badge-missing { background: #fff5f5; color: var(--red); }
+    .badge-partial { background: #fffbeb; color: var(--orange); }
+    .card {
+      background: #fff; border-radius: 12px; border: 1px solid var(--border);
+      padding: 24px; margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 16px; font-weight: 700; color: var(--text);
+      margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th {
+      background: var(--bg); padding: 10px 12px; text-align: left;
+      font-size: 11px; font-weight: 600; color: var(--text-2);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: #3a3a3f; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafafa; }
+    .alert {
+      padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 16px;
+    }
+    .alert-red { background: var(--red-light); border-left: 3px solid var(--red); color: var(--red); }
+    .alert-green { background: var(--green-light); border-left: 3px solid var(--green); color: var(--green); }
+    .alert-orange { background: var(--orange-light); border-left: 3px solid var(--orange); color: var(--orange); }
+    .alert-blue { background: var(--blue-light); border-left: 3px solid var(--blue); color: var(--blue); }
+    /* ── Flow ── */
+    .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin: 12px 0; }
+    .flow-step {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 6px; padding: 6px 12px; font-size: 12px; font-weight: 500;
+      color: var(--text); white-space: nowrap;
+    }
+    .flow-step.done { background: var(--green-light); border-color: #a8e6cb; color: var(--green); }
+    .flow-step.missing { background: #fff5f5; border-color: #ffc5c0; color: var(--red); }
+    .flow-step.gate { background: #fffbeb; border-color: #fde68a; color: var(--orange); font-weight: 700; }
+    .flow-arrow { color: var(--text-2); font-size: 14px; }
+    /* ── B2B2C flow boxes ── */
+    .b2b2c-flow { display: flex; align-items: center; gap: 0; padding: 24px; overflow-x: auto; }
+    .flow-node { flex-shrink: 0; text-align: center; }
+    .flow-box {
+      display: inline-block; padding: 12px 20px; border-radius: 10px;
+      font-size: 13px; font-weight: 600; min-width: 120px;
+    }
+    .flow-box-green { background: #d1fae5; color: #065f46; border: 1.5px solid #6ee7b7; }
+    .flow-box-red   { background: #fee2e2; color: #991b1b; border: 1.5px solid #fca5a5; }
+    .flow-sub { font-size: 11px; font-weight: 400; margin-top: 5px; color: inherit; opacity: 0.8; }
+    .flow-label { font-size: 10px; color: #aeaeb2; margin-top: 6px; text-align: center; }
+    .flow-arrow-lg { font-size: 20px; color: #c7c7cc; padding: 0 8px; flex-shrink: 0; }
+    /* ── Page Spec ── */
+    .page-spec {
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      margin-bottom: 24px; overflow: hidden;
+    }
+    .page-spec-header {
+      background: var(--header-bg); color: #fff;
+      padding: 16px 24px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .page-spec-header h3 { color: #fff; margin: 0; font-size: 16px; }
+    .page-spec-url { font-size: 12px; color: rgba(255,255,255,0.6); font-family: monospace; margin-top: 2px; }
+    .page-spec-body { padding: 20px 24px; }
+    .req-list { list-style: none; }
+    .req-list li { padding: 5px 0; font-size: 13px; color: #3a3a3f; display: flex; gap: 8px; align-items: flex-start; }
+    .req-list li::before { content: "·"; color: var(--green); font-size: 18px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+    /* ── API spec ── */
+    .api-method {
+      display: inline-block; padding: 2px 7px; border-radius: 4px;
+      font-size: 11px; font-weight: 700; font-family: monospace; margin-right: 4px;
+    }
+    .get { background: #e0f2fe; color: #0369a1; }
+    .post { background: #dcfce7; color: #15803d; }
+    .patch { background: #fef9c3; color: #854d0e; }
+    .delete { background: #fee2e2; color: #b91c1c; }
+    code {
+      font-family: "SF Mono", "Fira Code", monospace;
+      background: var(--bg); border: 1px solid var(--border);
+      padding: 1px 5px; border-radius: 4px; font-size: 12px;
+    }
+    /* ── Stat Grid ── */
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px; }
+    .stat-card {
+      background: #fff; border: 1px solid var(--border); border-radius: 10px;
+      padding: 16px; text-align: center;
+    }
+    .stat-num { font-size: 28px; font-weight: 800; }
+    .stat-label { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+    .stat-card.green .stat-num { color: var(--green); }
+    .stat-card.red .stat-num { color: var(--red); }
+    .stat-card.orange .stat-num { color: var(--orange); }
+    .stat-card.blue .stat-num { color: var(--blue); }
+    /* ── Schema ── */
+    .schema-field { display: flex; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--bg); font-size: 13px; }
+    .schema-name { font-family: monospace; color: var(--blue); width: 180px; flex-shrink: 0; }
+    .schema-type { color: var(--orange); width: 110px; flex-shrink: 0; }
+    .schema-desc { color: var(--text-2); }
+    .schema-new { background: var(--green-light); border-radius: 4px; padding: 0 5px; font-size: 10px; color: var(--green); font-weight: 700; }
+    /* ── Priority grid ── */
+    .priority-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .priority-card { border-radius: 10px; padding: 16px 18px; border: 1.5px solid; }
+    .priority-card h3 { font-size: 13px; font-weight: 700; margin: 0 0 10px; }
+    .priority-card ul { margin: 0; padding-left: 16px; font-size: 13px; }
+    .priority-card li { margin-bottom: 5px; line-height: 1.5; }
+    .p0-card { border-color: #fca5a5; background: #fff5f5; }
+    .p0-card h3 { color: #c0392b; }
+    .p1-card { border-color: #fcd34d; background: #fffbf0; }
+    .p1-card h3 { color: #92400e; }
+    .p2-card { border-color: #93c5fd; background: #eff6ff; }
+    .p2-card h3 { color: #1e40af; }
+    .p3-card { border-color: #a7f3d0; background: #f0fdf4; }
+    .p3-card h3 { color: #065f46; }
+    /* ── Section intro ── */
+    .section-intro { font-size: 14px; color: var(--text-2); margin-top: -8px; margin-bottom: 24px; }
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 24px; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .priority-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar Nav -->
+<nav class="sidebar">
+  <div class="sidebar-logo">IERepair<span>Admin 后台产品需求文档 v1.0</span></div>
+
+  <div class="nav-section">概览</div>
+  <a class="nav-item" href="#overview">功能状态总览</a>
+  <a class="nav-item" href="#b2b2c">B2B2C 业务现状</a>
+
+  <div class="nav-section">Admin 功能</div>
+  <a class="nav-item" href="#existing">已完成功能</a>
+  <a class="nav-item" href="#missing">待补充功能</a>
+
+  <div class="nav-section">数据层</div>
+  <a class="nav-item" href="#schema">数据库 Schema</a>
+  <a class="nav-item" href="#pages">页面 &amp; 路由</a>
+
+  <div class="nav-section">其他端</div>
+  <a class="nav-item" href="#other-portals">Merchant / Consumer</a>
+
+  <div class="nav-section">规划</div>
+  <a class="nav-item" href="#priority">优先级建议</a>
+  <a class="nav-item" href="#verdict">核心判断</a>
+</nav>
+
+<!-- Main Content -->
+<main class="main">
+
+  <!-- Header -->
+  <h1>Admin 后台产品需求文档</h1>
+  <div class="meta-bar">
+    <div class="meta-item"><strong>生成日期</strong>2026-05-29</div>
+    <div class="meta-item"><strong>分析范围</strong>Admin 后台 + 数据库 Schema + API 路由</div>
+    <div class="meta-item"><strong>对照文档</strong>docs/08-MVP开发范围.md</div>
+    <div class="meta-item"><strong>当前版本</strong>v1.0</div>
+  </div>
+
+  <!-- Overview -->
+  <section id="overview">
+    <h2>功能状态总览</h2>
+    <p class="section-intro">以平台管理员视角模拟操作后台，识别阻碍 B2B2C 商业模式运转的功能缺口。</p>
+
+    <div class="stat-grid">
+      <div class="stat-card green">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Admin 已完成模块</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Admin 待补充功能</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-num">5</div>
+        <div class="stat-label">数据库表缺失</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-num">2</div>
+        <div class="stat-label">整端完全为零<br>（Merchant + Consumer）</div>
+      </div>
+    </div>
+
+    <div class="alert alert-red">
+      <strong>⛔ 当前状态：</strong>Admin 后台上游定义工作已就绪，但缺少 3 张核心关联表，且 Merchant / Consumer 两端均未建设，整个交易主链路完全不通。
+    </div>
+  </section>
+
+  <!-- B2B2C Status -->
+  <section id="b2b2c">
+    <h2>B2B2C 业务现状</h2>
+    <p class="section-intro">B2B2C 主干在第一个箭头就断开了。Admin 已完成上游定义，但下游两端均为零。</p>
+
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <div class="b2b2c-flow">
+        <div class="flow-node">
+          <div class="flow-box flow-box-green">
+            平台 Admin
+            <div class="flow-sub">维修目录 ✓<br>商品母库 ✓<br>门店账号 ✓</div>
+          </div>
+        </div>
+        <div>
+          <div class="flow-arrow-lg">→</div>
+          <div class="flow-label">定义可卖什么</div>
+        </div>
+        <div class="flow-node">
+          <div class="flow-box flow-box-red">
+            商家 Merchant
+            <div class="flow-sub">账号已建 ✓<br>登录后台 ✗<br>选品定价 ✗</div>
+          </div>
+        </div>
+        <div>
+          <div class="flow-arrow-lg">→</div>
+          <div class="flow-label">入驻选品上架</div>
+        </div>
+        <div class="flow-node">
+          <div class="flow-box flow-box-red">
+            消费者 Consumer
+            <div class="flow-sub">首页静态 ✓<br>搜索发现 ✗<br>预约下单 ✗</div>
+          </div>
+        </div>
+        <div>
+          <div class="flow-arrow-lg">→</div>
+          <div class="flow-label">搜索购买预约</div>
+        </div>
+        <div class="flow-node">
+          <div class="flow-box flow-box-red">
+            Admin 监控
+            <div class="flow-sub">交易可见 ✗<br>佣金计算 ✗<br>纠纷处理 ✗</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding: 0 24px 18px; font-size: 13px; color: #6e6e73;">
+        <strong style="color: var(--red);">结论：</strong>商家选品 → 消费者发现 → 消费者预约 → 门店接单，整条链路完全断开。Admin 仅作为上游内容管理系统在运作。
+      </div>
+    </div>
+  </section>
+
+  <!-- Existing Features -->
+  <section id="existing">
+    <h2>已完成功能</h2>
+    <p class="section-intro">Admin 后台已具备完整的上游内容管理能力，是后续各端的数据基础。</p>
+
+    <div class="page-spec">
+      <div class="page-spec-header">
+        <div>
+          <h3>管理员登录</h3>
+          <div class="page-spec-url">/admin/login</div>
+        </div>
+        <span class="badge badge-done">✓ 已完成</span>
+      </div>
+      <div class="page-spec-body">
+        <ul class="req-list">
+          <li>邮箱 + 密码认证，HttpOnly Cookie <code>admin_session</code> 鉴权</li>
+          <li><code>requireAdminSession()</code> 保护所有 <code>(protected)</code> 路由</li>
+          <li>Session 过期自动跳转登录页，防止未授权访问</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="page-spec">
+      <div class="page-spec-header">
+        <div>
+          <h3>数据概览 Dashboard</h3>
+          <div class="page-spec-url">/admin/dashboard</div>
+        </div>
+        <span class="badge badge-done">✓ 已完成</span>
+      </div>
+      <div class="page-spec-body">
+        <ul class="req-list">
+          <li>门店数、维修服务数、商品数、目录完整度、Eircode 解析率等 11 个统计指标</li>
+          <li>Server Component 直接查询 Prisma，无 API 层开销</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="page-spec">
+      <div class="page-spec-header">
+        <div>
+          <h3>维修目录管理</h3>
+          <div class="page-spec-url">/admin/repair-catalog</div>
+        </div>
+        <span class="badge badge-done">✓ 已完成</span>
+      </div>
+      <div class="page-spec-body">
+        <ul class="req-list">
+          <li>设备品类 → 品牌 → 型号 → 维修类型 → 维修服务，5 层完整树结构 CRUD</li>
+          <li>含参考价格区间、预计工时；软删除 <code>isActive</code></li>
+          <li>4 层级联选择器，实时过滤子级选项</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="page-spec">
+      <div class="page-spec-header">
+        <div>
+          <h3>门店账号管理</h3>
+          <div class="page-spec-url">/admin/merchants</div>
+        </div>
+        <span class="badge badge-done">✓ 已完成</span>
+      </div>
+      <div class="page-spec-body">
+        <ul class="req-list">
+          <li>创建门店账号（名称、地址、Eircode、联系方式）</li>
+          <li>创建时自动调用 <code>geocodeEircode()</code> → 写入 <code>lat/lng</code>，供 PostGIS 地理搜索使用</li>
+          <li>编辑信息、启用/停用门店；门店详情独立页面</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="page-spec">
+      <div class="page-spec-header">
+        <div>
+          <h3>商品母库管理</h3>
+          <div class="page-spec-url">/admin/products</div>
+        </div>
+        <span class="badge badge-done">✓ 已完成</span>
+      </div>
+      <div class="page-spec-body">
+        <ul class="req-list">
+          <li>商品 CRUD：名称、品牌、品类、参考价格区间、描述、图片</li>
+          <li>图片上传到 Cloudflare R2（presigned URL）</li>
+          <li>CSV 批量导入，预览含错误行高亮</li>
+          <li>按品类/状态筛选，支持搜索</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="page-spec">
+      <div class="page-spec-header">
+        <div>
+          <h3>品类管理</h3>
+          <div class="page-spec-url">/admin/categories</div>
+        </div>
+        <span class="badge badge-done">✓ 已完成</span>
+      </div>
+      <div class="page-spec-body">
+        <ul class="req-list">
+          <li>商品品类（<code>ProductCategory</code>）CRUD，名称内联编辑，排序调整</li>
+          <li>设备品类（<code>DeviceCategory</code>）在维修目录内管理</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Missing Features -->
+  <section id="missing">
+    <h2>待补充功能</h2>
+    <p class="section-intro">以下功能缺失是 B2B2C 商业模式无法运转的直接原因，按优先级排列。</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width:8%">优先级</th>
+          <th style="width:30%">缺失功能</th>
+          <th style="width:25%">阻塞原因</th>
+          <th style="width:20%">B2B2C 影响</th>
+          <th>前置依赖</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-p0">P0</span></td>
+          <td>
+            <strong>门店选品管理视图</strong>
+            <div style="font-size:12px;color:var(--text-2);margin-top:3px">Admin 查看各门店已选商品、定价、上下架状态</div>
+          </td>
+          <td>无 <code>MerchantProduct</code> 表，无从查看</td>
+          <td>Admin 对平台在售商品完全盲视</td>
+          <td>需先建 <code>MerchantProduct</code> Schema</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-p0">P0</span></td>
+          <td>
+            <strong>维修预约总览</strong>
+            <div style="font-size:12px;color:var(--text-2);margin-top:3px">跨门店预约列表、状态筛选、快速跳转门店详情</div>
+          </td>
+          <td>无 <code>RepairBooking</code> 表</td>
+          <td>Admin 对核心交易数据完全不可见</td>
+          <td>需先建 <code>RepairBooking</code> Schema</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-p0">P0</span></td>
+          <td>
+            <strong>门店营业时间管理</strong>
+            <div style="font-size:12px;color:var(--text-2);margin-top:3px">在门店详情页配置每天营业时间段，供消费者预约时选择</div>
+          </td>
+          <td>无 <code>MerchantHours</code> 表</td>
+          <td>用户无法知道门店何时开门，预约系统无法运转</td>
+          <td>需先建 <code>MerchantHours</code> Schema</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-p1">P1</span></td>
+          <td>
+            <strong>商品审核流程</strong>
+            <div style="font-size:12px;color:var(--text-2);margin-top:3px">Admin 审核商家申请入库的自定义商品，通过/拒绝</div>
+          </td>
+          <td>现商品只有 <code>status: active/inactive</code>，无 pending/rejected 状态</td>
+          <td>平台内容质量失控，恶意商品无法拦截</td>
+          <td>Product.status 扩展 + 审核 UI</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-p1">P1</span></td>
+          <td>
+            <strong>Admin 账号管理</strong>
+            <div style="font-size:12px;color:var(--text-2);margin-top:3px">后台 CRUD 管理员账号，角色分配（超管/运营/只读）</div>
+          </td>
+          <td>现只能直接操作数据库新增 AdminUser</td>
+          <td>多人运营时无法分权，离职账号无法在 UI 停用</td>
+          <td>AdminUser CRUD API + UI</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-p2">P2</span></td>
+          <td>
+            <strong>佣金 / 平台收益概览</strong>
+            <div style="font-size:12px;color:var(--text-2);margin-top:3px">按时间段统计门店交易额、平台抽佣、已结算/未结算明细</div>
+          </td>
+          <td>无订单/支付系统，暂无数据源</td>
+          <td>B2B2C 核心收益无法量化和追踪</td>
+          <td>依赖 Stripe Connect 订单数据（Phase 2）</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Schema -->
+  <section id="schema">
+    <h2>数据库 Schema</h2>
+    <p class="section-intro">5 张表已建，5 张表缺失。缺失的表是交易闭环无法运转的根本原因。</p>
+
+    <h3>已建表</h3>
+    <div class="card" style="padding: 16px 24px;">
+      <div class="schema-field">
+        <div class="schema-name">DeviceCategory / Brand / Model</div>
+        <div class="schema-type"><span class="badge badge-done">✓ 已建</span></div>
+        <div class="schema-desc">维修目录层级结构（品类→品牌→型号）</div>
+      </div>
+      <div class="schema-field">
+        <div class="schema-name">RepairService</div>
+        <div class="schema-type"><span class="badge badge-done">✓ 已建</span></div>
+        <div class="schema-desc">平台定义的维修服务 + 参考价格区间</div>
+      </div>
+      <div class="schema-field">
+        <div class="schema-name">AdminUser</div>
+        <div class="schema-type"><span class="badge badge-done">✓ 已建</span></div>
+        <div class="schema-desc">平台管理员账号（邮箱 + bcrypt 密码）</div>
+      </div>
+      <div class="schema-field">
+        <div class="schema-name">Merchant</div>
+        <div class="schema-type"><span class="badge badge-done">✓ 已建</span></div>
+        <div class="schema-desc">门店账号（含 PostGIS 地理坐标）</div>
+      </div>
+      <div class="schema-field" style="border-bottom:none">
+        <div class="schema-name">Product / ProductCategory</div>
+        <div class="schema-type"><span class="badge badge-done">✓ 已建</span></div>
+        <div class="schema-desc">商品母库 + 品类分类</div>
+      </div>
+    </div>
+
+    <h3>缺失表（阻断交易的根本原因）</h3>
+    <div class="card" style="padding: 16px 24px;">
+      <div class="schema-field">
+        <div class="schema-name">MerchantProduct <span class="schema-new">NEW</span></div>
+        <div class="schema-type"><span class="badge badge-missing">✗ 缺失</span></div>
+        <div class="schema-desc"><strong style="color:var(--red)">致命缺失</strong> — 门店从母库选品实例：<code>merchantId</code>, <code>productId</code>, <code>price</code>, <code>isActive</code>, <code>stock</code>。商家选品写这张表，消费者搜索商品价格读这张表。无此表，B2B2C 中间层完全缺失。</div>
+      </div>
+      <div class="schema-field">
+        <div class="schema-name">MerchantService <span class="schema-new">NEW</span></div>
+        <div class="schema-type"><span class="badge badge-missing">✗ 缺失</span></div>
+        <div class="schema-desc"><strong style="color:var(--red)">致命缺失</strong> — 门店提供的维修服务实例：<code>merchantId</code>, <code>repairServiceId</code>, <code>price</code>, <code>durationMinutes</code>, <code>isActive</code>。"这家门店换 iPhone 15 屏幕 €89"就是这张表。</div>
+      </div>
+      <div class="schema-field">
+        <div class="schema-name">MerchantHours <span class="schema-new">NEW</span></div>
+        <div class="schema-type"><span class="badge badge-missing">✗ 缺失</span></div>
+        <div class="schema-desc">门店营业时间：<code>merchantId</code>, <code>dayOfWeek</code>, <code>openTime</code>, <code>closeTime</code>, <code>isClosed</code>。无此表则无法生成可预约时间段。</div>
+      </div>
+      <div class="schema-field">
+        <div class="schema-name">User <span class="schema-new">NEW</span></div>
+        <div class="schema-type"><span class="badge badge-missing">✗ 缺失</span></div>
+        <div class="schema-desc">消费者账号：<code>phone</code>, <code>name</code>, <code>email</code>, OTP 字段。无消费者账号，所有需要登录的操作（我的预约、收藏）均无法实现。</div>
+      </div>
+      <div class="schema-field" style="border-bottom:none">
+        <div class="schema-name">RepairBooking <span class="schema-new">NEW</span></div>
+        <div class="schema-type"><span class="badge badge-missing">✗ 缺失</span></div>
+        <div class="schema-desc"><strong style="color:var(--red)">致命缺失</strong> — 预约主体：<code>userId</code>, <code>merchantId</code>, <code>merchantServiceId</code>, <code>scheduledAt</code>, <code>status</code>, <code>smsLog</code>。整个预约闭环的数据载体。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pages & Routes -->
+  <section id="pages">
+    <h2>页面 &amp; 路由清单</h2>
+    <p class="section-intro">Admin 后台全部路由位于 <code>/admin/</code> 下，受 Cookie Session 保护。</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>路由</th>
+          <th>功能</th>
+          <th>状态</th>
+          <th>Auth</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>/admin/login</code></td>
+          <td>管理员登录</td>
+          <td><span class="badge badge-done">✓ 已完成</span></td>
+          <td>公开</td>
+        </tr>
+        <tr>
+          <td><code>/admin/dashboard</code></td>
+          <td>数据概览（11 项指标）</td>
+          <td><span class="badge badge-done">✓ 已完成</span></td>
+          <td>admin_session</td>
+        </tr>
+        <tr>
+          <td><code>/admin/repair-catalog</code></td>
+          <td>维修目录 5 层 CRUD</td>
+          <td><span class="badge badge-done">✓ 已完成</span></td>
+          <td>admin_session</td>
+        </tr>
+        <tr>
+          <td><code>/admin/merchants</code></td>
+          <td>门店账号列表 + 创建</td>
+          <td><span class="badge badge-done">✓ 已完成</span></td>
+          <td>admin_session</td>
+        </tr>
+        <tr>
+          <td><code>/admin/merchants/[id]</code></td>
+          <td>门店详情 + 编辑</td>
+          <td><span class="badge badge-done">✓ 已完成</span></td>
+          <td>admin_session</td>
+        </tr>
+        <tr>
+          <td><code>/admin/products</code></td>
+          <td>商品母库列表 + CSV 导入</td>
+          <td><span class="badge badge-done">✓ 已完成</span></td>
+          <td>admin_session</td>
+        </tr>
+        <tr>
+          <td><code>/admin/products/new</code></td>
+          <td>新建商品（含 R2 图片上传）</td>
+          <td><span class="badge badge-done">✓ 已完成</span></td>
+          <td>admin_session</td>
+        </tr>
+        <tr>
+          <td><code>/admin/categories</code></td>
+          <td>品类 CRUD + 排序</td>
+          <td><span class="badge badge-done">✓ 已完成</span></td>
+          <td>admin_session</td>
+        </tr>
+        <tr>
+          <td><code>/admin/merchants/[id]/products</code></td>
+          <td>门店选品视图</td>
+          <td><span class="badge badge-missing">✗ 待建</span></td>
+          <td>admin_session</td>
+        </tr>
+        <tr>
+          <td><code>/admin/bookings</code></td>
+          <td>全平台预约总览</td>
+          <td><span class="badge badge-missing">✗ 待建</span></td>
+          <td>admin_session</td>
+        </tr>
+        <tr>
+          <td><code>/admin/admins</code></td>
+          <td>管理员账号管理</td>
+          <td><span class="badge badge-missing">✗ 待建</span></td>
+          <td>admin_session</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Other Portals -->
+  <section id="other-portals">
+    <h2>Merchant / Consumer 端现状</h2>
+    <p class="section-intro">B2B2C 无法运转的直接原因：下游两端完全为零，数据无法流动到消费者。</p>
+
+    <div class="card">
+      <div class="card-title">商家端 Merchant</div>
+      <div class="flow">
+        <span class="flow-step missing">登录后台</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step missing">浏览商品母库</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step missing">选品上架 + 定价</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step missing">配置营业时间</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step missing">查看接受预约</span>
+      </div>
+      <div style="margin-top:12px">
+        <span class="badge badge-missing">0% — 完全为零</span>
+        <span style="font-size:13px;color:var(--text-2);margin-left:10px">账号数据已在数据库，但无任何前端页面和 API。详见 merchant-prd.html。</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">消费者端 Consumer</div>
+      <div class="flow">
+        <span class="flow-step done">静态首页</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step missing">Eircode 搜索</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step missing">门店商品发现</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step missing">手机号登录</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step missing">维修预约</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step missing">预约管理</span>
+      </div>
+      <div style="margin-top:12px">
+        <span class="badge badge-partial">5% — 仅静态首页</span>
+        <span style="font-size:13px;color:var(--text-2);margin-left:10px">仅 <code>src/app/page.tsx</code> 静态展示页。详见 consumer-prd.html。</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Priority -->
+  <section id="priority">
+    <h2>优先级建议</h2>
+    <p class="section-intro">四个阶段，从解锁 Merchant 端开始，逐步打通完整交易闭环。</p>
+
+    <div class="priority-grid">
+      <div class="priority-card p0-card">
+        <h3>🔴 P0 — 解锁 Merchant 端（先决条件）</h3>
+        <ul>
+          <li>建 <code>MerchantProduct</code>、<code>MerchantService</code>、<code>MerchantHours</code> 表（Prisma migration）</li>
+          <li>Merchant 登录 API + Cookie Session 鉴权</li>
+          <li><code>/merchant/products/catalog</code> — 浏览母库 + 选品</li>
+          <li><code>/merchant/products</code> — 已选品列表 + 调价</li>
+          <li><code>/merchant/settings</code> — 营业时间配置</li>
+        </ul>
+      </div>
+      <div class="priority-card p1-card">
+        <h3>🟡 P1 — 解锁 Consumer 搜索（核心用户价值）</h3>
+        <ul>
+          <li>建 <code>User</code> 表 + 手机号 OTP 登录（Twilio）</li>
+          <li>PostGIS 安装确认 + <code>ST_DWithin</code> 查询 API</li>
+          <li><code>/search</code> — Eircode + 关键词 → 附近门店商品</li>
+          <li><code>/products/[id]</code> — 商品详情 + 在售门店价格</li>
+          <li><code>/stores/[id]</code> — 门店详情页</li>
+        </ul>
+      </div>
+      <div class="priority-card p2-card">
+        <h3>🔵 P2 — 完成预约闭环（让业务跑通）</h3>
+        <ul>
+          <li>建 <code>RepairBooking</code> 表</li>
+          <li><code>/repair/book</code> — 预约表单（选机型/故障/门店/时段）</li>
+          <li>Merchant 端预约管理（接受/完成）</li>
+          <li>Admin 预约总览</li>
+          <li>Twilio SMS — 预约确认通知</li>
+        </ul>
+      </div>
+      <div class="priority-card p3-card">
+        <h3>🟢 P3 — Admin 补充功能（锦上添花）</h3>
+        <ul>
+          <li>Admin 账号管理 UI（角色分权）</li>
+          <li>商品审核流程（pending/approved/rejected）</li>
+          <li>门店选品管理视图</li>
+          <li>佣金概览（依赖 Stripe Connect，Phase 2）</li>
+          <li>Redis 缓存（Upstash）接入</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Verdict -->
+  <section id="verdict">
+    <h2>核心判断</h2>
+
+    <div class="alert alert-red">
+      <strong>⛔ 现阶段 B2B2C 商业模式无法运转</strong><br>
+      Admin 后台已完成上游内容管理（维修目录、商品母库、门店账号），但缺少 3 张核心关联表（<code>MerchantProduct</code>、<code>MerchantService</code>、<code>MerchantHours</code>），导致"平台定义的内容"和"门店实际在售的商品/服务"之间没有任何桥接。Merchant 端 0% 未建，Consumer 端 5% 仅有静态首页。整个交易主链路：商家选品 → 消费者发现 → 消费者预约 → 门店接单，完全不通。
+    </div>
+
+    <div class="alert alert-green">
+      <strong>✅ Admin 后台自身已具备运营能力</strong><br>
+      管理员可以完整维护维修目录（5 层级联）、管理商品母库（含 CSV 批量导入和 R2 图片上传）、创建和管理门店账号（含 Eircode 自动解析坐标）。这部分工作已经到位，是后续 Merchant 端和 Consumer 端的数据基础。下一步只需专注打通 Merchant 端，即可让第一个商家完成选品，之后便可验证 Consumer 端搜索是否能找到该商家的商品。
+    </div>
+
+    <div style="font-size: 12px; color: #aeaeb2; text-align: center; margin-top: 40px; padding-bottom: 40px;">
+      IERepair Admin PRD v1.0 · 生成于 2026-05-29 · 对照 docs/08-MVP开发范围.md
+    </div>
+  </section>
+
+</main>
+
+<script>
+  const items = document.querySelectorAll('.nav-item');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        items.forEach(i => i.classList.remove('active'));
+        const match = document.querySelector(`.nav-item[href="#${e.target.id}"]`);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  document.querySelectorAll('section[id]').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

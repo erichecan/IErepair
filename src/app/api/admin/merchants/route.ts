@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireAdminSession } from "@/lib/auth";
+import { geocodeEircode } from "@/lib/geocode";
 import bcrypt from "bcryptjs";
 
 export async function GET() {
@@ -34,8 +35,12 @@ export async function POST(req: Request) {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
+    const coords = eircode ? await geocodeEircode(eircode) : null;
     const merchant = await prisma.merchant.create({
-      data: { name: name.trim(), email: email.trim().toLowerCase(), passwordHash, phone, address, eircode },
+      data: {
+        name: name.trim(), email: email.trim().toLowerCase(), passwordHash, phone, address, eircode,
+        lat: coords?.lat ?? null, lng: coords?.lng ?? null,
+      },
       select: { id: true, name: true, email: true, phone: true, address: true, eircode: true, isActive: true, createdAt: true },
     });
 
