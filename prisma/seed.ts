@@ -1163,10 +1163,210 @@ async function main() {
     console.log(`  ✓ [${catSlug}] brands & models ready`);
   }
 
+  // 5. Demo merchants
+  const merchantHash = await bcrypt.hash("merchant123", 10);
+  const merchants = [
+    {
+      name: "FonFix City Centre",
+      email: "merchant@ierepair.ie",
+      passwordHash: merchantHash,
+      phone: "+353 1 234 5678",
+      address: "15 Abbey Street Lower, Dublin 1",
+      eircode: "D01 W2X2",
+      lat: 53.3478,
+      lng: -6.2601,
+      mustChangePassword: false,
+    },
+    {
+      name: "FonFix Rathmines",
+      email: "rathmines@ierepair.ie",
+      passwordHash: merchantHash,
+      phone: "+353 1 234 5679",
+      address: "44 Rathmines Road Lower, Dublin 6",
+      eircode: "D06 X9P2",
+      lat: 53.3241,
+      lng: -6.2633,
+      mustChangePassword: false,
+    },
+    {
+      name: "FonFix Swords",
+      email: "swords@ierepair.ie",
+      passwordHash: merchantHash,
+      phone: "+353 1 234 5680",
+      address: "22 Main Street, Swords, Co. Dublin",
+      eircode: "K67 X2F5",
+      lat: 53.4597,
+      lng: -6.2181,
+      mustChangePassword: false,
+    },
+  ];
+
+  const merchantIds: number[] = [];
+  for (const m of merchants) {
+    const record = await prisma.merchant.upsert({
+      where: { email: m.email },
+      update: { name: m.name, phone: m.phone, address: m.address, eircode: m.eircode, lat: m.lat, lng: m.lng },
+      create: m,
+    });
+    merchantIds.push(record.id);
+  }
+  console.log(`  ✓ ${merchants.length} demo merchants ready`);
+
+  // 6. Merchant hours (Mon–Sat open, Sun closed)
+  const HOURS = [
+    { dayOfWeek: 1, openTime: "09:00", closeTime: "18:00", isClosed: false },
+    { dayOfWeek: 2, openTime: "09:00", closeTime: "18:00", isClosed: false },
+    { dayOfWeek: 3, openTime: "09:00", closeTime: "18:00", isClosed: false },
+    { dayOfWeek: 4, openTime: "09:00", closeTime: "18:00", isClosed: false },
+    { dayOfWeek: 5, openTime: "09:00", closeTime: "18:00", isClosed: false },
+    { dayOfWeek: 6, openTime: "10:00", closeTime: "17:00", isClosed: false },
+    { dayOfWeek: 0, openTime: null,    closeTime: null,    isClosed: true  },
+  ];
+  for (const merchantId of merchantIds) {
+    for (const h of HOURS) {
+      await prisma.merchantHours.upsert({
+        where: { merchantId_dayOfWeek: { merchantId, dayOfWeek: h.dayOfWeek } },
+        update: { openTime: h.openTime, closeTime: h.closeTime, isClosed: h.isClosed },
+        create: { merchantId, ...h },
+      });
+    }
+  }
+  console.log("  ✓ Merchant hours ready");
+
+  // 7. Merchant services (City Centre merchant gets iPhone 15 + Galaxy S24 key repairs)
+  const cityCentreId = merchantIds[0];
+  const demoServices: Array<{ slug: string; modelName: string; repairTypeEn: string; price: number }> = [
+    { slug: "smartphone", modelName: "iPhone 15", repairTypeEn: "Screen Replacement", price: 159 },
+    { slug: "smartphone", modelName: "iPhone 15", repairTypeEn: "Battery Replacement", price: 79 },
+    { slug: "smartphone", modelName: "iPhone 15 Pro", repairTypeEn: "Screen Replacement", price: 219 },
+    { slug: "smartphone", modelName: "iPhone 15 Pro", repairTypeEn: "Battery Replacement", price: 89 },
+    { slug: "smartphone", modelName: "iPhone 14", repairTypeEn: "Screen Replacement", price: 129 },
+    { slug: "smartphone", modelName: "iPhone 14", repairTypeEn: "Battery Replacement", price: 69 },
+    { slug: "smartphone", modelName: "Galaxy S24", repairTypeEn: "Screen Replacement", price: 149 },
+    { slug: "smartphone", modelName: "Galaxy S24", repairTypeEn: "Battery Replacement", price: 69 },
+    { slug: "smartphone", modelName: "Galaxy S24 Ultra", repairTypeEn: "Screen Replacement", price: 269 },
+    { slug: "smartphone", modelName: "iPhone 13", repairTypeEn: "Water Damage Repair", price: 119 },
+  ];
+
+  for (const svc of demoServices) {
+    const catId = categoryMap.get(svc.slug);
+    if (!catId) continue;
+    const brand = await prisma.deviceBrand.findFirst({
+      where: { categoryId: catId, models: { some: { name: svc.modelName } } },
+    });
+    if (!brand) continue;
+    const model = await prisma.deviceModel.findFirst({ where: { brandId: brand.id, name: svc.modelName } });
+    if (!model) continue;
+    const rt = await prisma.repairType.findFirst({
+      where: { categoryId: catId, nameEn: svc.repairTypeEn },
+    });
+    if (!rt) continue;
+    const repairService = await prisma.repairService.findFirst({
+      where: { deviceModelId: model.id, repairTypeId: rt.id },
+    });
+    if (!repairService) continue;
+    await prisma.merchantService.upsert({
+      where: { merchantId_repairServiceId: { merchantId: cityCentreId, repairServiceId: repairService.id } },
+      update: { price: svc.price },
+      create: { merchantId: cityCentreId, repairServiceId: repairService.id, price: svc.price },
+    });
+  }
+  console.log("  ✓ Demo merchant services ready");
+
+  // 8. Demo repair bookings (4 states for dashboard showcase)
+  const iphone15ScreenSvc = await (async () => {
+    const catId = categoryMap.get("smartphone")!;
+    const brand = await prisma.deviceBrand.findFirst({ where: { categoryId: catId, slug: "apple" } });
+    if (!brand) return null;
+    const model = await prisma.deviceModel.findFirst({ where: { brandId: brand.id, name: "iPhone 15" } });
+    if (!model) return null;
+    const rt = await prisma.repairType.findFirst({ where: { categoryId: catId, nameEn: "Screen Replacement" } });
+    if (!rt) return null;
+    return prisma.repairService.findFirst({ where: { deviceModelId: model.id, repairTypeId: rt.id } });
+  })();
+
+  const iphone15BatterySvc = await (async () => {
+    const catId = categoryMap.get("smartphone")!;
+    const brand = await prisma.deviceBrand.findFirst({ where: { categoryId: catId, slug: "apple" } });
+    if (!brand) return null;
+    const model = await prisma.deviceModel.findFirst({ where: { brandId: brand.id, name: "iPhone 15" } });
+    if (!model) return null;
+    const rt = await prisma.repairType.findFirst({ where: { categoryId: catId, nameEn: "Battery Replacement" } });
+    if (!rt) return null;
+    return prisma.repairService.findFirst({ where: { deviceModelId: model.id, repairTypeId: rt.id } });
+  })();
+
+  if (iphone15ScreenSvc && iphone15BatterySvc) {
+    const now = new Date();
+    const tomorrow = new Date(now); tomorrow.setDate(tomorrow.getDate() + 1); tomorrow.setHours(10, 0, 0, 0);
+    const in5Days = new Date(now); in5Days.setDate(in5Days.getDate() + 5); in5Days.setHours(14, 0, 0, 0);
+    const minus7 = new Date(now); minus7.setDate(minus7.getDate() - 7); minus7.setHours(11, 0, 0, 0);
+    const minus9 = new Date(now); minus9.setDate(minus9.getDate() - 9); minus9.setHours(15, 0, 0, 0);
+
+    const bookingData = [
+      {
+        orderNumber: "RB-DEMO-0001",
+        merchantId: cityCentreId,
+        repairServiceId: iphone15ScreenSvc.id,
+        status: "pending_confirm",
+        userName: "Aoife Murphy",
+        userPhone: "+353 87 123 4567",
+        userEmail: "aoife@example.com",
+        appointmentTime: tomorrow,
+        quotedPrice: 159,
+      },
+      {
+        orderNumber: "RB-DEMO-0002",
+        merchantId: cityCentreId,
+        repairServiceId: iphone15BatterySvc.id,
+        status: "confirmed",
+        userName: "Ciarán O'Brien",
+        userPhone: "+353 85 987 6543",
+        userEmail: "ciaran@example.com",
+        appointmentTime: in5Days,
+        quotedPrice: 79,
+      },
+      {
+        orderNumber: "RB-DEMO-0003",
+        merchantId: cityCentreId,
+        repairServiceId: iphone15ScreenSvc.id,
+        status: "completed",
+        userName: "Siobhán Walsh",
+        userPhone: "+353 86 555 1234",
+        userEmail: "siobhan@example.com",
+        appointmentTime: minus7,
+        quotedPrice: 159,
+        actualPrice: 159,
+      },
+      {
+        orderNumber: "RB-DEMO-0004",
+        merchantId: cityCentreId,
+        repairServiceId: iphone15BatterySvc.id,
+        status: "cancelled",
+        userName: "Pádraig Kelly",
+        userPhone: "+353 83 444 5678",
+        appointmentTime: minus9,
+        quotedPrice: 79,
+        cancelReason: "Customer requested cancellation",
+      },
+    ];
+
+    for (const b of bookingData) {
+      await prisma.repairBooking.upsert({
+        where: { orderNumber: b.orderNumber },
+        update: {},
+        create: b,
+      });
+    }
+    console.log("  ✓ Demo repair bookings ready (4 statuses)");
+  }
+
   console.log(`\n✅ Seed complete:`);
   console.log(`   Categories:     ${CATEGORIES.length}`);
   console.log(`   Device models:  ${totalModels}`);
   console.log(`   Repair services:${totalServices}`);
+  console.log(`   Merchants:      ${merchants.length}`);
+  console.log(`   Bookings:       4 demo bookings`);
 }
 
 main()

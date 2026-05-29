@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { requireMerchantSession } from "@/lib/merchant-auth";
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await requireMerchantSession(req);
+  const session = await requireMerchantSession();
   const { id } = await params;
   const bookingId = parseInt(id);
 

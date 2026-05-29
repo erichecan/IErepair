@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IERepair 测试报告</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #f4f6f9;
+      color: #1a1a2e;
+      line-height: 1.7;
+    }
+
+    /* ── 顶部横幅 ── */
+    .hero {
+      background: linear-gradient(135deg, #146345 0%, #0d4a33 60%, #0a3526 100%);
+      color: #fff;
+      padding: 56px 40px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -80px; top: -80px;
+      width: 360px; height: 360px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+    .hero p { font-size: 15px; opacity: 0.8; max-width: 560px; }
+    .hero-meta {
+      display: flex;
+      gap: 32px;
+      margin-top: 32px;
+    }
+    .hero-meta-item { font-size: 13px; opacity: 0.75; }
+    .hero-meta-item strong { display: block; font-size: 22px; font-weight: 700; opacity: 1; color: #17db66; }
+
+    /* ── 总结卡片栏 ── */
+    .summary-bar {
+      background: #fff;
+      border-bottom: 1px solid #e8ecf0;
+      padding: 24px 40px;
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .summary-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #555;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .dot-green { background: #17db66; }
+    .dot-red   { background: #e53e3e; }
+    .dot-blue  { background: #4299e1; }
+    .summary-chip strong { color: #1a1a2e; }
+    .verdict {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f0fff6;
+      border: 1px solid #17db66;
+      border-radius: 8px;
+      padding: 6px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #146345;
+    }
+
+    /* ── 主体布局 ── */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* ── 角色卡 ── */
+    .roles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .role-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 20px 18px;
+      border: 1px solid #e8ecf0;
+    }
+    .role-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+    .role-icon-admin    { background: #fff3e0; }
+    .role-icon-merchant { background: #e8f5e9; }
+    .role-icon-new      { background: #e3f2fd; }
+    .role-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 4px;
+    }
+    .role-name { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+    .role-account { font-size: 12px; color: #888; font-family: monospace; }
+
+    /* ── 区块标题 ── */
+    .section { margin-bottom: 48px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: #146345;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .section-title { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+    .section-sub { font-size: 13px; color: #888; margin-top: 1px; }
+
+    /* ── 步骤卡 ── */
+    .steps { display: flex; flex-direction: column; gap: 10px; }
+    .step {
+      background: #fff;
+      border: 1px solid #e8ecf0;
+      border-radius: 10px;
+      padding: 16px 18px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .step-check {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: #f0fff6;
+      border: 1.5px solid #17db66;
+      color: #146345;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-body { flex: 1; }
+    .step-title { font-size: 14px; font-weight: 600; color: #1a1a2e; margin-bottom: 3px; }
+    .step-desc  { font-size: 13px; color: #666; }
+    .step-tag {
+      display: inline-block;
+      background: #f0fff6;
+      color: #146345;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 4px;
+      padding: 1px 7px;
+      margin-right: 4px;
+      margin-top: 5px;
+    }
+    .step-tag.orange { background: #fff3e0; color: #e65100; }
+    .step-tag.red    { background: #ffebee; color: #c62828; }
+    .step-tag.blue   { background: #e3f2fd; color: #1565c0; }
+
+    /* ── 安全测试栏 ── */
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .security-item {
+      background: #fff;
+      border: 1px solid #e8ecf0;
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .shield { font-size: 18px; }
+    .security-text { font-size: 13px; }
+    .security-text strong { display: block; color: #1a1a2e; font-weight: 600; margin-bottom: 1px; }
+    .security-text span { color: #888; }
+    .security-badge {
+      margin-left: auto;
+      background: #ffebee;
+      color: #c62828;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    /* ── 闭环流程图 ── */
+    .loop-flow {
+      background: #fff;
+      border: 1px solid #e8ecf0;
+      border-radius: 12px;
+      padding: 28px 24px;
+      margin-bottom: 20px;
+    }
+    .flow-steps {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+    .flow-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+    .flow-circle {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: #f0fff6;
+      border: 2px solid #146345;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .flow-circle.done::after {
+      content: "✓";
+      position: absolute;
+      bottom: -2px; right: -2px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: #17db66;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .flow-label { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+    .flow-sub   { font-size: 11px; color: #999; margin-top: 2px; }
+    .flow-arrow {
+      flex-shrink: 0;
+      font-size: 20px;
+      color: #ccc;
+      padding-top: 14px;
+    }
+
+    /* ── 结论表格 ── */
+    .result-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #e8ecf0;
+    }
+    .result-table thead tr { background: #f8fafb; }
+    .result-table th {
+      text-align: left;
+      padding: 12px 18px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #888;
+      border-bottom: 1px solid #e8ecf0;
+    }
+    .result-table td {
+      padding: 12px 18px;
+      font-size: 14px;
+      border-bottom: 1px solid #f0f2f5;
+      color: #333;
+    }
+    .result-table tr:last-child td { border-bottom: none; }
+    .result-table tr:hover td { background: #fafbfc; }
+    .pass-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #f0fff6;
+      color: #146345;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    /* ── 页脚 ── */
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #bbb;
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid #e8ecf0;
+    }
+
+    @media (max-width: 640px) {
+      .roles { grid-template-columns: 1fr; }
+      .security-grid { grid-template-columns: 1fr; }
+      .hero-meta { gap: 20px; }
+      .flow-arrow { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 顶部横幅 -->
+<div class="hero">
+  <div class="hero-badge">📋 TEST REPORT</div>
+  <h1>IERepair 平台测试报告</h1>
+  <p>模拟三类真实用户，验证平台核心业务流程的端到端畅通性</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <strong>39</strong>
+      测试场景
+    </div>
+    <div class="hero-meta-item">
+      <strong>39</strong>
+      全部通过
+    </div>
+    <div class="hero-meta-item">
+      <strong>0</strong>
+      失败项
+    </div>
+    <div class="hero-meta-item">
+      <strong>3</strong>
+      模拟角色
+    </div>
+  </div>
+</div>
+
+<!-- 总结栏 -->
+<div class="summary-bar">
+  <div class="summary-chip"><div class="dot dot-green"></div><strong>39 项通过</strong></div>
+  <div class="summary-chip"><div class="dot dot-red"></div><strong>0 项失败</strong></div>
+  <div class="summary-chip"><div class="dot dot-blue"></div>测试时间：2026 年 5 月 29 日</div>
+  <div class="verdict">🎉 全部场景验证通过</div>
+</div>
+
+<div class="container">
+
+  <!-- 角色说明 -->
+  <div class="section">
+    <div class="section-header">
+      <div style="font-size:18px;font-weight:700;color:#1a1a2e;">本次测试模拟了哪些用户</div>
+    </div>
+    <div class="roles">
+      <div class="role-card">
+        <div class="role-icon role-icon-admin">🛡️</div>
+        <div class="role-label">角色一</div>
+        <div class="role-name">平台管理员</div>
+        <div class="role-account">admin@ierepair.ie</div>
+      </div>
+      <div class="role-card">
+        <div class="role-icon role-icon-merchant">🏪</div>
+        <div class="role-label">角色二</div>
+        <div class="role-name">在册商家</div>
+        <div class="role-account">merchant@ierepair.ie</div>
+      </div>
+      <div class="role-card">
+        <div class="role-icon role-icon-new">✨</div>
+        <div class="role-label">角色三</div>
+        <div class="role-name">新入驻商家</div>
+        <div class="role-account">闭环测试时动态创建</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第一部分：管理员 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div>
+        <div class="section-title">平台管理员的操作路径</div>
+        <div class="section-sub">管理员是平台"后台管家"，负责维护商家名录和设备目录</div>
+      </div>
+    </div>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">管理员登录后台</div>
+          <div class="step-desc">用邮箱和密码成功登录，系统颁发登录凭证。同时验证了错误密码会被直接拒绝，不会绕过。</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">查看平台维修设备目录</div>
+          <div class="step-desc">管理员打开设备目录，看到平台已收录 <strong>5 个品类</strong>（手机、平板、笔记本、台式机、游戏机），每个品类下挂有对应品牌和型号。</div>
+          <span class="step-tag">5 个品类</span>
+          <span class="step-tag blue">626 个型号</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">查看在册商家名单</div>
+          <div class="step-desc">管理员打开商家管理页，平台目前共有 <strong>6 家已入驻门店</strong>，信息完整可查。</div>
+          <span class="step-tag">6 家门店</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">新增一家商家</div>
+          <div class="step-desc">管理员填写门店名称、邮箱、密码、电话和地址，成功创建了一家新门店。</div>
+          <span class="step-tag">创建成功</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">拦截重复邮箱注册</div>
+          <div class="step-desc">管理员尝试用同一个邮箱再次创建商家，系统正确提示"邮箱已存在"并拒绝，不会产生重复账号。</div>
+          <span class="step-tag red">重复注册 → 拒绝</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">查看产品母库</div>
+          <div class="step-desc">管理员进入产品管理页，数据正常加载，可用于维护平台售卖的零配件目录。</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 第二部分：商家 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div>
+        <div class="section-title">商家的操作路径</div>
+        <div class="section-sub">商家是都柏林门店店主，每天核心任务是处理顾客的维修预约</div>
+      </div>
+    </div>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">商家登录后台</div>
+          <div class="step-desc">FonFix City Centre 的店主用邮箱密码登录，系统颁发专属登录凭证，错误密码同样被拒绝。</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">查看并更新门店信息</div>
+          <div class="step-desc">商家查看门店名称、地址和联系方式，随后将联系电话更新为新号码，系统保存后立即返回了最新数据。</div>
+          <span class="step-tag orange">信息更新</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">配置每周营业时间</div>
+          <div class="step-desc">系统为门店提供了 <strong>7 天的时间表模板</strong>。商家将周日改为休息日，其余六天保持正常营业时间，修改保存成功。</div>
+          <span class="step-tag">7 天时间表</span>
+          <span class="step-tag orange">周日设为休息</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">查看上架的维修服务</div>
+          <div class="step-desc">商家进入服务管理页，当前门店共上架了 <strong>10 个维修项目</strong>，可供顾客选择预约。</div>
+          <span class="step-tag">10 个服务项目</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">接受顾客预约（待确认 → 已确认）</div>
+          <div class="step-desc">顾客发来了一条维修预约请求，商家在预约列表中找到这条"待确认"记录，点击接受。系统将预约状态切换为<strong>已确认</strong>，顾客的到店预约正式生效。</div>
+          <span class="step-tag orange">待确认</span>
+          →
+          <span class="step-tag">已确认</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">完成维修，记录实收金额（已确认 → 已完成）</div>
+          <div class="step-desc">顾客到店维修完毕，商家回到该预约，点击"完成"并填写实际收费 <strong>€159</strong>。系统将订单状态更新为已完成，并记录了最终金额。</div>
+          <span class="step-tag orange">已确认</span>
+          →
+          <span class="step-tag">已完成 €159</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">保护机制：非法状态不可操作</div>
+          <div class="step-desc">商家尝试对刚刚"已完成"的订单再次点击"接受"，系统识别状态非法，直接拒绝，确保订单不会被误操作篡改。</div>
+          <span class="step-tag red">非法操作 → 拦截</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">浏览平台设备目录（选品备用）</div>
+          <div class="step-desc">商家进入选品页面，可浏览平台全量的设备品类、品牌和维修服务，为日后上架更多项目做准备。</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 第三部分：安全 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div>
+        <div class="section-title">未登录用户能看到什么？</div>
+        <div class="section-sub">验证所有受保护的页面在未登录状态下均无法访问</div>
+      </div>
+    </div>
+    <div class="security-grid">
+      <div class="security-item">
+        <div class="shield">🔒</div>
+        <div class="security-text">
+          <strong>管理员·商家名单</strong>
+          <span>未登录访客尝试查看</span>
+        </div>
+        <div class="security-badge">已拒绝</div>
+      </div>
+      <div class="security-item">
+        <div class="shield">🔒</div>
+        <div class="security-text">
+          <strong>管理员·维修目录</strong>
+          <span>未登录访客尝试查看</span>
+        </div>
+        <div class="security-badge">已拒绝</div>
+      </div>
+      <div class="security-item">
+        <div class="shield">🔒</div>
+        <div class="security-text">
+          <strong>管理员·产品母库</strong>
+          <span>未登录访客尝试查看</span>
+        </div>
+        <div class="security-badge">已拒绝</div>
+      </div>
+      <div class="security-item">
+        <div class="shield">🔒</div>
+        <div class="security-text">
+          <strong>商家·门店信息</strong>
+          <span>未登录访客尝试查看</span>
+        </div>
+        <div class="security-badge">已拒绝</div>
+      </div>
+      <div class="security-item">
+        <div class="shield">🔒</div>
+        <div class="security-text">
+          <strong>商家·预约列表</strong>
+          <span>未登录访客尝试查看</span>
+        </div>
+        <div class="security-badge">已拒绝</div>
+      </div>
+      <div class="security-item">
+        <div class="shield">🔒</div>
+        <div class="security-text">
+          <strong>商家·维修服务</strong>
+          <span>未登录访客尝试查看</span>
+        </div>
+        <div class="security-badge">已拒绝</div>
+      </div>
+      <div class="security-item">
+        <div class="shield">🔒</div>
+        <div class="security-text">
+          <strong>商家·营业时间</strong>
+          <span>未登录访客尝试查看</span>
+        </div>
+        <div class="security-badge">已拒绝</div>
+      </div>
+      <div class="security-item">
+        <div class="shield">🚫</div>
+        <div class="security-text">
+          <strong>用管理员身份访问商家后台</strong>
+          <span>两种角色之间完全隔离</span>
+        </div>
+        <div class="security-badge">已拒绝</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第四部分：闭环 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div>
+        <div class="section-title">3 端完整闭环验证</div>
+        <div class="section-sub">验证"管理员创建商家 → 商家独立运营"的完整链路是否畅通</div>
+      </div>
+    </div>
+
+    <div class="loop-flow">
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-circle done">🛡️</div>
+          <div class="flow-label">管理员</div>
+          <div class="flow-sub">创建新商家账号</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-circle done">🔑</div>
+          <div class="flow-label">新商家</div>
+          <div class="flow-sub">首次登录后台</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-circle done">🏪</div>
+          <div class="flow-label">新商家</div>
+          <div class="flow-sub">查看门店信息</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-circle done">📅</div>
+          <div class="flow-label">新商家</div>
+          <div class="flow-sub">配置营业时间</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-circle done">✅</div>
+          <div class="flow-label">管理员</div>
+          <div class="flow-sub">验证新商家在列</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-circle done">👋</div>
+          <div class="flow-label">新商家</div>
+          <div class="flow-sub">退出登录</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">管理员创建全新商家账号</div>
+          <div class="step-desc">管理员在后台填写门店名称、邮箱和密码，为"闭环测试门店"完成注册。每次测试都使用带时间戳的唯一邮箱，确保不与历史数据冲突。</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">新商家用刚分配的账号首次登录</div>
+          <div class="step-desc">新商家凭注册时设置的邮箱和密码成功登录，获得自己的专属凭证。</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">新商家查看自身信息，数据完全正确</div>
+          <div class="step-desc">新商家打开"我的门店"，系统返回的正是该门店自己的信息，邮箱和名称完全吻合，不会出现数据串用的情况。</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">新商家完成门店基础配置</div>
+          <div class="step-desc">新商家设置每周营业计划：周日休息，其余六天 10:00–19:00 营业，配置保存成功。</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">管理员刷新列表，确认新商家已入册</div>
+          <div class="step-desc">管理员在商家管理页再次拉取数据，新门店已出现在名单中，平台端与商家端的数据完全同步。</div>
+          <span class="step-tag">闭环打通</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-check">✓</div>
+        <div class="step-body">
+          <div class="step-title">新商家退出，登录凭证清除</div>
+          <div class="step-desc">新商家点击退出，系统成功清除登录状态，流程完整收尾。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 结论表格 -->
+  <div class="section">
+    <div class="section-header">
+      <div style="font-size:18px;font-weight:700;color:#1a1a2e;">测试结论汇总</div>
+    </div>
+    <table class="result-table">
+      <thead>
+        <tr>
+          <th>业务场景</th>
+          <th>涉及角色</th>
+          <th>结果</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>管理员登录 / 错误密码拦截</td>
+          <td>平台管理员</td>
+          <td><span class="pass-badge">✓ 通过</span></td>
+        </tr>
+        <tr>
+          <td>商家登录 / 错误密码拦截</td>
+          <td>在册商家</td>
+          <td><span class="pass-badge">✓ 通过</span></td>
+        </tr>
+        <tr>
+          <td>未登录用户无法访问任何受保护页面（7 个端点）</td>
+          <td>未登录访客</td>
+          <td><span class="pass-badge">✓ 通过</span></td>
+        </tr>
+        <tr>
+          <td>管理员凭证不能访问商家后台（角色隔离）</td>
+          <td>平台管理员</td>
+          <td><span class="pass-badge">✓ 通过</span></td>
+        </tr>
+        <tr>
+          <td>管理员查看设备目录（5 品类 / 626 型号）</td>
+          <td>平台管理员</td>
+          <td><span class="pass-badge">✓ 通过</span></td>
+        </tr>
+        <tr>
+          <td>管理员查看在册商家列表</td>
+          <td>平台管理员</td>
+          <td><span class="pass-badge">✓ 通过</span></td>
+        </tr>
+        <tr>
+          <td>管理员创建新商家 / 拦截重复邮箱</td>
+          <td>平台管理员</td>
+          <td><span class="pass-badge">✓ 通过</span></td>
+        </tr>
+        <tr>
+          <td>商家查看并更新门店信息</td>
+          <td>在册商家</td>
+          <td><span class="pass-badge">✓ 通过</span></td>
+        </tr>
+        <tr>
+          <td>商家配置每周 7 天营业时间</td>
+          <td>在册商家</td>
+          <td><span class="pass-badge">✓ 通过</span></td>
+        </tr>
+        <tr>
+          <td>商家查看上架维修服务列表</td>
+          <td>在册商家</td>
+          <td><span class="pass-badge">✓ 通过</span></td>
+        </tr>
+        <tr>
+          <td>商家接受预约（待确认 → 已确认）</td>
+          <td>在册商家</td>
+          <td><span class="pass-badge">✓ 通过</span></td>
+        </tr>
+        <tr>
+          <td>商家完成维修并记录实收金额（→ 已完成）</td>
+          <td>在册商家</td>
+          <td><span class="pass-badge">✓ 通过</span></td>
+        </tr>
+        <tr>
+          <td>非法状态流转被拦截</td>
+          <td>在册商家</td>
+          <td><span class="pass-badge">✓ 通过</span></td>
+        </tr>
+        <tr>
+          <td>Admin 创建 → Merchant 登录 → 配置门店 → Admin 验证闭环</td>
+          <td>管理员 + 新商家</td>
+          <td><span class="pass-badge">✓ 通过</span></td>
+        </tr>
+        <tr>
+          <td>退出登录（管理员 + 商家）</td>
+          <td>全部角色</td>
+          <td><span class="pass-badge">✓ 通过</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    IERepair Platform · 测试报告生成于 2026 年 5 月 29 日 · 39 / 39 通过
+  </div>
+
+</div>
+</body>
+</html>
