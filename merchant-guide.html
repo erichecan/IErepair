@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IERepair 商家入驻指南 · Merchant Onboarding Guide</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      background: #f5f5f7;
+      color: #1d1d1f;
+      line-height: 1.6;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: #1c3830;
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    }
+    .header-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo { color: #17db66; font-size: 22px; font-weight: 800; text-decoration: none; }
+    .lang-toggle {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .lang-toggle:hover { background: rgba(255,255,255,0.22); }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #1c3830 0%, #146345 100%);
+      color: #fff;
+      text-align: center;
+      padding: 56px 24px 48px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(23,219,102,0.18);
+      color: #17db66;
+      border: 1px solid rgba(23,219,102,0.35);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .hero h1 { font-size: clamp(26px, 5vw, 38px); font-weight: 800; margin-bottom: 12px; }
+    .hero p { font-size: 16px; opacity: 0.85; max-width: 520px; margin: 0 auto; }
+
+    /* ── Content ── */
+    .content { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* ── Step card ── */
+    .step-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      border: 1px solid #e8e8e8;
+    }
+    .step-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .step-num {
+      background: #146345;
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-title { font-size: 20px; font-weight: 700; color: #1d1d1f; }
+    .step-subtitle { font-size: 13px; color: #888; margin-top: 3px; }
+
+    .step-body p { font-size: 15px; color: #444; margin-bottom: 12px; }
+    .step-body p:last-child { margin-bottom: 0; }
+
+    /* ── List ── */
+    .check-list { list-style: none; margin: 12px 0; }
+    .check-list li {
+      padding: 8px 0 8px 28px;
+      position: relative;
+      font-size: 15px;
+      color: #333;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .check-list li:last-child { border-bottom: none; }
+    .check-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #146345;
+      font-weight: 700;
+    }
+
+    /* ── URL pill ── */
+    .url-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f0faf5;
+      border: 1.5px solid #a7d9c2;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 13px;
+      color: #146345;
+      font-weight: 600;
+      margin: 8px 0 16px;
+      word-break: break-all;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .url-pill:hover { background: #d1fae5; border-color: #146345; }
+    .url-pill::before { content: "🔗"; font-size: 14px; }
+
+    /* ── Note / Warning ── */
+    .note {
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #78350f;
+      margin: 16px 0;
+    }
+    .note strong { font-weight: 700; }
+    .tip {
+      background: #f0faf5;
+      border-left: 4px solid #146345;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #065f46;
+      margin: 16px 0;
+    }
+
+    /* ── Visual flow ── */
+    .flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 16px 0;
+    }
+    .flow-item {
+      background: #f0faf5;
+      border: 1px solid #a7d9c2;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #146345;
+    }
+    .flow-arrow { color: #a0aec0; font-size: 16px; }
+
+    /* ── Status badges ── */
+    .badges { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0; }
+    .badge {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .badge-yellow { background: #fef3c7; color: #b45309; }
+    .badge-green  { background: #d1fae5; color: #065f46; }
+    .badge-blue   { background: #dbeafe; color: #1d4ed8; }
+    .badge-gray   { background: #f5f5f5; color: #555; }
+    .badge-red    { background: #fee2e2; color: #dc2626; }
+
+    /* ── Section separator ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #888;
+      margin: 40px 0 16px;
+    }
+
+    /* ── Table ── */
+    .info-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+    .info-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: #f5f5f7;
+      font-weight: 600;
+      color: #555;
+      border-bottom: 2px solid #e8e8e8;
+    }
+    .info-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f0f0f0;
+      color: #333;
+      vertical-align: top;
+    }
+    .info-table tr:last-child td { border-bottom: none; }
+
+    /* ── Footer ── */
+    .footer {
+      background: #1c3830;
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 28px 24px;
+      font-size: 13px;
+    }
+    .footer strong { color: #17db66; }
+
+    /* ── Language toggle logic ── */
+    [lang="zh"] .en { display: none; }
+    [lang="en"] .zh { display: none; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .step-card { padding: 20px; }
+      .flow { gap: 4px; }
+      .flow-item { font-size: 12px; padding: 5px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════ -->
+<div class="header">
+  <div class="header-inner">
+    <span class="logo">IERepair</span>
+    <button class="lang-toggle" onclick="toggleLang(this)">English</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-badge zh">商家入驻指南</div>
+  <div class="hero-badge en">Merchant Onboarding Guide</div>
+
+  <h1 class="zh">欢迎加入 IERepair 平台</h1>
+  <h1 class="en">Welcome to IERepair</h1>
+
+  <p class="zh">按照以下步骤完成开店设置，即可开始接收来自全爱尔兰消费者的维修预约订单。</p>
+  <p class="en">Follow these steps to set up your store and start receiving repair bookings from customers across Ireland.</p>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CONTENT
+══════════════════════════════════════════ -->
+<div class="content">
+
+  <!-- ─── Overview ─── -->
+  <p class="section-label zh">快速流程</p>
+  <p class="section-label en">Quick Overview</p>
+
+  <div class="flow">
+    <span class="flow-item zh">① 收到登录凭据</span>
+    <span class="flow-item en">① Receive credentials</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-item zh">② 首次登录 &amp; 改密码</span>
+    <span class="flow-item en">② First login &amp; set password</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-item zh">③ 完善门店资料</span>
+    <span class="flow-item en">③ Complete store profile</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-item zh">④ 添加维修服务</span>
+    <span class="flow-item en">④ Add repair services</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-item zh">⑤ 接单营业</span>
+    <span class="flow-item en">⑤ Accept bookings</span>
+  </div>
+
+  <div style="margin: 32px 0 0;"></div>
+
+  <!-- ─── STEP 1 ─── -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title zh">获取登录账号</div>
+        <div class="step-title en">Get Your Login Credentials</div>
+        <div class="step-subtitle zh">由 IERepair 运营团队直接告知</div>
+        <div class="step-subtitle en">Provided directly by the IERepair team</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p class="zh">在您正式开始使用之前，请先联系 IERepair 运营团队，我们会为您创建商家账号，并直接告知以下登录信息：</p>
+      <p class="en">Before you can log in, contact the IERepair team. We will create your merchant account and provide you with the following details directly:</p>
+
+      <ul class="check-list">
+        <li class="zh"><strong>登录邮箱</strong> — 用于登录商家后台的邮箱地址</li>
+        <li class="en"><strong>Login Email</strong> — the email address used to log in to your merchant portal</li>
+        <li class="zh"><strong>初始密码</strong> — 首次登录后系统会要求您立即修改</li>
+        <li class="en"><strong>Initial Password</strong> — you will be asked to change this immediately on first login</li>
+      </ul>
+
+      <div class="tip">
+        <strong class="zh">📞 联系方式：</strong><strong class="en">📞 Contact:</strong>
+        <span class="zh">请通过本页底部的联系方式与 IERepair 团队取得联系。</span>
+        <span class="en">Reach out via the contact details at the bottom of this page.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── STEP 2 ─── -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title zh">首次登录 &amp; 修改密码</div>
+        <div class="step-title en">First Login &amp; Change Password</div>
+        <div class="step-subtitle zh">安全第一，临时密码必须立即更换</div>
+        <div class="step-subtitle en">Your temporary password must be changed immediately</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p class="zh">打开商家后台登录页：</p>
+      <p class="en">Open the merchant login page:</p>
+      <a class="url-pill" href="https://ierepair-dfd7b2qpra-ew.a.run.app/merchant/login" target="_blank">https://ierepair-dfd7b2qpra-ew.a.run.app/merchant/login</a>
+
+      <ul class="check-list">
+        <li class="zh">输入邮件中的登录邮箱和临时密码，点击「登录」</li>
+        <li class="en">Enter your email and the temporary password from the email, then click <strong>Log In</strong></li>
+        <li class="zh">系统将自动跳转至「修改密码」页面（首次登录强制执行）</li>
+        <li class="en">You will be automatically redirected to the <strong>Change Password</strong> page (required on first login)</li>
+        <li class="zh">输入新密码（建议至少 8 位，包含字母和数字）并确认</li>
+        <li class="en">Enter a new password (at least 8 characters, mixing letters and numbers is recommended) and confirm</li>
+        <li class="zh">修改成功后，系统自动跳转至商家控制台首页（Dashboard）</li>
+        <li class="en">Once changed, you will be taken to your merchant <strong>Dashboard</strong></li>
+      </ul>
+
+      <div class="tip">
+        <strong class="zh">💡 提示：</strong><strong class="en">💡 Tip:</strong>
+        <span class="zh">请妥善保管您的新密码，不要与他人分享。如忘记密码，请联系 IERepair 运营团队重置。</span>
+        <span class="en">Keep your new password safe. If you forget it, contact the IERepair team to reset it.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── STEP 3 ─── -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title zh">完善门店资料</div>
+        <div class="step-title en">Complete Your Store Profile</div>
+        <div class="step-subtitle zh">消费者搜索时看到的就是这些信息</div>
+        <div class="step-subtitle en">This is what customers see when they find your store</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p class="zh">进入 <strong>Settings（门店设置）</strong> 页面，填写门店的基本信息：</p>
+      <p class="en">Go to <strong>Settings</strong> and fill in your store details:</p>
+      <a class="url-pill" href="https://ierepair-dfd7b2qpra-ew.a.run.app/merchant/settings" target="_blank">https://ierepair-dfd7b2qpra-ew.a.run.app/merchant/settings</a>
+
+      <table class="info-table">
+        <tr>
+          <th class="zh">填写项目</th>
+          <th class="en">Field</th>
+          <th class="zh">是否必填</th>
+          <th class="en">Required?</th>
+        </tr>
+        <tr>
+          <td class="zh">门店名称</td>
+          <td class="en">Store Name</td>
+          <td><span class="zh">必填</span><span class="en">Yes</span></td>
+        </tr>
+        <tr>
+          <td class="zh">联系电话</td>
+          <td class="en">Phone Number</td>
+          <td><span class="zh">必填</span><span class="en">Yes</span></td>
+        </tr>
+        <tr>
+          <td class="zh">门店地址</td>
+          <td class="en">Address</td>
+          <td><span class="zh">必填</span><span class="en">Yes</span></td>
+        </tr>
+        <tr>
+          <td class="zh">Eircode（爱尔兰邮编）</td>
+          <td class="en">Eircode</td>
+          <td><span class="zh">必填，用于地图搜索定位</span><span class="en">Yes — used for map search</span></td>
+        </tr>
+        <tr>
+          <td class="zh">门店简介</td>
+          <td class="en">Description</td>
+          <td><span class="zh">建议填写，吸引更多客户</span><span class="en">Recommended</span></td>
+        </tr>
+        <tr>
+          <td class="zh">营业时间</td>
+          <td class="en">Opening Hours</td>
+          <td><span class="zh">必填，每天独立设置</span><span class="en">Yes — set separately for each day</span></td>
+        </tr>
+        <tr>
+          <td class="zh">门店照片</td>
+          <td class="en">Store Photos</td>
+          <td><span class="zh">建议上传，提高信任度</span><span class="en">Recommended</span></td>
+        </tr>
+      </table>
+
+      <div class="note">
+        <strong class="zh">⚠️ 重要：</strong><strong class="en">⚠️ Important:</strong>
+        <span class="zh">Eircode 决定了您的门店在消费者按地区搜索时能否出现。请务必填写正确，格式如：<code>D01 W2X2</code></span>
+        <span class="en">Your Eircode determines whether your store appears in location-based searches. Enter it correctly, e.g. <code>D01 W2X2</code></span>
+      </div>
+
+      <p class="zh"><strong>设置营业时间：</strong>在设置页面下方的营业时间表中，为每天分别选择开始时间和结束时间。休息日请勾选"关闭"。填写完毕后点击保存。</p>
+      <p class="en"><strong>Setting opening hours:</strong> In the Hours section of Settings, set opening and closing times for each day of the week. Toggle a day as "Closed" if you're not open. Click Save when done.</p>
+    </div>
+  </div>
+
+  <!-- ─── STEP 4 ─── -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <div>
+        <div class="step-title zh">添加维修服务</div>
+        <div class="step-title en">Add Your Repair Services</div>
+        <div class="step-subtitle zh">告诉消费者你能修什么、收多少钱</div>
+        <div class="step-subtitle en">Tell customers what you repair and at what price</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p class="zh">进入 <strong>Services（维修服务）</strong> 页面：</p>
+      <p class="en">Go to the <strong>Services</strong> page:</p>
+      <a class="url-pill" href="https://ierepair-dfd7b2qpra-ew.a.run.app/merchant/services" target="_blank">https://ierepair-dfd7b2qpra-ew.a.run.app/merchant/services</a>
+
+      <p class="zh">添加服务分为 4 步：</p>
+      <p class="en">Adding a service takes 4 steps:</p>
+
+      <div class="flow" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+        <div style="display:flex; align-items: flex-start; gap: 12px;">
+          <div style="background:#146345;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;margin-top:1px;">1</div>
+          <div>
+            <div style="font-weight:600;font-size:15px;" class="zh">选择设备类别</div>
+            <div style="font-weight:600;font-size:15px;" class="en">Choose device category</div>
+            <div style="font-size:13px;color:#666;margin-top:2px;" class="zh">如：iPhone、Samsung、iPad 等</div>
+            <div style="font-size:13px;color:#666;margin-top:2px;" class="en">e.g. iPhone, Samsung, iPad</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items: flex-start; gap: 12px;">
+          <div style="background:#146345;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;margin-top:1px;">2</div>
+          <div>
+            <div style="font-weight:600;font-size:15px;" class="zh">选择品牌和具体型号</div>
+            <div style="font-weight:600;font-size:15px;" class="en">Select brand and model</div>
+            <div style="font-size:13px;color:#666;margin-top:2px;" class="zh">如：Apple → iPhone 15 Pro</div>
+            <div style="font-size:13px;color:#666;margin-top:2px;" class="en">e.g. Apple → iPhone 15 Pro</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items: flex-start; gap: 12px;">
+          <div style="background:#146345;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;margin-top:1px;">3</div>
+          <div>
+            <div style="font-weight:600;font-size:15px;" class="zh">选择维修类型并填写您的价格</div>
+            <div style="font-weight:600;font-size:15px;" class="en">Choose repair type and set your price</div>
+            <div style="font-size:13px;color:#666;margin-top:2px;" class="zh">如：屏幕更换 €89，电池更换 €49</div>
+            <div style="font-size:13px;color:#666;margin-top:2px;" class="en">e.g. Screen Replacement €89, Battery €49</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items: flex-start; gap: 12px;">
+          <div style="background:#146345;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;margin-top:1px;">4</div>
+          <div>
+            <div style="font-weight:600;font-size:15px;" class="zh">点击「添加」，服务即时生效</div>
+            <div style="font-weight:600;font-size:15px;" class="en">Click Add — the service goes live immediately</div>
+            <div style="font-size:13px;color:#666;margin-top:2px;" class="zh">消费者搜索时即可看到您的报价</div>
+            <div style="font-size:13px;color:#666;margin-top:2px;" class="en">Customers can see your price in search results right away</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip" style="margin-top:20px;">
+        <strong class="zh">💡 提示：</strong><strong class="en">💡 Tip:</strong>
+        <span class="zh">建议添加您最擅长的 5–10 种常见维修服务，并确保价格有竞争力。之后随时可以在服务列表中开启或关闭某项服务。</span>
+        <span class="en">We recommend adding 5–10 common repairs you specialise in with competitive prices. You can enable or disable any service at any time from the services list.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── STEP 5 ─── -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <div>
+        <div class="step-title zh">接单与管理预约</div>
+        <div class="step-title en">Managing Bookings</div>
+        <div class="step-subtitle zh">消费者下单后在此处处理</div>
+        <div class="step-subtitle en">Handle customer repair bookings here</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p class="zh">进入 <strong>Bookings（预约管理）</strong> 页面：</p>
+      <p class="en">Go to the <strong>Bookings</strong> page:</p>
+      <a class="url-pill" href="https://ierepair-dfd7b2qpra-ew.a.run.app/merchant/bookings" target="_blank">https://ierepair-dfd7b2qpra-ew.a.run.app/merchant/bookings</a>
+
+      <p class="zh">预约订单共有以下几个状态：</p>
+      <p class="en">Booking statuses explained:</p>
+
+      <div class="badges">
+        <span class="badge badge-yellow zh">待确认 Pending</span>
+        <span class="badge badge-yellow en">Pending Confirmation</span>
+        <span class="badge badge-green zh">已确认 Confirmed</span>
+        <span class="badge badge-green en">Confirmed</span>
+        <span class="badge badge-blue zh">维修中 In Progress</span>
+        <span class="badge badge-blue en">In Progress</span>
+        <span class="badge badge-gray zh">已完成 Completed</span>
+        <span class="badge badge-gray en">Completed</span>
+        <span class="badge badge-red zh">已取消 Cancelled</span>
+        <span class="badge badge-red en">Cancelled</span>
+      </div>
+
+      <ul class="check-list" style="margin-top:16px;">
+        <li class="zh"><strong>接受预约：</strong>点击订单上的「接受」按钮，状态变为「已确认」，消费者会看到确认通知</li>
+        <li class="en"><strong>Accept:</strong> Click the Accept button on the booking. Status changes to Confirmed and the customer is notified</li>
+        <li class="zh"><strong>拒绝预约：</strong>点击「拒绝」按钮，状态变为「已取消」</li>
+        <li class="en"><strong>Reject:</strong> Click Reject to cancel the booking</li>
+        <li class="zh"><strong>完成维修：</strong>维修完成后，点击「标记完成」，状态变为「已完成」</li>
+        <li class="en"><strong>Complete:</strong> Once the repair is done, click Mark as Complete</li>
+      </ul>
+
+      <div class="note">
+        <strong class="zh">⚠️ 建议：</strong><strong class="en">⚠️ Recommendation:</strong>
+        <span class="zh">请在消费者下单后 <strong>24 小时内</strong>完成确认或拒绝，避免影响消费者体验和平台评分。</span>
+        <span class="en">Please confirm or reject bookings within <strong>24 hours</strong> to maintain a good rating and customer experience.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── STEP 6 ─── -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">6</div>
+      <div>
+        <div class="step-title zh">扫码签到（可选）</div>
+        <div class="step-title en">QR Check-In (Optional)</div>
+        <div class="step-subtitle zh">消费者到店时扫描其手机上的二维码</div>
+        <div class="step-subtitle en">Scan the customer's QR code when they arrive</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p class="zh">消费者在「我的预约」页面可生成一个签到二维码。当其到店时，商家可进入「Check-in」页面扫描二维码完成签到，免去人工核验订单号的麻烦。</p>
+      <p class="en">Customers can show a QR code from their booking history. Open the <strong>Check-in</strong> page on your device and scan their QR code to instantly verify and check in the booking — no need to look up order numbers manually.</p>
+      <a class="url-pill" href="https://ierepair-dfd7b2qpra-ew.a.run.app/merchant/checkin" target="_blank">https://ierepair-dfd7b2qpra-ew.a.run.app/merchant/checkin</a>
+
+      <div class="tip">
+        <strong class="zh">💡 提示：</strong><strong class="en">💡 Tip:</strong>
+        <span class="zh">建议在店内设置一台平板或电脑常开 Check-in 页面，方便接待到店客户。</span>
+        <span class="en">Consider keeping the Check-in page open on a tablet or PC at your counter for quick customer reception.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── FAQ ─── -->
+  <p class="section-label zh">常见问题</p>
+  <p class="section-label en">Frequently Asked Questions</p>
+
+  <div class="step-card" style="padding: 24px 32px;">
+    <table class="info-table">
+      <tr>
+        <th class="zh" style="width:42%">问题</th>
+        <th class="en" style="width:42%">Question</th>
+        <th class="zh">回答</th>
+        <th class="en">Answer</th>
+      </tr>
+      <tr>
+        <td class="zh">添加服务后多久生效？</td>
+        <td class="en">When do services go live after adding?</td>
+        <td class="zh">即时生效，消费者可立即搜索到。</td>
+        <td class="en">Immediately — customers can find them in search results right away.</td>
+      </tr>
+      <tr>
+        <td class="zh">可以修改服务价格吗？</td>
+        <td class="en">Can I change a service price?</td>
+        <td class="zh">可以，在服务列表中点击编辑即可随时修改。</td>
+        <td class="en">Yes. Click Edit next to any service in the services list.</td>
+      </tr>
+      <tr>
+        <td class="zh">可以暂时下架某个服务吗？</td>
+        <td class="en">Can I temporarily hide a service?</td>
+        <td class="zh">可以，在服务列表中切换开关即可开启或关闭。</td>
+        <td class="en">Yes. Use the toggle in the services list to enable or disable any service.</td>
+      </tr>
+      <tr>
+        <td class="zh">忘记密码怎么办？</td>
+        <td class="en">What if I forget my password?</td>
+        <td class="zh">请联系 IERepair 运营团队，我们会为您重置。</td>
+        <td class="en">Contact the IERepair team — we'll reset it for you.</td>
+      </tr>
+      <tr>
+        <td class="zh">消费者提交预约时我会收到通知吗？</td>
+        <td class="en">Will I be notified of new bookings?</td>
+        <td class="zh">请定期登录后台查看待确认订单。短信通知功能即将上线。</td>
+        <td class="en">Please check your dashboard regularly for pending bookings. SMS notifications are coming soon.</td>
+      </tr>
+      <tr>
+        <td class="zh">找不到我维修的某款机型怎么办？</td>
+        <td class="en">What if a device model I repair isn't in the catalog?</td>
+        <td class="zh">请联系 IERepair 团队，我们会将其添加到系统目录中。</td>
+        <td class="en">Contact the IERepair team and we'll add it to the catalog.</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ─── Contact ─── -->
+  <div class="step-card" style="background: linear-gradient(135deg, #f0faf5, #e6f7ef); border-color: #a7d9c2; text-align:center; padding: 36px;">
+    <div style="font-size: 28px; margin-bottom: 12px;">📩</div>
+    <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;" class="zh">需要帮助？</div>
+    <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;" class="en">Need Help?</div>
+    <p style="font-size: 15px; color: #555;" class="zh">如有任何问题，请通过以下方式联系 IERepair 运营团队：</p>
+    <p style="font-size: 15px; color: #555;" class="en">If you have any questions, reach out to the IERepair team:</p>
+    <div style="margin-top: 16px; font-size: 15px; font-weight: 600; color: #146345;">
+      📧 support@ierepair.ie
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<div class="footer">
+  <strong>IERepair</strong> &nbsp;·&nbsp;
+  <span class="zh">商家入驻指南 · 版本 1.0 · 2026</span>
+  <span class="en">Merchant Onboarding Guide · v1.0 · 2026</span>
+</div>
+
+<script>
+  function toggleLang(btn) {
+    const html = document.documentElement;
+    if (html.lang === "zh") {
+      html.lang = "en";
+      btn.textContent = "中文";
+    } else {
+      html.lang = "zh";
+      btn.textContent = "English";
+    }
+  }
+</script>
+
+</body>
+</html>

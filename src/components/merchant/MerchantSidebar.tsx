@@ -24,6 +24,7 @@ export default function MerchantSidebar({ session }: { session: Session }) {
   const navItems = [
     { href: "/merchant/dashboard", label: t.navDashboard, icon: "📊" },
     { href: "/merchant/bookings", label: t.navBookings, icon: "📋" },
+    { href: "/merchant/checkin", label: t.navCheckin, icon: "🔍" },
     { href: "/merchant/services", label: t.navServices, icon: "🔧" },
     { href: "/merchant/products", label: t.navProducts, icon: "📦" },
     { href: "/merchant/reviews", label: t.navReviews, icon: "⭐" },
@@ -71,9 +72,9 @@ export default function MerchantSidebar({ session }: { session: Session }) {
         </div>
         <button
           onClick={() => setLang(lang === "zh" ? "en" : "zh")}
-          style={{ width: "100%", padding: "6px 12px", background: "transparent", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 6, color: "rgba(255,255,255,0.6)", fontSize: 12, cursor: "pointer", marginBottom: 8 }}
+          style={{ width: "100%", padding: "7px 12px", background: "#17db66", border: "none", borderRadius: 6, color: "#1c3830", fontSize: 13, fontWeight: 700, cursor: "pointer", marginBottom: 8 }}
         >
-          {t.langToggle}
+          🌐 {t.langToggle}
         </button>
         <button
           onClick={handleLogout}

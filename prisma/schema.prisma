@@ -104,6 +104,8 @@ model Merchant {
   lng                Float?
   isActive           Boolean           @default(true)
   mustChangePassword Boolean           @default(true)
+  stripePublishableKey String?
+  stripeSecretKey      String?
   merchantProducts   MerchantProduct[]
   merchantServices   MerchantService[]
   merchantHours      MerchantHours[]

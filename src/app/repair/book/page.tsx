@@ -56,8 +56,8 @@ export default function BookPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const presetMerchantId = searchParams.get("merchantId") ? parseInt(searchParams.get("merchantId")!, 10) : null;
-  const presetRepairServiceId = searchParams.get("repairServiceId")
+  const presetMerchantId = searchParams?.get("merchantId") ? parseInt(searchParams.get("merchantId")!, 10) : null;
+  const presetRepairServiceId = searchParams?.get("repairServiceId")
     ? parseInt(searchParams.get("repairServiceId")!, 10)
     : null;
 

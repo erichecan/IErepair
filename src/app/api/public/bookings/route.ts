@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { sendSMS } from "@/lib/sms";
 
 const STATUS_LABELS: Record<string, string> = {
   pending_confirm: "待确认",
@@ -33,6 +34,7 @@ export async function GET(req: Request) {
             },
           },
         },
+        review: { select: { id: true } },
       },
     });
 
@@ -50,6 +52,7 @@ export async function GET(req: Request) {
         appointmentTime: b.appointmentTime,
         quotedPrice: Number(b.quotedPrice),
         createdAt: b.createdAt,
+        hasReview: !!b.review,
       }))
     );
   } catch (error) {
@@ -111,6 +114,26 @@ export async function POST(req: Request) {
         repairService: { include: { repairType: true, deviceModel: true } },
       },
     });
+
+    const apptStr = new Date(booking.appointmentTime).toLocaleString("en-IE", {
+      timeZone: "Europe/Dublin",
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+
+    // Notify merchant
+    if (booking.merchant.phone) {
+      void sendSMS(
+        booking.merchant.phone,
+        `New booking [${booking.orderNumber}]: ${booking.repairService.deviceModel.name} ${booking.repairService.repairType.name} from ${userName}. Appt: ${apptStr}. Phone: ${userPhone}`
+      );
+    }
+
+    // Confirm to consumer
+    void sendSMS(
+      userPhone,
+      `Your repair booking [${booking.orderNumber}] at ${booking.merchant.name} is received. Appt: ${apptStr}. We'll confirm shortly.`
+    );
 
     return Response.json(
       {

@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { useLang } from "@/lib/i18n/useLang";
+import { useConsumerT } from "@/lib/i18n/consumer";
 
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -40,6 +42,8 @@ interface MerchantDetail {
   phone: string | null;
   description: string | null;
   images: string[];
+  lat: number | null;
+  lng: number | null;
   avgRating: number | null;
   reviewCount: number;
   reviews: ReviewItem[];
@@ -58,11 +62,14 @@ function Stars({ rating, size = 15 }: { rating: number; size?: number }) {
 }
 
 export default function StorePage() {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
+  const id = params?.id ?? "";
   const [merchant, setMerchant] = useState<MerchantDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const [lang] = useLang("en");
+  const t = useConsumerT(lang);
 
   useEffect(() => {
     fetch(`/api/public/merchants/${id}`)
@@ -87,7 +94,7 @@ export default function StorePage() {
     return (
       <div style={styles.centered}>
         <div style={{ fontSize: 18, color: "#555" }}>{error || "Store not found"}</div>
-        <Link href="/" style={styles.backLink}>← Back to Home</Link>
+        <Link href="/" style={styles.backLink}>← {t.backToHome}</Link>
       </div>
     );
   }
@@ -117,7 +124,7 @@ export default function StorePage() {
       <div style={styles.topBar}>
         <div className="wrapper" style={styles.topBarInner}>
           <Link href="/" style={styles.logo}>IERepair</Link>
-          <Link href="/search" style={styles.backNav}>← Search Results</Link>
+          <Link href="/search" style={styles.backNav}>{t.storeBackToSearch}</Link>
         </div>
       </div>
 
@@ -170,7 +177,7 @@ export default function StorePage() {
             href={`/repair/book?merchantId=${merchant.id}`}
             style={styles.bookBtn}
           >
-            Book a Repair
+            {t.storeBookRepair}
           </Link>
         </div>
 
@@ -179,7 +186,7 @@ export default function StorePage() {
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {/* Opening hours */}
             <div style={styles.card}>
-              <h2 style={styles.cardTitle}>Opening Hours</h2>
+              <h2 style={styles.cardTitle}>{t.storeOpeningHours}</h2>
               <div style={styles.hoursList}>
                 {merchant.hours.map((h) => (
                   <div
@@ -197,17 +204,41 @@ export default function StorePage() {
                       }}
                     >
                       {DAY_NAMES[h.dayOfWeek]}
-                      {h.dayOfWeek === today ? " (Today)" : ""}
+                      {h.dayOfWeek === today ? t.storeToday : ""}
                     </span>
                     <span style={styles.hourTime}>
                       {h.isClosed
-                        ? "Closed"
+                        ? t.storeClosed
                         : `${h.openTime ?? "?"} – ${h.closeTime ?? "?"}`}
                     </span>
                   </div>
                 ))}
               </div>
             </div>
+
+            {/* Map */}
+            {merchant.lat && merchant.lng && process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY && (
+              <div style={styles.card}>
+                <h2 style={styles.cardTitle}>{t.storeLocation}</h2>
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${merchant.lat},${merchant.lng}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={`https://maps.googleapis.com/maps/api/staticmap?center=${merchant.lat},${merchant.lng}&zoom=15&size=480x240&scale=2&markers=color:0x146345%7C${merchant.lat},${merchant.lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`}
+                    alt={`Map of ${merchant.name}`}
+                    style={{ width: "100%", borderRadius: 8, display: "block" }}
+                  />
+                </a>
+                {merchant.address && (
+                  <div style={{ marginTop: 10, fontSize: 13, color: "#555" }}>
+                    {merchant.address}
+                    {merchant.eircode ? `, ${merchant.eircode}` : ""}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Right column */}
@@ -215,10 +246,10 @@ export default function StorePage() {
             {/* Services */}
             <div style={styles.card}>
               <h2 style={styles.cardTitle}>
-                Services ({merchant.services.length})
+                {t.storeServices} ({merchant.services.length})
               </h2>
               {merchant.services.length === 0 ? (
-                <div style={{ color: "#888", fontSize: 14 }}>No services listed yet.</div>
+                <div style={{ color: "#888", fontSize: 14 }}>{t.storeNoServices}</div>
               ) : (
                 <div style={styles.serviceList}>
                   {merchant.services.map((svc) => (
@@ -237,7 +268,7 @@ export default function StorePage() {
                           href={`/repair/book?merchantId=${merchant.id}&repairServiceId=${svc.repairServiceId}`}
                           style={styles.svcBookBtn}
                         >
-                          Book
+                          {t.storeBook}
                         </Link>
                       </div>
                     </div>
@@ -251,7 +282,7 @@ export default function StorePage() {
               <div style={styles.card}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
                   <h2 style={{ ...styles.cardTitle, margin: 0 }}>
-                    Reviews ({merchant.reviewCount})
+                    {t.storeReviews} ({merchant.reviewCount})
                   </h2>
                   {merchant.avgRating !== null && (
                     <div style={{ display: "flex", alignItems: "center", gap: 6 }}>

@@ -27,8 +27,8 @@ interface SearchResult {
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
-  const q = searchParams.get("q") ?? "";
-  const eircode = searchParams.get("eircode") ?? "";
+  const q = searchParams?.get("q") ?? "";
+  const eircode = searchParams?.get("eircode") ?? "";
 
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);

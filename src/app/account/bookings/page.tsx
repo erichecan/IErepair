@@ -3,6 +3,9 @@
 import { useEffect, useState, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { QRCodeSVG } from "qrcode.react";
+import { useLang } from "@/lib/i18n/useLang";
+import { useConsumerT } from "@/lib/i18n/consumer";
 
 interface Booking {
   orderNumber: string;
@@ -17,6 +20,7 @@ interface Booking {
   appointmentTime: string;
   quotedPrice: number;
   createdAt: string;
+  hasReview: boolean;
 }
 
 const STATUS_COLOR: Record<string, string> = {
@@ -51,12 +55,15 @@ export default function AccountBookingsPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [phone, setPhone] = useState(searchParams.get("phone") ?? "");
-  const [input, setInput] = useState(searchParams.get("phone") ?? "");
+  const [lang] = useLang("en");
+  const t = useConsumerT(lang);
+  const [phone, setPhone] = useState(searchParams?.get("phone") ?? "");
+  const [input, setInput] = useState(searchParams?.get("phone") ?? "");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const [error, setError] = useState("");
+  const [qrOrderNumber, setQrOrderNumber] = useState<string | null>(null);
 
   const fetchBookings = useCallback(async (p: string) => {
     if (!p.trim()) return;
@@ -81,7 +88,7 @@ export default function AccountBookingsPage() {
   }, []);
 
   useEffect(() => {
-    const p = searchParams.get("phone");
+    const p = searchParams?.get("phone");
     if (p) {
       setPhone(p);
       setInput(p);
@@ -104,26 +111,26 @@ export default function AccountBookingsPage() {
       <div style={styles.topBar}>
         <div className="wrapper" style={styles.topBarInner}>
           <Link href="/" style={styles.logo}>IERepair</Link>
-          <span style={styles.pageTitle}>My Bookings</span>
+          <span style={styles.pageTitle}>{t.myBookings}</span>
         </div>
       </div>
 
       <div className="wrapper" style={styles.page}>
-        <h1 style={styles.h1}>Look Up Your Bookings</h1>
-        <p style={styles.subtitle}>Enter your phone number to view all your repair appointments.</p>
+        <h1 style={styles.h1}>{t.lookUpBookings}</h1>
+        <p style={styles.subtitle}>{t.lookUpSubtitle}</p>
 
         {/* Search form */}
         <form onSubmit={handleSearch} style={styles.form}>
           <input
             type="tel"
-            placeholder="e.g. 0871234567"
+            placeholder={t.phonePlaceholder}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             style={styles.phoneInput}
             autoFocus
           />
           <button type="submit" style={styles.searchBtn} disabled={loading}>
-            {loading ? "Searching…" : "Look Up"}
+            {loading ? t.searching : t.lookUpBtn}
           </button>
         </form>
 
@@ -133,20 +140,15 @@ export default function AccountBookingsPage() {
         {searched && !loading && !error && bookings.length === 0 && (
           <div style={styles.empty}>
             <div style={styles.emptyIcon}>📭</div>
-            <div style={styles.emptyTitle}>No bookings found</div>
-            <div style={styles.emptyText}>
-              No repair appointments found for <strong>{phone}</strong>.
-              Double-check the number you used when booking.
-            </div>
-            <Link href="/repair/book" style={styles.bookLink}>Book a Repair</Link>
+            <div style={styles.emptyTitle}>{t.noBookingsTitle}</div>
+            <div style={styles.emptyText}>{t.noBookingsText(phone)}</div>
+            <Link href="/repair/book" style={styles.bookLink}>{t.storeBookRepair}</Link>
           </div>
         )}
 
         {bookings.length > 0 && (
           <div style={styles.list}>
-            <div style={styles.listMeta}>
-              {bookings.length} booking{bookings.length !== 1 ? "s" : ""} found for {phone}
-            </div>
+            <div style={styles.listMeta}>{t.bookingsFound(bookings.length, phone)}</div>
             {bookings.map((b) => (
               <div key={b.orderNumber} style={styles.card}>
                 <div style={styles.cardTop}>
@@ -169,39 +171,87 @@ export default function AccountBookingsPage() {
 
                 <div style={styles.detailGrid}>
                   <div style={styles.detailItem}>
-                    <span style={styles.detailLabel}>Store</span>
+                    <span style={styles.detailLabel}>{t.labelStore}</span>
                     <span style={styles.detailValue}>{b.merchantName}</span>
                   </div>
                   {b.merchantAddress && (
                     <div style={styles.detailItem}>
-                      <span style={styles.detailLabel}>Address</span>
+                      <span style={styles.detailLabel}>{t.labelAddress}</span>
                       <span style={styles.detailValue}>{b.merchantAddress}</span>
                     </div>
                   )}
                   {b.merchantPhone && (
                     <div style={styles.detailItem}>
-                      <span style={styles.detailLabel}>Store Phone</span>
+                      <span style={styles.detailLabel}>{t.labelStorePhone}</span>
                       <a href={`tel:${b.merchantPhone}`} style={styles.detailLink}>
                         {b.merchantPhone}
                       </a>
                     </div>
                   )}
                   <div style={styles.detailItem}>
-                    <span style={styles.detailLabel}>Appointment</span>
+                    <span style={styles.detailLabel}>{t.labelAppointment}</span>
                     <span style={styles.detailValue}>{formatDt(b.appointmentTime)}</span>
                   </div>
                   <div style={styles.detailItem}>
-                    <span style={styles.detailLabel}>Quoted Price</span>
+                    <span style={styles.detailLabel}>{t.labelQuotedPrice}</span>
                     <span style={{ ...styles.detailValue, fontWeight: 700 }}>
                       €{b.quotedPrice.toFixed(2)}
                     </span>
                   </div>
                 </div>
+
+                {b.status === "confirmed" && (
+                  <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid #f5f5f5", display: "flex", justifyContent: "flex-end" }}>
+                    <button
+                      onClick={() => setQrOrderNumber(b.orderNumber)}
+                      style={styles.qrBtn}
+                    >
+                      {t.showCheckinQR}
+                    </button>
+                  </div>
+                )}
+
+                {b.status === "completed" && (
+                  <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid #f5f5f5", display: "flex", justifyContent: "flex-end" }}>
+                    {b.hasReview ? (
+                      <span style={{ fontSize: 13, color: "#888" }}>{t.reviewSubmitted}</span>
+                    ) : (
+                      <Link href={`/review/${b.orderNumber}`} style={styles.reviewBtn}>
+                        {t.leaveReview}
+                      </Link>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {/* QR Code Modal */}
+      {qrOrderNumber && (
+        <div
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2000 }}
+          onClick={() => setQrOrderNumber(null)}
+        >
+          <div
+            style={{ background: "#fff", borderRadius: 20, padding: "32px 36px", textAlign: "center", boxShadow: "0 16px 60px rgba(0,0,0,0.25)" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ fontSize: 14, color: "#888", marginBottom: 8 }}>{t.showQRSubtitle}</div>
+            <div style={{ fontSize: 13, fontFamily: "monospace", fontWeight: 700, color: "#146345", marginBottom: 16 }}>{qrOrderNumber}</div>
+            <QRCodeSVG value={qrOrderNumber} size={200} fgColor="#1d1d1f" />
+            <div style={{ marginTop: 20 }}>
+              <button
+                onClick={() => setQrOrderNumber(null)}
+                style={{ padding: "10px 28px", borderRadius: 40, background: "#1d1d1f", color: "#fff", border: "none", fontSize: 14, fontWeight: 600, cursor: "pointer" }}
+              >
+                {t.closeBtn}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -379,5 +429,27 @@ const styles = {
     color: "#146345",
     textDecoration: "none",
     fontWeight: 600,
+  },
+  reviewBtn: {
+    padding: "8px 20px",
+    borderRadius: 40,
+    background: "#f0faf5",
+    color: "#146345",
+    textDecoration: "none",
+    fontSize: 13,
+    fontWeight: 700,
+    border: "1.5px solid #146345",
+    display: "inline-block",
+  },
+  qrBtn: {
+    padding: "8px 20px",
+    borderRadius: 40,
+    background: "#f0f4ff",
+    color: "#1a73e8",
+    fontSize: 13,
+    fontWeight: 700,
+    border: "1.5px solid #1a73e8",
+    cursor: "pointer",
+    fontFamily: "inherit",
   },
 };

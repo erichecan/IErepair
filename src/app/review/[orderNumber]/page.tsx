@@ -33,7 +33,8 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
 }
 
 export default function ReviewPage() {
-  const { orderNumber } = useParams<{ orderNumber: string }>();
+  const params = useParams<{ orderNumber: string }>();
+  const orderNumber = params?.orderNumber ?? "";
   const router = useRouter();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");

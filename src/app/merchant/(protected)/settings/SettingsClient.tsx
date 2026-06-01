@@ -19,6 +19,7 @@ interface Props {
   merchant: Merchant;
   hours: HourRow[];
   initialImages: string[];
+  stripeConfigured: boolean;
 }
 
 function buildDefaultHours(saved: HourRow[]): HourRow[] {
@@ -26,14 +27,14 @@ function buildDefaultHours(saved: HourRow[]): HourRow[] {
   return Array.from({ length: 7 }, (_, i) => map.get(i) ?? { dayOfWeek: i, openTime: "09:00", closeTime: "18:00", isClosed: i === 0 || i === 6 });
 }
 
-export default function MerchantSettingsClient({ merchant, hours, initialImages }: Props) {
+export default function MerchantSettingsClient({ merchant, hours, initialImages, stripeConfigured }: Props) {
   const [lang] = useLang("zh");
   const t = useMerchantT(lang);
 
   const searchParams = useSearchParams();
   const tabParam = searchParams?.get("tab");
-  const [tab, setTab] = useState<"info" | "hours" | "images" | "security">(
-    tabParam === "hours" ? "hours" : tabParam === "images" ? "images" : tabParam === "security" ? "security" : "info"
+  const [tab, setTab] = useState<"info" | "hours" | "images" | "stripe" | "security">(
+    tabParam === "hours" ? "hours" : tabParam === "images" ? "images" : tabParam === "stripe" ? "stripe" : tabParam === "security" ? "security" : "info"
   );
 
   const [info, setInfo] = useState({
@@ -57,6 +58,12 @@ export default function MerchantSettingsClient({ merchant, hours, initialImages 
   const [imgMsg, setImgMsg] = useState("");
   const [imgSuccess, setImgSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [stripe, setStripe] = useState({ publishableKey: "", secretKey: "" });
+  const [stripeSaving, setStripeSaving] = useState(false);
+  const [stripeMsg, setStripeMsg] = useState("");
+  const [stripeSuccess, setStripeSuccess] = useState(false);
+  const [stripeOk, setStripeOk] = useState(stripeConfigured);
 
   const [sec, setSec] = useState({ currentPassword: "", newPassword: "", confirm: "" });
   const [secSaving, setSecSaving] = useState(false);
@@ -124,6 +131,27 @@ export default function MerchantSettingsClient({ merchant, hours, initialImages 
     } catch { setImgMsg(t.settingsNetworkError); setImgSuccess(false); }
   }
 
+  async function saveStripe(e: React.FormEvent) {
+    e.preventDefault();
+    setStripeMsg(""); setStripeSuccess(false);
+    setStripeSaving(true);
+    try {
+      const body: Record<string, string> = {};
+      if (stripe.publishableKey.trim()) body.stripePublishableKey = stripe.publishableKey.trim();
+      if (stripe.secretKey.trim()) body.stripeSecretKey = stripe.secretKey.trim();
+      const res = await fetch("/api/merchant/stripe", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (!res.ok) { setStripeMsg(data.error || t.settingsFailed); setStripeSuccess(false); return; }
+      setStripeMsg(t.settingsStripeSaved); setStripeSuccess(true);
+      setStripe({ publishableKey: "", secretKey: "" });
+      setStripeOk(true);
+    } catch { setStripeMsg(t.settingsNetworkError); setStripeSuccess(false); } finally { setStripeSaving(false); }
+  }
+
   async function savePassword(e: React.FormEvent) {
     e.preventDefault();
     setSecMsg(""); setSecSuccess(false);
@@ -164,6 +192,7 @@ export default function MerchantSettingsClient({ merchant, hours, initialImages 
     info: t.settingsTabInfo,
     hours: t.settingsTabHours,
     images: t.settingsTabImages,
+    stripe: t.settingsTabStripe,
     security: t.settingsTabSecurity,
   };
 
@@ -180,10 +209,15 @@ export default function MerchantSettingsClient({ merchant, hours, initialImages 
         <h1 style={{ fontSize: 24, fontWeight: 700, color: "#1d1d1f", margin: "0 0 4px" }}>{t.navSettings}</h1>
       </div>
 
-      <div style={{ display: "flex", gap: 4, background: "#f5f5f7", padding: 4, borderRadius: 24, width: "fit-content", marginBottom: 28 }}>
-        {(["info", "hours", "images", "security"] as const).map(k => (
+      <div style={{ display: "flex", gap: 4, background: "#f5f5f7", padding: 4, borderRadius: 24, width: "fit-content", marginBottom: 28, flexWrap: "wrap" }}>
+        {(["info", "hours", "images", "stripe", "security"] as const).map(k => (
           <button key={k} style={tabStyle(k)} onClick={() => setTab(k)}>
             {tabLabels[k]}
+            {k === "stripe" && (
+              <span style={{ marginLeft: 5, fontSize: 10, verticalAlign: "middle" }}>
+                {stripeOk ? "✅" : "⚠️"}
+              </span>
+            )}
           </button>
         ))}
       </div>
@@ -341,6 +375,54 @@ export default function MerchantSettingsClient({ merchant, hours, initialImages 
             <p style={{ fontSize: 12, color: "#aeaeb2", margin: 0 }}>{t.settingsImgHint}</p>
             {imgMsg && <p style={{ fontSize: 13, color: imgSuccess ? "#146345" : "#c0392b", marginTop: 10 }}>{imgMsg}</p>}
           </div>
+        </div>
+      )}
+
+      {tab === "stripe" && (
+        <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e5ea", padding: "32px", maxWidth: 560 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
+            <span style={{ fontSize: 24 }}>💳</span>
+            <div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: "#1d1d1f" }}>Stripe</div>
+              <div style={{ fontSize: 13, color: stripeOk ? "#146345" : "#888", fontWeight: 600 }}>
+                {stripeOk ? `✅ ${t.settingsStripeEnabled}` : `⚠️ ${t.settingsStripeNotEnabled}`}
+              </div>
+            </div>
+          </div>
+          <p style={{ fontSize: 14, color: "#6e6e73", margin: "0 0 24px", lineHeight: 1.6 }}>{t.settingsStripeDesc}</p>
+          <form onSubmit={saveStripe}>
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#1d1d1f", marginBottom: 6 }}>
+                {t.settingsStripePublishable}
+              </label>
+              <input
+                value={stripe.publishableKey}
+                onChange={e => setStripe(prev => ({ ...prev, publishableKey: e.target.value }))}
+                placeholder="pk_live_... or pk_test_..."
+                style={{ width: "100%", padding: "10px 12px", border: "1px solid #d1d1d6", borderRadius: 8, fontSize: 14, outline: "none", boxSizing: "border-box", fontFamily: "monospace" }}
+              />
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#1d1d1f", marginBottom: 6 }}>
+                {t.settingsStripeSecret}
+                <span style={{ fontWeight: 400, color: "#aeaeb2", marginLeft: 6 }}>{t.settingsStripeSecretNote}</span>
+              </label>
+              <input
+                type="password"
+                value={stripe.secretKey}
+                onChange={e => setStripe(prev => ({ ...prev, secretKey: e.target.value }))}
+                placeholder="sk_live_... or sk_test_..."
+                style={{ width: "100%", padding: "10px 12px", border: "1px solid #d1d1d6", borderRadius: 8, fontSize: 14, outline: "none", boxSizing: "border-box", fontFamily: "monospace" }}
+              />
+            </div>
+            <p style={{ fontSize: 12, color: "#aeaeb2", margin: "0 0 20px" }}>{t.settingsStripeHint}</p>
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+              <button type="submit" disabled={stripeSaving} style={{ padding: "10px 24px", background: "#146345", border: "none", borderRadius: 8, color: "#fff", fontSize: 14, fontWeight: 600, cursor: stripeSaving ? "not-allowed" : "pointer", opacity: stripeSaving ? 0.7 : 1 }}>
+                {stripeSaving ? t.settingsSaving : t.settingsSaveStripe}
+              </button>
+              {stripeMsg && <span style={{ fontSize: 13, color: stripeSuccess ? "#146345" : "#c0392b" }}>{stripeMsg}</span>}
+            </div>
+          </form>
         </div>
       )}
 

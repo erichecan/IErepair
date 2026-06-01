@@ -100,6 +100,40 @@ const translations = {
     backToHome: "Back to Home",
     servicesFound: (total: number) =>
       `${total} service${total !== 1 ? "s" : ""} found`,
+
+    // Store detail page
+    storeBackToSearch: "← Search Results",
+    storeOpeningHours: "Opening Hours",
+    storeLocation: "Location",
+    storeServices: "Services",
+    storeReviews: "Reviews",
+    storeBookRepair: "Book a Repair",
+    storeClosed: "Closed",
+    storeToday: " (Today)",
+    storeNoServices: "No services listed yet.",
+    storeBook: "Book",
+
+    // Account bookings page
+    myBookings: "My Bookings",
+    lookUpBookings: "Look Up Your Bookings",
+    lookUpSubtitle: "Enter your phone number to view all your repair appointments.",
+    phonePlaceholder: "e.g. 0871234567",
+    lookUpBtn: "Look Up",
+    noBookingsTitle: "No bookings found",
+    noBookingsText: (phone: string) =>
+      `No repair appointments found for ${phone}. Double-check the number you used when booking.`,
+    bookingsFound: (n: number, phone: string) =>
+      `${n} booking${n !== 1 ? "s" : ""} found for ${phone}`,
+    labelStore: "Store",
+    labelAddress: "Address",
+    labelStorePhone: "Store Phone",
+    labelAppointment: "Appointment",
+    labelQuotedPrice: "Quoted Price",
+    showCheckinQR: "Show Check-in QR",
+    leaveReview: "Leave a Review",
+    reviewSubmitted: "⭐ Review submitted",
+    showQRSubtitle: "Show this to the store to check in",
+    closeBtn: "Close",
   },
   zh: {
     // Header nav
@@ -196,6 +230,40 @@ const translations = {
     noRepairsDesc: "请尝试其他关键词或附近的Eircode",
     backToHome: "返回首页",
     servicesFound: (total: number) => `找到 ${total} 项服务`,
+
+    // Store detail page
+    storeBackToSearch: "← 返回搜索结果",
+    storeOpeningHours: "营业时间",
+    storeLocation: "门店位置",
+    storeServices: "维修服务",
+    storeReviews: "用户评价",
+    storeBookRepair: "立即预约",
+    storeClosed: "休息",
+    storeToday: "（今天）",
+    storeNoServices: "暂无服务项目。",
+    storeBook: "预约",
+
+    // Account bookings page
+    myBookings: "我的预约",
+    lookUpBookings: "查询我的预约",
+    lookUpSubtitle: "请输入您的手机号码，查看全部维修预约记录。",
+    phonePlaceholder: "如：0871234567",
+    lookUpBtn: "查询",
+    noBookingsTitle: "未找到预约记录",
+    noBookingsText: (phone: string) =>
+      `未找到 ${phone} 的维修预约。请确认您预约时使用的手机号码。`,
+    bookingsFound: (n: number, phone: string) =>
+      `共找到 ${n} 条预约（${phone}）`,
+    labelStore: "门店",
+    labelAddress: "地址",
+    labelStorePhone: "门店电话",
+    labelAppointment: "预约时间",
+    labelQuotedPrice: "报价",
+    showCheckinQR: "显示签到二维码",
+    leaveReview: "撰写评价",
+    reviewSubmitted: "⭐ 已提交评价",
+    showQRSubtitle: "向门店出示此二维码签到",
+    closeBtn: "关闭",
   },
 } as const;
 
@@ -203,4 +271,4 @@ export function useConsumerT(lang: Lang) {
   return translations[lang];
 }
 
-export type ConsumerT = (typeof translations)["en"];
+export type ConsumerT = (typeof translations)[Lang];
