@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { useLang } from "@/lib/i18n/useLang";
+import { useConsumerT } from "@/lib/i18n/consumer";
 
 const stores = [
   {
@@ -9,7 +13,7 @@ const stores = [
     distance: "0.4 km",
     rating: 4.9,
     reviewCount: 312,
-    status: "Open",
+    status: "Open" as const,
     closesAt: "7:00 PM",
     tags: ["Screen Repair", "Battery", "Accessories"],
   },
@@ -21,7 +25,7 @@ const stores = [
     distance: "1.2 km",
     rating: 4.8,
     reviewCount: 187,
-    status: "Open",
+    status: "Open" as const,
     closesAt: "6:30 PM",
     tags: ["Screen Repair", "Data Recovery"],
   },
@@ -33,13 +37,26 @@ const stores = [
     distance: "2.8 km",
     rating: 4.7,
     reviewCount: 143,
-    status: "Closes soon",
+    status: "Closes soon" as const,
     closesAt: "5:00 PM",
     tags: ["Battery", "Charging Port", "Camera Repair"],
   },
 ];
 
 export default function NearbyStores() {
+  const [lang] = useLang("en");
+  const t = useConsumerT(lang);
+
+  const statusLabel: Record<string, string> = {
+    "Open": t.nearbyOpen,
+    "Closes soon": t.nearbyClosesSoon,
+  };
+
+  const statusStyle: Record<string, { background: string; color: string }> = {
+    "Open": { background: "#f0faf4", color: "#428445" },
+    "Closes soon": { background: "#fffbeb", color: "#b45309" },
+  };
+
   return (
     <section style={{ padding: "64px 0", background: "#fafafa" }}>
       <div className="wrapper">
@@ -61,14 +78,14 @@ export default function NearbyStores() {
                 marginBottom: "6px",
               }}
             >
-              Stores Near You
+              {t.nearbyTitle}
             </h2>
             <p style={{ color: "#888", fontSize: "14px" }}>
-              Based on Dublin 1 · Change location
+              {t.nearbySubtitle}
             </p>
           </div>
           <Link href="/stores" className="view-all-link">
-            View all stores
+            {t.nearbyViewAll}
             <svg
               width="16"
               height="16"
@@ -102,25 +119,15 @@ export default function NearbyStores() {
                 <div
                   style={{
                     flexShrink: 0,
-                    background:
-                      store.status === "Open"
-                        ? "#f0faf4"
-                        : store.status === "Closes soon"
-                        ? "#fffbeb"
-                        : "#fff5f5",
-                    color:
-                      store.status === "Open"
-                        ? "#428445"
-                        : store.status === "Closes soon"
-                        ? "#b45309"
-                        : "#dc2626",
+                    background: statusStyle[store.status]?.background ?? "#fff5f5",
+                    color: statusStyle[store.status]?.color ?? "#dc2626",
                     borderRadius: "60px",
                     padding: "3px 10px",
                     fontSize: "11px",
                     fontWeight: 700,
                   }}
                 >
-                  {store.status}
+                  {statusLabel[store.status] ?? store.status}
                 </div>
               </div>
 
@@ -163,7 +170,7 @@ export default function NearbyStores() {
                   </svg>
                   {store.distance}
                 </div>
-                <div style={{ color: "#aaa" }}>Until {store.closesAt}</div>
+                <div style={{ color: "#aaa" }}>{t.nearbyUntil} {store.closesAt}</div>
               </div>
 
               {/* Tags */}

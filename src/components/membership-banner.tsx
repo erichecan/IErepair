@@ -1,6 +1,20 @@
+"use client";
+
 import Link from "next/link";
+import { useLang } from "@/lib/i18n/useLang";
+import { useConsumerT } from "@/lib/i18n/consumer";
 
 export default function MembershipBanner() {
+  const [lang] = useLang("en");
+  const t = useConsumerT(lang);
+
+  const perks = [
+    { icon: "🛡️", title: t.perkFreeScreen, desc: t.perkFreeScreenDesc },
+    { icon: "⚡", title: t.perkPriority, desc: t.perkPriorityDesc },
+    { icon: "💰", title: t.perkDiscount, desc: t.perkDiscountDesc },
+    { icon: "📦", title: t.perkAccessories, desc: t.perkAccessoriesDesc },
+  ];
+
   return (
     <section style={{ padding: "72px 0", background: "#f9f9f9" }}>
       <div className="wrapper">
@@ -30,7 +44,7 @@ export default function MembershipBanner() {
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
               </svg>
               <span style={{ fontSize: "13px", fontWeight: 600, color: "#146345" }}>
-                IERepair Membership
+                {t.membershipTag}
               </span>
             </div>
 
@@ -44,9 +58,9 @@ export default function MembershipBanner() {
                 color: "#1d1d1f",
               }}
             >
-              Protect Your Phone.
+              {t.membershipTitle1}
               <br />
-              <span style={{ color: "#146345" }}>Save Every Year.</span>
+              <span style={{ color: "#146345" }}>{t.membershipTitle2}</span>
             </h2>
 
             <p
@@ -65,10 +79,10 @@ export default function MembershipBanner() {
 
             <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
               <Link href="/membership" className="btn-primary">
-                Get Membership — From €9.99/mo
+                {t.membershipCta}
               </Link>
               <Link href="/membership#plans" className="btn-outline">
-                Compare Plans
+                {t.membershipCompare}
               </Link>
             </div>
           </div>
@@ -81,28 +95,7 @@ export default function MembershipBanner() {
               gap: "16px",
             }}
           >
-            {[
-              {
-                icon: "🛡️",
-                title: "Free Screen Cover",
-                desc: "One free screen replacement per year",
-              },
-              {
-                icon: "⚡",
-                title: "Priority Repair",
-                desc: "Jump the queue at partner stores",
-              },
-              {
-                icon: "💰",
-                title: "20% Off All Repairs",
-                desc: "Discount on every repair service",
-              },
-              {
-                icon: "📦",
-                title: "Free Accessories",
-                desc: "Monthly accessory voucher included",
-              },
-            ].map((perk) => (
+            {perks.map((perk) => (
               <div
                 key={perk.title}
                 style={{

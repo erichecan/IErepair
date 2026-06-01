@@ -99,6 +99,7 @@ model Merchant {
   address            String?
   eircode            String?
   description        String?
+  images             String[]
   lat                Float?
   lng                Float?
   isActive           Boolean           @default(true)
@@ -107,6 +108,7 @@ model Merchant {
   merchantServices   MerchantService[]
   merchantHours      MerchantHours[]
   repairBookings     RepairBooking[]
+  reviews            MerchantReview[]
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
 }
@@ -202,10 +204,26 @@ model RepairBooking {
   actualPrice      Decimal? @db.Decimal(10, 2)
   notes            String?
   cancelReason     String?
+  review           MerchantReview?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
   @@index([merchantId])
   @@index([status])
   @@index([appointmentTime])
+}
+
+model MerchantReview {
+  id         Int           @id @default(autoincrement())
+  merchantId Int
+  merchant   Merchant      @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  bookingId  Int           @unique
+  booking    RepairBooking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  userName   String
+  rating     Int
+  comment    String?
+  isVisible  Boolean       @default(true)
+  createdAt  DateTime      @default(now())
+
+  @@index([merchantId])
 }

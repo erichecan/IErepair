@@ -2,9 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLang } from "@/lib/i18n/useLang";
+import { useMerchantT } from "@/lib/i18n/merchant";
 
 export default function ChangePasswordPage() {
   const router = useRouter();
+  const [lang] = useLang("zh");
+  const t = useMerchantT(lang);
+
   const [newPassword, setNewPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
@@ -14,11 +19,11 @@ export default function ChangePasswordPage() {
     e.preventDefault();
     setError("");
     if (newPassword.length < 8) {
-      setError("密码至少 8 位");
+      setError(t.changePasswordErrShort);
       return;
     }
     if (newPassword !== confirm) {
-      setError("两次密码不一致");
+      setError(t.changePasswordErrMismatch);
       return;
     }
     setLoading(true);
@@ -30,12 +35,12 @@ export default function ChangePasswordPage() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "修改失败");
+        setError(data.error || t.changePasswordErrFailed);
         return;
       }
       router.push("/merchant/dashboard");
     } catch {
-      setError("网络错误，请重试");
+      setError(t.changePasswordErrNetwork);
     } finally {
       setLoading(false);
     }
@@ -44,15 +49,15 @@ export default function ChangePasswordPage() {
   return (
     <div style={{ maxWidth: 480, margin: "40px auto" }}>
       <div style={{ background: "#fff", borderRadius: 16, padding: "40px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
-        <h1 style={{ fontSize: 22, fontWeight: 700, color: "#1d1d1f", margin: "0 0 8px" }}>设置新密码</h1>
+        <h1 style={{ fontSize: 22, fontWeight: 700, color: "#1d1d1f", margin: "0 0 8px" }}>{t.changePasswordTitle}</h1>
         <p style={{ fontSize: 14, color: "#6e6e73", margin: "0 0 28px" }}>
-          首次登录需要修改初始密码。请设置一个至少 8 位的安全密码。
+          {t.changePasswordDesc}
         </p>
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#1d1d1f", marginBottom: 6 }}>
-              新密码
+              {t.changePasswordNew}
             </label>
             <input
               type="password"
@@ -60,21 +65,21 @@ export default function ChangePasswordPage() {
               onChange={e => setNewPassword(e.target.value)}
               required
               minLength={8}
-              placeholder="至少 8 位"
+              placeholder={t.changePasswordNewPlaceholder}
               style={{ width: "100%", padding: "10px 12px", border: "1px solid #d1d1d6", borderRadius: 8, fontSize: 14, outline: "none", boxSizing: "border-box" }}
             />
           </div>
 
           <div style={{ marginBottom: 24 }}>
             <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#1d1d1f", marginBottom: 6 }}>
-              确认新密码
+              {t.changePasswordConfirm}
             </label>
             <input
               type="password"
               value={confirm}
               onChange={e => setConfirm(e.target.value)}
               required
-              placeholder="再次输入新密码"
+              placeholder={t.changePasswordConfirmPlaceholder}
               style={{ width: "100%", padding: "10px 12px", border: "1px solid #d1d1d6", borderRadius: 8, fontSize: 14, outline: "none", boxSizing: "border-box" }}
             />
           </div>
@@ -90,7 +95,7 @@ export default function ChangePasswordPage() {
             disabled={loading}
             style={{ width: "100%", padding: "12px", background: "#146345", border: "none", borderRadius: 8, color: "#fff", fontSize: 15, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.7 : 1 }}
           >
-            {loading ? "保存中..." : "保存并进入工作台"}
+            {loading ? t.changePasswordSaving : t.changePasswordSubmit}
           </button>
         </form>
       </div>

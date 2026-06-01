@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { useLang } from "@/lib/i18n/useLang";
+import { useConsumerT } from "@/lib/i18n/consumer";
 
 interface ServiceCardProps {
   merchantId: number;
@@ -27,6 +31,9 @@ export default function ServiceCard({
   durationMinutes,
   repairServiceId,
 }: ServiceCardProps) {
+  const [lang] = useLang("en");
+  const t = useConsumerT(lang);
+
   return (
     <div style={styles.card}>
       <div style={styles.top}>
@@ -44,21 +51,21 @@ export default function ServiceCard({
         </div>
         <div style={styles.right}>
           <div style={styles.price}>€{price.toFixed(2)}</div>
-          <div style={styles.duration}>{durationMinutes} min</div>
+          <div style={styles.duration}>{durationMinutes} {t.minUnit}</div>
           {distanceKm != null && (
-            <div style={styles.distance}>{distanceKm.toFixed(1)} km away</div>
+            <div style={styles.distance}>{distanceKm.toFixed(1)} {t.kmAway}</div>
           )}
         </div>
       </div>
       <div style={styles.actions}>
         <Link href={`/stores/${merchantId}`} style={styles.viewBtn}>
-          View Store
+          {t.viewStore}
         </Link>
         <Link
           href={`/repair/book?merchantId=${merchantId}&repairServiceId=${repairServiceId}`}
           style={styles.bookBtn}
         >
-          Book Now
+          {t.bookNow}
         </Link>
       </div>
     </div>

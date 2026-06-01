@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useLang } from "@/lib/i18n/useLang";
+import { useMerchantT } from "@/lib/i18n/merchant";
 
 interface Session {
   merchantId: number;
@@ -11,6 +13,8 @@ interface Session {
 export default function MerchantSidebar({ session }: { session: Session }) {
   const pathname = usePathname();
   const router = useRouter();
+  const [lang, setLang] = useLang("zh");
+  const t = useMerchantT(lang);
 
   async function handleLogout() {
     await fetch("/api/merchant/auth/logout", { method: "POST" });
@@ -18,18 +22,19 @@ export default function MerchantSidebar({ session }: { session: Session }) {
   }
 
   const navItems = [
-    { href: "/merchant/dashboard", label: "工作台", icon: "📊" },
-    { href: "/merchant/bookings", label: "预约管理", icon: "📋" },
-    { href: "/merchant/services", label: "维修服务", icon: "🔧" },
-    { href: "/merchant/products", label: "商品管理", icon: "📦" },
-    { href: "/merchant/settings", label: "门店设置", icon: "⚙️" },
+    { href: "/merchant/dashboard", label: t.navDashboard, icon: "📊" },
+    { href: "/merchant/bookings", label: t.navBookings, icon: "📋" },
+    { href: "/merchant/services", label: t.navServices, icon: "🔧" },
+    { href: "/merchant/products", label: t.navProducts, icon: "📦" },
+    { href: "/merchant/reviews", label: t.navReviews, icon: "⭐" },
+    { href: "/merchant/settings", label: t.navSettings, icon: "⚙️" },
   ];
 
   return (
     <aside style={{ width: 220, background: "var(--color-header-bg, #1c3830)", display: "flex", flexDirection: "column", flexShrink: 0 }}>
       <div style={{ padding: "24px 20px", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
         <div style={{ fontSize: 16, fontWeight: 700, color: "#fff" }}>IERepair</div>
-        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginTop: 2 }}>商家管理中心</div>
+        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginTop: 2 }}>{t.sidebarTitle}</div>
       </div>
 
       <nav style={{ flex: 1, padding: "16px 12px" }}>
@@ -65,10 +70,16 @@ export default function MerchantSidebar({ session }: { session: Session }) {
           {session.email}
         </div>
         <button
+          onClick={() => setLang(lang === "zh" ? "en" : "zh")}
+          style={{ width: "100%", padding: "6px 12px", background: "transparent", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 6, color: "rgba(255,255,255,0.6)", fontSize: 12, cursor: "pointer", marginBottom: 8 }}
+        >
+          {t.langToggle}
+        </button>
+        <button
           onClick={handleLogout}
           style={{ width: "100%", padding: "8px 12px", background: "rgba(255,255,255,0.08)", border: "none", borderRadius: 6, color: "rgba(255,255,255,0.7)", fontSize: 13, cursor: "pointer" }}
         >
-          退出登录
+          {t.logout}
         </button>
       </div>
     </aside>

@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLang } from "@/lib/i18n/useLang";
+import { useConsumerT } from "@/lib/i18n/consumer";
 
 interface SearchBarProps {
   initialQ?: string;
@@ -13,6 +15,8 @@ export default function SearchBar({ initialQ = "", initialEircode = "", compact 
   const [q, setQ] = useState(initialQ);
   const [eircode, setEircode] = useState(initialEircode);
   const router = useRouter();
+  const [lang] = useLang("en");
+  const t = useConsumerT(lang);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -27,20 +31,20 @@ export default function SearchBar({ initialQ = "", initialEircode = "", compact 
       <form onSubmit={handleSubmit} style={compact ? styles.formCompact : styles.form}>
         <input
           type="text"
-          placeholder="Screen repair, battery..."
+          placeholder={t.searchKeywordPlaceholder}
           value={q}
           onChange={(e) => setQ(e.target.value)}
           style={compact ? styles.inputCompact : styles.input}
         />
         <input
           type="text"
-          placeholder="Eircode (e.g. D01 W2X2)"
+          placeholder={t.searchEircodePlaceholder}
           value={eircode}
           onChange={(e) => setEircode(e.target.value)}
           style={compact ? styles.inputCompact : styles.input}
         />
         <button type="submit" style={compact ? styles.btnCompact : styles.btn}>
-          Search
+          {t.searchBtn}
         </button>
       </form>
       <style jsx>{`

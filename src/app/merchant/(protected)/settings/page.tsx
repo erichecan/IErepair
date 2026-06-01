@@ -10,7 +10,7 @@ export default async function MerchantSettingsPage() {
   const [merchant, hours] = await Promise.all([
     prisma.merchant.findUnique({
       where: { id: session.merchantId },
-      select: { id: true, name: true, email: true, phone: true, address: true, eircode: true, description: true, lat: true, lng: true },
+      select: { id: true, name: true, email: true, phone: true, address: true, eircode: true, description: true, images: true, lat: true, lng: true },
     }),
     prisma.merchantHours.findMany({
       where: { merchantId: session.merchantId },
@@ -20,5 +20,5 @@ export default async function MerchantSettingsPage() {
 
   if (!merchant) redirect("/merchant/login");
 
-  return <MerchantSettingsClient merchant={merchant} hours={hours} />;
+  return <MerchantSettingsClient merchant={merchant} hours={hours} initialImages={merchant.images} />;
 }

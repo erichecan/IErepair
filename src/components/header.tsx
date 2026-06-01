@@ -2,9 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useLang } from "@/lib/i18n/useLang";
+import { useConsumerT } from "@/lib/i18n/consumer";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [lang, setLang] = useLang("en");
+  const t = useConsumerT(lang);
 
   return (
     <header
@@ -77,10 +81,10 @@ export default function Header() {
           className="nav-desktop"
         >
           {[
-            { label: "Repair Services", href: "/services" },
-            { label: "Accessories", href: "/accessories" },
-            { label: "Find a Store", href: "/stores" },
-            { label: "Membership", href: "/membership" },
+            { label: t.navRepair, href: "/services" },
+            { label: t.navAccessories, href: "/accessories" },
+            { label: t.navFindStore, href: "/stores" },
+            { label: t.navMembership, href: "/membership" },
           ].map((item) => (
             <Link
               key={item.href}
@@ -209,6 +213,34 @@ export default function Header() {
             </span>
           </Link>
 
+          {/* Lang toggle */}
+          <button
+            onClick={() => setLang(lang === "en" ? "zh" : "en")}
+            style={{
+              background: "none",
+              border: "1px solid #e0e0e0",
+              borderRadius: "60px",
+              padding: "5px 12px",
+              fontSize: "12px",
+              fontWeight: 600,
+              color: "#555",
+              cursor: "pointer",
+              fontFamily: "inherit",
+              marginLeft: "4px",
+              transition: "border-color 0.15s, color 0.15s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = "#146345";
+              e.currentTarget.style.color = "#146345";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = "#e0e0e0";
+              e.currentTarget.style.color = "#555";
+            }}
+          >
+            {t.langToggle}
+          </button>
+
           {/* Book Repair CTA */}
           <Link
             href="/book"
@@ -226,7 +258,7 @@ export default function Header() {
             }}
             className="book-btn"
           >
-            Book Repair
+            {t.navBookRepair}
           </Link>
         </div>
       </div>

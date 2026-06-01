@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useLang } from "@/lib/i18n/useLang";
+import { useMerchantT } from "@/lib/i18n/merchant";
 
 interface RepairBooking {
   id: number;
@@ -43,11 +45,6 @@ function maskPhone(phone: string) {
   return phone.slice(0, 3) + "****" + phone.slice(-4);
 }
 
-function fmtDate(iso: string) {
-  const d = new Date(iso);
-  return `${d.getMonth() + 1}月${d.getDate()}日 ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
-}
-
 function todayRange(): [string, string] {
   const now = new Date();
   const from = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -67,13 +64,6 @@ function weekRange(): [string, string] {
   return [mon.toISOString(), sun.toISOString()];
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  pending_confirm: "待确认",
-  confirmed: "已确认",
-  completed: "已完成",
-  cancelled: "已取消",
-};
-
 const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
   pending_confirm: { bg: "#fff8e1", color: "#f59e0b" },
   confirmed: { bg: "#e8f0fe", color: "#1a73e8" },
@@ -84,6 +74,16 @@ const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
 const TABS: StatusTab[] = ["pending_confirm", "confirmed", "completed", "cancelled"];
 
 export default function MerchantBookingsPage() {
+  const [lang] = useLang("zh");
+  const t = useMerchantT(lang);
+
+  const statusLabels: Record<string, string> = {
+    pending_confirm: t.statusPending,
+    confirmed: t.statusConfirmed,
+    completed: t.statusCompleted,
+    cancelled: t.statusCancelled,
+  };
+
   const [activeTab, setActiveTab] = useState<StatusTab>("pending_confirm");
   const [bookings, setBookings] = useState<RepairBooking[]>([]);
   const [total, setTotal] = useState(0);
@@ -137,13 +137,13 @@ export default function MerchantBookingsPage() {
     const { type, bookingId, reason, actualPrice } = modal;
 
     if (type === "reject" && !reason.trim()) {
-      setModal(m => m ? { ...m, error: "请填写拒绝原因" } : null);
+      setModal(m => m ? { ...m, error: t.errorRejectRequired } : null);
       return;
     }
     if (type === "complete") {
       const price = parseFloat(actualPrice);
       if (isNaN(price) || price < 0) {
-        setModal(m => m ? { ...m, error: "请输入有效金额" } : null);
+        setModal(m => m ? { ...m, error: t.errorInvalidAmount } : null);
         return;
       }
     }
@@ -163,7 +163,7 @@ export default function MerchantBookingsPage() {
       fetchBookings();
     } else {
       const d = await res.json();
-      setModal(m => m ? { ...m, saving: false, error: d.error || "操作失败" } : null);
+      setModal(m => m ? { ...m, saving: false, error: d.error || t.errorActionFailed } : null);
     }
   }
 
@@ -181,8 +181,8 @@ export default function MerchantBookingsPage() {
   return (
     <div>
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: "#1d1d1f", margin: "0 0 4px" }}>预约管理</h1>
-        <p style={{ fontSize: 14, color: "#6e6e73" }}>管理用户预约和维修订单</p>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: "#1d1d1f", margin: "0 0 4px" }}>{t.bookingsPageTitle}</h1>
+        <p style={{ fontSize: 14, color: "#6e6e73" }}>{t.bookingsDesc}</p>
       </div>
 
       {/* Status tabs */}
@@ -205,7 +205,7 @@ export default function MerchantBookingsPage() {
               gap: 6,
             }}
           >
-            {STATUS_LABELS[tab]}
+            {statusLabels[tab]}
             {tab === "pending_confirm" && pendingCount > 0 && (
               <span style={{ background: activeTab === tab ? "rgba(255,255,255,0.3)" : "#c0392b", color: "#fff", borderRadius: 10, fontSize: 11, padding: "1px 6px", fontWeight: 700 }}>
                 {pendingCount}
@@ -232,7 +232,7 @@ export default function MerchantBookingsPage() {
               fontWeight: dateRange === r ? 600 : 400,
             }}
           >
-            {r === "today" ? "今天" : r === "week" ? "本周" : "自定义"}
+            {r === "today" ? t.filterToday : r === "week" ? t.filterWeek : t.filterCustom}
           </button>
         ))}
         {dateRange === "custom" && (
@@ -252,17 +252,17 @@ export default function MerchantBookingsPage() {
             />
           </>
         )}
-        <span style={{ fontSize: 13, color: "#aeaeb2", marginLeft: 4 }}>共 {total} 条</span>
+        <span style={{ fontSize: 13, color: "#aeaeb2", marginLeft: 4 }}>{t.totalCount(total)}</span>
       </div>
 
       {/* Booking list */}
       {loading ? (
-        <div style={{ color: "#6e6e73", fontSize: 14, padding: "40px", textAlign: "center" }}>加载中...</div>
+        <div style={{ color: "#6e6e73", fontSize: 14, padding: "40px", textAlign: "center" }}>{t.loadingText}</div>
       ) : bookings.length === 0 ? (
         <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e5ea", padding: "60px", textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 16 }}>📋</div>
-          <div style={{ fontSize: 16, fontWeight: 600, color: "#1d1d1f", marginBottom: 6 }}>暂无{STATUS_LABELS[activeTab]}预约</div>
-          <div style={{ fontSize: 14, color: "#6e6e73" }}>此时间段内没有符合条件的预约记录</div>
+          <div style={{ fontSize: 16, fontWeight: 600, color: "#1d1d1f", marginBottom: 6 }}>{t.noBookingsInTab(statusLabels[activeTab])}</div>
+          <div style={{ fontSize: 14, color: "#6e6e73" }}>{t.noBookingsDesc}</div>
         </div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -284,7 +284,7 @@ export default function MerchantBookingsPage() {
                     <div style={{ fontSize: 13, fontWeight: 700, color: "#1d1d1f", fontFamily: "monospace" }}>{b.orderNumber}</div>
                     <div style={{ marginTop: 4 }}>
                       <span style={{ padding: "2px 8px", borderRadius: 10, fontSize: 11, fontWeight: 600, background: statusStyle.bg, color: statusStyle.color }}>
-                        {STATUS_LABELS[b.status]}
+                        {statusLabels[b.status]}
                       </span>
                     </div>
                   </div>
@@ -303,14 +303,14 @@ export default function MerchantBookingsPage() {
 
                   {/* Time */}
                   <div style={{ flex: "0 0 auto", minWidth: 110, textAlign: "right" }}>
-                    <div style={{ fontSize: 13, color: "#1d1d1f" }}>{fmtDate(b.appointmentTime)}</div>
-                    <div style={{ fontSize: 12, color: "#6e6e73", marginTop: 2 }}>预约时间</div>
+                    <div style={{ fontSize: 13, color: "#1d1d1f" }}>{t.fmtDate(new Date(b.appointmentTime))}</div>
+                    <div style={{ fontSize: 12, color: "#6e6e73", marginTop: 2 }}>{t.colApptTime}</div>
                   </div>
 
                   {/* Price */}
                   <div style={{ flex: "0 0 auto", minWidth: 80, textAlign: "right" }}>
                     <div style={{ fontSize: 16, fontWeight: 700, color: "#146345" }}>€{Number(b.quotedPrice).toFixed(2)}</div>
-                    <div style={{ fontSize: 11, color: "#aeaeb2", marginTop: 2 }}>报价</div>
+                    <div style={{ fontSize: 11, color: "#aeaeb2", marginTop: 2 }}>{t.colQuoted}</div>
                   </div>
 
                   {/* Actions */}
@@ -321,13 +321,13 @@ export default function MerchantBookingsPage() {
                           onClick={() => acceptBooking(b.id)}
                           style={{ padding: "6px 14px", background: "#146345", border: "none", borderRadius: 6, color: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer" }}
                         >
-                          接受
+                          {t.actionAccept}
                         </button>
                         <button
                           onClick={() => setModal({ type: "reject", bookingId: b.id, reason: "", actualPrice: "", error: "", saving: false })}
                           style={{ padding: "6px 14px", background: "#fff", border: "1px solid #ffccc7", borderRadius: 6, color: "#c0392b", fontSize: 12, fontWeight: 600, cursor: "pointer" }}
                         >
-                          拒绝
+                          {t.actionReject}
                         </button>
                       </>
                     )}
@@ -337,13 +337,13 @@ export default function MerchantBookingsPage() {
                           onClick={() => setModal({ type: "complete", bookingId: b.id, reason: "", actualPrice: String(Number(b.quotedPrice)), error: "", saving: false })}
                           style={{ padding: "6px 14px", background: "#1a73e8", border: "none", borderRadius: 6, color: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer" }}
                         >
-                          完成维修
+                          {t.actionComplete}
                         </button>
                         <button
                           onClick={() => setModal({ type: "reject", bookingId: b.id, reason: "", actualPrice: "", error: "", saving: false })}
                           style={{ padding: "6px 14px", background: "#fff", border: "1px solid #d1d1d6", borderRadius: 6, color: "#6e6e73", fontSize: 12, cursor: "pointer" }}
                         >
-                          取消
+                          {t.actionCancel}
                         </button>
                       </>
                     )}
@@ -356,19 +356,19 @@ export default function MerchantBookingsPage() {
                 {/* Expanded detail */}
                 {expanded && (
                   <div style={{ borderTop: "1px solid #f0f0f5", padding: "16px 20px", background: "#fafafa", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 24px" }}>
-                    <Detail label="订单号" value={b.orderNumber} mono />
-                    <Detail label="品类" value={service.deviceModel.brand.category.name} />
-                    <Detail label="用户姓名" value={b.userName} />
-                    <Detail label="设备型号" value={deviceLabel} />
-                    <Detail label="联系电话" value={b.userPhone} />
-                    <Detail label="维修项目" value={service.repairType.name} />
-                    <Detail label="预约时间" value={fmtDate(b.appointmentTime)} />
-                    <Detail label="报价金额" value={`€${Number(b.quotedPrice).toFixed(2)}`} />
-                    {b.actualPrice != null && <Detail label="实收金额" value={`€${Number(b.actualPrice).toFixed(2)}`} />}
-                    {b.userEmail && <Detail label="邮箱" value={b.userEmail} />}
-                    {b.notes && <div style={{ gridColumn: "1 / -1" }}><Detail label="备注" value={b.notes} /></div>}
-                    {b.cancelReason && <div style={{ gridColumn: "1 / -1" }}><Detail label="取消原因" value={b.cancelReason} /></div>}
-                    <Detail label="创建时间" value={fmtDate(b.createdAt)} />
+                    <Detail label={t.detailOrderNo} value={b.orderNumber} mono />
+                    <Detail label={t.detailCategory} value={service.deviceModel.brand.category.name} />
+                    <Detail label={t.detailCustomer} value={b.userName} />
+                    <Detail label={t.detailDevice} value={deviceLabel} />
+                    <Detail label={t.detailPhone} value={b.userPhone} />
+                    <Detail label={t.detailRepairType} value={service.repairType.name} />
+                    <Detail label={t.detailApptTime} value={t.fmtDate(new Date(b.appointmentTime))} />
+                    <Detail label={t.detailQuoted} value={`€${Number(b.quotedPrice).toFixed(2)}`} />
+                    {b.actualPrice != null && <Detail label={t.detailActual} value={`€${Number(b.actualPrice).toFixed(2)}`} />}
+                    {b.userEmail && <Detail label={t.detailEmail} value={b.userEmail} />}
+                    {b.notes && <div style={{ gridColumn: "1 / -1" }}><Detail label={t.detailNotes} value={b.notes} /></div>}
+                    {b.cancelReason && <div style={{ gridColumn: "1 / -1" }}><Detail label={t.detailCancelReason} value={b.cancelReason} /></div>}
+                    <Detail label={t.detailCreated} value={t.fmtDate(new Date(b.createdAt))} />
                   </div>
                 )}
               </div>
@@ -380,9 +380,9 @@ export default function MerchantBookingsPage() {
       {/* Pagination */}
       {pageCount > 1 && (
         <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 20 }}>
-          <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} style={{ padding: "6px 14px", border: "1px solid #d1d1d6", borderRadius: 6, background: "#fff", fontSize: 13, cursor: page === 0 ? "not-allowed" : "pointer", opacity: page === 0 ? 0.4 : 1 }}>上一页</button>
+          <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} style={{ padding: "6px 14px", border: "1px solid #d1d1d6", borderRadius: 6, background: "#fff", fontSize: 13, cursor: page === 0 ? "not-allowed" : "pointer", opacity: page === 0 ? 0.4 : 1 }}>{t.prevPage}</button>
           <span style={{ padding: "6px 14px", fontSize: 13, color: "#6e6e73" }}>{page + 1} / {pageCount}</span>
-          <button onClick={() => setPage(p => Math.min(pageCount - 1, p + 1))} disabled={page >= pageCount - 1} style={{ padding: "6px 14px", border: "1px solid #d1d1d6", borderRadius: 6, background: "#fff", fontSize: 13, cursor: page >= pageCount - 1 ? "not-allowed" : "pointer", opacity: page >= pageCount - 1 ? 0.4 : 1 }}>下一页</button>
+          <button onClick={() => setPage(p => Math.min(pageCount - 1, p + 1))} disabled={page >= pageCount - 1} style={{ padding: "6px 14px", border: "1px solid #d1d1d6", borderRadius: 6, background: "#fff", fontSize: 13, cursor: page >= pageCount - 1 ? "not-allowed" : "pointer", opacity: page >= pageCount - 1 ? 0.4 : 1 }}>{t.nextPage}</button>
         </div>
       )}
 
@@ -392,21 +392,21 @@ export default function MerchantBookingsPage() {
           <div style={{ background: "#fff", borderRadius: 14, padding: "28px 32px", width: 380, boxShadow: "0 16px 48px rgba(0,0,0,0.16)" }}>
             {modal.type === "reject" ? (
               <>
-                <h3 style={{ fontSize: 17, fontWeight: 700, color: "#1d1d1f", margin: "0 0 6px" }}>拒绝预约</h3>
-                <p style={{ fontSize: 14, color: "#6e6e73", marginBottom: 16 }}>请填写拒绝原因，将通知给用户。</p>
+                <h3 style={{ fontSize: 17, fontWeight: 700, color: "#1d1d1f", margin: "0 0 6px" }}>{t.rejectTitle}</h3>
+                <p style={{ fontSize: 14, color: "#6e6e73", marginBottom: 16 }}>{t.rejectDesc}</p>
                 <textarea
                   value={modal.reason}
                   onChange={e => setModal(m => m ? { ...m, reason: e.target.value, error: "" } : null)}
                   rows={4}
-                  placeholder="例如：该时间段已满档，建议改约..."
+                  placeholder={t.rejectPlaceholder}
                   autoFocus
                   style={{ width: "100%", padding: "10px 12px", border: `1px solid ${modal.error ? "#ffccc7" : "#d1d1d6"}`, borderRadius: 8, fontSize: 14, outline: "none", boxSizing: "border-box", resize: "vertical", fontFamily: "inherit" }}
                 />
               </>
             ) : (
               <>
-                <h3 style={{ fontSize: 17, fontWeight: 700, color: "#1d1d1f", margin: "0 0 6px" }}>完成维修</h3>
-                <p style={{ fontSize: 14, color: "#6e6e73", marginBottom: 16 }}>请输入实际收取的维修费用（€）。</p>
+                <h3 style={{ fontSize: 17, fontWeight: 700, color: "#1d1d1f", margin: "0 0 6px" }}>{t.completeTitle}</h3>
+                <p style={{ fontSize: 14, color: "#6e6e73", marginBottom: 16 }}>{t.completeDesc}</p>
                 <input
                   type="number"
                   value={modal.actualPrice}
@@ -424,7 +424,7 @@ export default function MerchantBookingsPage() {
                 onClick={() => { if (!modal.saving) setModal(null); }}
                 style={{ flex: 1, padding: "10px", border: "1px solid #d1d1d6", borderRadius: 8, background: "#fff", fontSize: 14, cursor: "pointer" }}
               >
-                取消
+                {modal.type === "reject" ? t.rejectCancel : t.completeCancel}
               </button>
               <button
                 onClick={doAction}
@@ -437,7 +437,7 @@ export default function MerchantBookingsPage() {
                   opacity: modal.saving ? 0.7 : 1,
                 }}
               >
-                {modal.saving ? "处理中..." : modal.type === "reject" ? "确认拒绝" : "确认完成"}
+                {modal.saving ? t.processingText : modal.type === "reject" ? t.rejectConfirm : t.completeConfirm}
               </button>
             </div>
           </div>

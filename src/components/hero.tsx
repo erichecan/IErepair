@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useLang } from "@/lib/i18n/useLang";
+import { useConsumerT } from "@/lib/i18n/consumer";
 
 export default function Hero() {
   const [keyword, setKeyword] = useState("");
   const [eircode, setEircode] = useState("");
+  const [lang] = useLang("en");
+  const t = useConsumerT(lang);
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -50,7 +54,7 @@ export default function Hero() {
                 }}
               />
               <span style={{ fontSize: "13px", fontWeight: 600, color: "#146345" }}>
-                Trusted by 10,000+ customers across Ireland
+                {t.heroBadge}
               </span>
             </div>
 
@@ -64,10 +68,10 @@ export default function Hero() {
                 color: "#1d1d1f",
               }}
             >
-              Fast, Reliable{" "}
-              <span style={{ color: "#1a7a4a" }}>Phone Repair</span>
+              {t.heroHeading1}{" "}
+              <span style={{ color: "#1a7a4a" }}>{t.heroHeading2}</span>
               <br />
-              Near You in Ireland
+              {t.heroHeading3}
             </h1>
             <p
               style={{
@@ -78,8 +82,7 @@ export default function Hero() {
                 maxWidth: "480px",
               }}
             >
-              Find trusted repair shops and accessories across Ireland. Enter your
-              Eircode to see prices and availability near you.
+              {t.heroSub}
             </p>
 
             {/* Search form */}
@@ -121,7 +124,7 @@ export default function Hero() {
                 </svg>
                 <input
                   type="text"
-                  placeholder="e.g. Screen repair, iPhone battery…"
+                  placeholder={t.heroKeywordPlaceholder}
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
                   style={{
@@ -159,7 +162,7 @@ export default function Hero() {
                 </svg>
                 <input
                   type="text"
-                  placeholder="Eircode"
+                  placeholder={t.heroEircodePlaceholder}
                   value={eircode}
                   onChange={(e) => setEircode(e.target.value)}
                   style={{
@@ -193,29 +196,29 @@ export default function Hero() {
                 onMouseEnter={(e) => (e.currentTarget.style.background = "#146345")}
                 onMouseLeave={(e) => (e.currentTarget.style.background = "#1d1d1f")}
               >
-                Find Repair
+                {t.heroSearchBtn}
               </button>
             </form>
 
             <p style={{ marginTop: "14px", fontSize: "13px", color: "#aaa" }}>
-              Popular:{" "}
-              {["Screen Replacement", "Battery Replacement", "Charging Port"].map(
-                (tag, i) => (
-                  <span key={tag}>
-                    <a
-                      href={`/search?q=${encodeURIComponent(tag)}`}
-                      style={{
-                        color: "#555",
-                        textDecoration: "underline",
-                        textDecorationColor: "#ddd",
-                      }}
-                    >
-                      {tag}
-                    </a>
-                    {i < 2 && <span style={{ margin: "0 6px", opacity: 0.4 }}>·</span>}
-                  </span>
-                )
-              )}
+              {t.heroPopular}{" "}
+              {t.heroTags.map((tag, i) => (
+                <span key={tag}>
+                  <a
+                    href={`/search?q=${encodeURIComponent(tag)}`}
+                    style={{
+                      color: "#555",
+                      textDecoration: "underline",
+                      textDecorationColor: "#ddd",
+                    }}
+                  >
+                    {tag}
+                  </a>
+                  {i < t.heroTags.length - 1 && (
+                    <span style={{ margin: "0 6px", opacity: 0.4 }}>·</span>
+                  )}
+                </span>
+              ))}
             </p>
           </div>
 

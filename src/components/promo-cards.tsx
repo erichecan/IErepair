@@ -1,6 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { useLang } from "@/lib/i18n/useLang";
+import { useConsumerT } from "@/lib/i18n/consumer";
 
 export default function PromoCards() {
+  const [lang] = useLang("en");
+  const t = useConsumerT(lang);
+
   return (
     <section style={{ padding: "0 0 0" }}>
       <div className="wrapper" style={{ paddingTop: "0", paddingBottom: "0" }}>
@@ -15,16 +22,16 @@ export default function PromoCards() {
             <div className="promo-overlay" />
             <div className="promo-content">
               <div style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "2px", textTransform: "uppercase", color: "#17db66", marginBottom: "10px" }}>
-                Enterprise
+                {t.promoEnterpriseTag}
               </div>
               <h3 style={{ fontSize: "clamp(22px, 2.5vw, 30px)", fontWeight: 800, lineHeight: 1.2, marginBottom: "12px", letterSpacing: "-0.5px" }}>
-                Business Repairs
+                {t.promoEnterpriseTitle}
               </h3>
               <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.8)", lineHeight: 1.6, marginBottom: "24px", maxWidth: "320px" }}>
-                Bulk device repair contracts for schools, offices & companies. Priority service with monthly invoicing.
+                {t.promoEnterpriseDesc}
               </p>
               <div className="promo-cta">
-                Learn More
+                {t.promoEnterpriseBtn}
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="m9 18 6-6-6-6" />
                 </svg>
@@ -42,16 +49,16 @@ export default function PromoCards() {
             <div className="promo-overlay" />
             <div className="promo-content">
               <div style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "2px", textTransform: "uppercase", color: "#17db66", marginBottom: "10px" }}>
-                Members Only
+                {t.promoMemberTag}
               </div>
               <h3 style={{ fontSize: "clamp(22px, 2.5vw, 30px)", fontWeight: 800, lineHeight: 1.2, marginBottom: "12px", letterSpacing: "-0.5px" }}>
-                Free Screen Repair
+                {t.promoMemberTitle}
               </h3>
               <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.8)", lineHeight: 1.6, marginBottom: "24px", maxWidth: "320px" }}>
-                IERepair members get one free screen replacement per year. Join today and protect your device.
+                {t.promoMemberDesc}
               </p>
               <div className="promo-cta">
-                Join Membership
+                {t.promoMemberBtn}
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="m9 18 6-6-6-6" />
                 </svg>

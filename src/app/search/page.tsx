@@ -5,6 +5,8 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import SearchBar from "@/components/consumer/SearchBar";
 import ServiceCard from "@/components/consumer/ServiceCard";
+import { useLang } from "@/lib/i18n/useLang";
+import { useConsumerT } from "@/lib/i18n/consumer";
 
 interface SearchResult {
   merchantId: number;
@@ -31,6 +33,9 @@ export default function SearchPage() {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
+
+  const [lang] = useLang("en");
+  const t = useConsumerT(lang);
 
   const fetchResults = useCallback(async () => {
     setLoading(true);
@@ -69,12 +74,12 @@ export default function SearchPage() {
       <div className="wrapper" style={styles.content}>
         <div style={styles.meta}>
           {loading ? (
-            <span>Searching...</span>
+            <span>{t.searching}</span>
           ) : (
             <span>
               {total > 0
-                ? `${total} service${total !== 1 ? "s" : ""} found${q ? ` for "${q}"` : ""}${eircode ? ` near ${eircode}` : ""}`
-                : `No results${q ? ` for "${q}"` : ""}${eircode ? ` near ${eircode}` : ""}`}
+                ? `${t.servicesFound(total)}${q ? ` for "${q}"` : ""}${eircode ? ` near ${eircode}` : ""}`
+                : `${t.noRepairsTitle}${q ? ` for "${q}"` : ""}${eircode ? ` near ${eircode}` : ""}`}
             </span>
           )}
         </div>
@@ -88,11 +93,11 @@ export default function SearchPage() {
         ) : results.length === 0 ? (
           <div style={styles.empty}>
             <div style={styles.emptyIcon}>🔍</div>
-            <div style={styles.emptyTitle}>No repairs found nearby</div>
+            <div style={styles.emptyTitle}>{t.noRepairsTitle}</div>
             <div style={styles.emptyText}>
-              Try a different search term or a nearby Eircode
+              {t.noRepairsDesc}
             </div>
-            <Link href="/" style={styles.homeLink}>Back to Home</Link>
+            <Link href="/" style={styles.homeLink}>{t.backToHome}</Link>
           </div>
         ) : (
           <div style={styles.grid}>

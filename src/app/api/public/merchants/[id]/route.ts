@@ -12,24 +12,37 @@ export async function GET(
   }
 
   try {
-    const merchant = await prisma.merchant.findUnique({
-      where: { id: merchantId, isActive: true },
-      include: {
-        merchantHours: { orderBy: { dayOfWeek: "asc" } },
-        merchantServices: {
-          where: { isActive: true },
-          include: {
-            repairService: {
-              include: {
-                repairType: true,
-                deviceModel: { include: { brand: { include: { category: true } } } },
+    const [merchant, reviewAgg, recentReviews] = await Promise.all([
+      prisma.merchant.findUnique({
+        where: { id: merchantId, isActive: true },
+        include: {
+          merchantHours: { orderBy: { dayOfWeek: "asc" } },
+          merchantServices: {
+            where: { isActive: true },
+            include: {
+              repairService: {
+                include: {
+                  repairType: true,
+                  deviceModel: { include: { brand: { include: { category: true } } } },
+                },
               },
             },
+            orderBy: { price: "asc" },
           },
-          orderBy: { price: "asc" },
         },
-      },
-    });
+      }),
+      prisma.merchantReview.aggregate({
+        where: { merchantId, isVisible: true },
+        _avg: { rating: true },
+        _count: { rating: true },
+      }),
+      prisma.merchantReview.findMany({
+        where: { merchantId, isVisible: true },
+        orderBy: { createdAt: "desc" },
+        take: 10,
+        select: { id: true, userName: true, rating: true, comment: true, createdAt: true },
+      }),
+    ]);
 
     if (!merchant) {
       return Response.json({ error: "Merchant not found" }, { status: 404 });
@@ -42,8 +55,12 @@ export async function GET(
       eircode: merchant.eircode,
       phone: merchant.phone,
       description: merchant.description,
+      images: merchant.images,
       lat: merchant.lat,
       lng: merchant.lng,
+      avgRating: reviewAgg._avg.rating ? Number(reviewAgg._avg.rating.toFixed(1)) : null,
+      reviewCount: reviewAgg._count.rating,
+      reviews: recentReviews,
       hours: merchant.merchantHours,
       services: merchant.merchantServices.map((ms) => ({
         id: ms.id,

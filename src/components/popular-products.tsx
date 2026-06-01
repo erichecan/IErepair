@@ -1,4 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { useLang } from "@/lib/i18n/useLang";
+import { useConsumerT } from "@/lib/i18n/consumer";
+import type { ConsumerT } from "@/lib/i18n/consumer";
 
 const products = [
   {
@@ -91,7 +96,7 @@ const products = [
   },
 ];
 
-function ProductCard({ product }: { product: (typeof products)[0] }) {
+function ProductCard({ product, t }: { product: (typeof products)[0]; t: ConsumerT }) {
   return (
     <Link href={`/products/${product.id}`} className="product-card">
       <div
@@ -177,7 +182,7 @@ function ProductCard({ product }: { product: (typeof products)[0] }) {
           }}
         >
           <div>
-            <span style={{ fontSize: "13px", color: "#888" }}>From </span>
+            <span style={{ fontSize: "13px", color: "#888" }}>{t.popularFrom} </span>
             <span style={{ fontSize: "16px", fontWeight: 800, color: "#1d1d1f" }}>
               €{product.priceFrom}
             </span>
@@ -204,7 +209,7 @@ function ProductCard({ product }: { product: (typeof products)[0] }) {
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
               <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
-            {product.storeCount} stores
+            {product.storeCount}{t.popularStores}
           </span>
         </div>
       </div>
@@ -213,6 +218,9 @@ function ProductCard({ product }: { product: (typeof products)[0] }) {
 }
 
 export default function PopularProducts() {
+  const [lang] = useLang("en");
+  const t = useConsumerT(lang);
+
   return (
     <section style={{ padding: "64px 0" }}>
       <div className="wrapper">
@@ -234,14 +242,14 @@ export default function PopularProducts() {
                 marginBottom: "6px",
               }}
             >
-              Popular Services & Products
+              {t.popularTitle}
             </h2>
             <p style={{ color: "#888", fontSize: "14px" }}>
-              Most booked this week across Ireland
+              {t.popularSubtitle}
             </p>
           </div>
           <Link href="/search" className="view-all-link">
-            View all
+            {t.popularViewAll}
             <svg
               width="16"
               height="16"
@@ -259,7 +267,7 @@ export default function PopularProducts() {
 
         <div className="products-grid">
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} t={t} />
           ))}
         </div>
       </div>

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useLang } from "@/lib/i18n/useLang";
+import { useMerchantT } from "@/lib/i18n/merchant";
 
 interface DeviceCategory { id: number; name: string; }
 interface DeviceBrand { id: number; name: string; categoryId: number; }
@@ -45,6 +47,9 @@ interface AddModal {
 }
 
 export default function MerchantServicesPage() {
+  const [lang] = useLang("zh");
+  const t = useMerchantT(lang);
+
   const [activeTab, setActiveTab] = useState<number | null>(null);
   const [categories, setCategories] = useState<DeviceCategory[]>([]);
   const [myServices, setMyServices] = useState<MyService[]>([]);
@@ -68,7 +73,6 @@ export default function MerchantServicesPage() {
     }).finally(() => setMyLoading(false));
   }, []);
 
-  // Modal: load brands when cat changes
   useEffect(() => {
     if (!modal.selCat) return;
     fetch(`/api/merchant/catalog/device-brands?categoryId=${modal.selCat}`)
@@ -76,7 +80,6 @@ export default function MerchantServicesPage() {
       .then(d => setModal(m => ({ ...m, brands: d.brands ?? [], selBrand: null, selModel: null, models: [], services: [] })));
   }, [modal.selCat]);
 
-  // Modal: load models when brand changes
   useEffect(() => {
     if (!modal.selBrand) return;
     fetch(`/api/merchant/catalog/device-models?brandId=${modal.selBrand}`)
@@ -84,7 +87,6 @@ export default function MerchantServicesPage() {
       .then(d => setModal(m => ({ ...m, models: d.models ?? [], selModel: null, services: [] })));
   }, [modal.selBrand]);
 
-  // Modal: load services when model/brand/cat changes
   const loadModalServices = useCallback(() => {
     if (!modal.selCat && !modal.selBrand && !modal.selModel) return;
     const params = new URLSearchParams();
@@ -103,7 +105,7 @@ export default function MerchantServicesPage() {
 
   async function addServiceFromModal(serviceId: number) {
     const price = parseFloat(modal.prices[serviceId] ?? "");
-    if (isNaN(price) || price <= 0) { alert("请输入有效价格"); return; }
+    if (isNaN(price) || price <= 0) { alert(t.errorInvalidPrice); return; }
     setModal(m => ({ ...m, addingIds: new Set([...m.addingIds, serviceId]) }));
     try {
       const res = await fetch("/api/merchant/services", {
@@ -139,7 +141,7 @@ export default function MerchantServicesPage() {
   }
 
   async function removeService(id: number) {
-    if (!confirm("确认移除该维修服务？")) return;
+    if (!confirm(t.serviceDeleteConfirm)) return;
     const res = await fetch(`/api/merchant/services/${id}`, { method: "DELETE" });
     if (res.ok) setMyServices(prev => prev.filter(s => s.id !== id));
   }
@@ -148,29 +150,30 @@ export default function MerchantServicesPage() {
     ? myServices.filter(s => s.repairService.deviceModel.brand.category.id === activeTab)
     : myServices;
 
+  const tableHeaders = [t.serviceTableDevice, t.serviceTableRepairType, t.serviceTableRefPrice, t.serviceTableMyPrice, t.serviceTableStatus, t.serviceTableActions];
+
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: "#1d1d1f", margin: "0 0 4px" }}>维修服务</h1>
-          <p style={{ fontSize: 14, color: "#6e6e73" }}>管理门店提供的维修服务和定价</p>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: "#1d1d1f", margin: "0 0 4px" }}>{t.servicesPageTitle}</h1>
+          <p style={{ fontSize: 14, color: "#6e6e73" }}>{t.servicesPageDesc}</p>
         </div>
         <button
           onClick={() => setModal(m => ({ ...m, open: true, selCat: null, selBrand: null, selModel: null, brands: [], models: [], services: [], prices: {} }))}
           style={{ padding: "10px 20px", background: "#146345", border: "none", borderRadius: 8, color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer" }}
         >
-          + 添加服务
+          {t.servicesAddBtn}
         </button>
       </div>
 
-      {/* Category tabs */}
       {categories.length > 0 && (
         <div style={{ display: "flex", gap: 4, background: "#f5f5f7", padding: 4, borderRadius: 24, width: "fit-content", marginBottom: 20 }}>
           <button
             onClick={() => setActiveTab(null)}
             style={{ padding: "8px 20px", borderRadius: 20, fontSize: 14, fontWeight: 500, cursor: "pointer", border: "none", background: activeTab === null ? "#146345" : "transparent", color: activeTab === null ? "#fff" : "#6e6e73" }}
           >
-            全部
+            {t.serviceAllTab}
           </button>
           {categories.map(c => (
             <button
@@ -189,29 +192,29 @@ export default function MerchantServicesPage() {
       )}
 
       {myLoading ? (
-        <div style={{ color: "#6e6e73", fontSize: 14 }}>加载中...</div>
+        <div style={{ color: "#6e6e73", fontSize: 14 }}>{t.loadingText}</div>
       ) : myServices.length === 0 ? (
         <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e5ea", padding: "60px", textAlign: "center" }}>
           <div style={{ fontSize: 40, marginBottom: 16 }}>🔧</div>
-          <div style={{ fontSize: 18, fontWeight: 600, color: "#1d1d1f", marginBottom: 8 }}>还没有添加维修服务</div>
-          <div style={{ fontSize: 14, color: "#6e6e73", marginBottom: 24 }}>点击右上角"添加服务"，选择您能提供的维修项目</div>
+          <div style={{ fontSize: 18, fontWeight: 600, color: "#1d1d1f", marginBottom: 8 }}>{t.servicesEmptyTitle}</div>
+          <div style={{ fontSize: 14, color: "#6e6e73", marginBottom: 24 }}>{t.servicesEmptyDesc}</div>
           <button
             onClick={() => setModal(m => ({ ...m, open: true, selCat: null, selBrand: null, selModel: null, brands: [], models: [], services: [], prices: {} }))}
             style={{ padding: "10px 24px", background: "#146345", border: "none", borderRadius: 8, color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer" }}
           >
-            添加服务
+            {t.servicesAddBtn}
           </button>
         </div>
       ) : tabServices.length === 0 ? (
         <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e5ea", padding: "40px", textAlign: "center", color: "#6e6e73", fontSize: 14 }}>
-          该品类暂无维修服务，点击右上角"添加服务"来添加
+          {t.servicesEmptyTabMsg}
         </div>
       ) : (
         <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e5ea", overflow: "hidden" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
               <tr style={{ background: "#f9f9f9", borderBottom: "1px solid #e5e5ea" }}>
-                {["设备 / 型号", "维修类型", "参考价", "我的价格", "状态", "操作"].map(h => (
+                {tableHeaders.map(h => (
                   <th key={h} style={{ padding: "12px 16px", textAlign: "left", fontSize: 12, fontWeight: 600, color: "#6e6e73" }}>{h}</th>
                 ))}
               </tr>
@@ -228,16 +231,16 @@ export default function MerchantServicesPage() {
                   <td style={{ padding: "14px 16px", fontSize: 14, fontWeight: 600, color: "#146345" }}>€{s.price.toFixed(2)}</td>
                   <td style={{ padding: "14px 16px" }}>
                     <span style={{ padding: "3px 10px", borderRadius: 12, fontSize: 12, fontWeight: 500, background: s.isActive ? "#e8f7f0" : "#f5f5f7", color: s.isActive ? "#146345" : "#6e6e73" }}>
-                      {s.isActive ? "开放" : "暂停"}
+                      {s.isActive ? t.serviceStatusActive : t.serviceStatusPaused}
                     </span>
                   </td>
                   <td style={{ padding: "14px 16px" }}>
                     <div style={{ display: "flex", gap: 8 }}>
                       <button onClick={() => toggleService(s.id, s.isActive)} style={{ padding: "4px 12px", border: "1px solid #d1d1d6", borderRadius: 6, background: "#fff", fontSize: 12, cursor: "pointer" }}>
-                        {s.isActive ? "暂停" : "恢复"}
+                        {s.isActive ? t.serviceBtnPause : t.serviceBtnResume}
                       </button>
                       <button onClick={() => removeService(s.id)} style={{ padding: "4px 12px", border: "1px solid #ffccc7", borderRadius: 6, background: "#fff", fontSize: 12, cursor: "pointer", color: "#c0392b" }}>
-                        移除
+                        {t.serviceBtnRemove}
                       </button>
                     </div>
                   </td>
@@ -248,23 +251,21 @@ export default function MerchantServicesPage() {
         </div>
       )}
 
-      {/* Add service modal */}
       {modal.open && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }} onClick={e => { if (e.target === e.currentTarget) setModal(m => ({ ...m, open: false })); }}>
           <div style={{ background: "#fff", borderRadius: 14, padding: "28px", width: 580, maxHeight: "85vh", overflow: "auto", boxShadow: "0 16px 48px rgba(0,0,0,0.16)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-              <h3 style={{ fontSize: 17, fontWeight: 700, color: "#1d1d1f", margin: 0 }}>添加维修服务</h3>
+              <h3 style={{ fontSize: 17, fontWeight: 700, color: "#1d1d1f", margin: 0 }}>{t.modalAddTitle}</h3>
               <button onClick={() => setModal(m => ({ ...m, open: false }))} style={{ fontSize: 20, background: "none", border: "none", cursor: "pointer", color: "#6e6e73", padding: "0 4px" }}>×</button>
             </div>
 
-            {/* 4-level cascade: 品类 → 品牌 → 型号 */}
             <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
               <select
                 value={modal.selCat ?? ""}
                 onChange={e => setModal(m => ({ ...m, selCat: e.target.value ? parseInt(e.target.value) : null, selBrand: null, selModel: null, brands: [], models: [], services: [] }))}
                 style={{ padding: "8px 12px", border: "1px solid #d1d1d6", borderRadius: 8, fontSize: 13, background: "#fff", outline: "none" }}
               >
-                <option value="">选择品类</option>
+                <option value="">{t.modalSelectCat}</option>
                 {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
 
@@ -274,7 +275,7 @@ export default function MerchantServicesPage() {
                   onChange={e => setModal(m => ({ ...m, selBrand: e.target.value ? parseInt(e.target.value) : null, selModel: null, models: [], services: [] }))}
                   style={{ padding: "8px 12px", border: "1px solid #d1d1d6", borderRadius: 8, fontSize: 13, background: "#fff", outline: "none" }}
                 >
-                  <option value="">选择品牌</option>
+                  <option value="">{t.modalSelectBrand}</option>
                   {modal.brands.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
                 </select>
               )}
@@ -285,25 +286,25 @@ export default function MerchantServicesPage() {
                   onChange={e => setModal(m => ({ ...m, selModel: e.target.value ? parseInt(e.target.value) : null }))}
                   style={{ padding: "8px 12px", border: "1px solid #d1d1d6", borderRadius: 8, fontSize: 13, background: "#fff", outline: "none" }}
                 >
-                  <option value="">全部型号</option>
+                  <option value="">{t.modalSelectAllModels}</option>
                   {modal.models.map(mo => <option key={mo.id} value={mo.id}>{mo.name}{mo.year ? ` (${mo.year})` : ""}</option>)}
                 </select>
               )}
             </div>
 
             {!modal.selCat ? (
-              <div style={{ textAlign: "center", padding: "40px", color: "#6e6e73", fontSize: 14 }}>请先选择设备品类</div>
+              <div style={{ textAlign: "center", padding: "40px", color: "#6e6e73", fontSize: 14 }}>{t.modalSelectCatFirst}</div>
             ) : modal.servicesLoading ? (
-              <div style={{ textAlign: "center", padding: "40px", color: "#6e6e73", fontSize: 14 }}>加载中...</div>
+              <div style={{ textAlign: "center", padding: "40px", color: "#6e6e73", fontSize: 14 }}>{t.loadingText}</div>
             ) : modal.services.length === 0 ? (
-              <div style={{ textAlign: "center", padding: "40px", color: "#6e6e73", fontSize: 14 }}>该条件下暂无维修服务</div>
+              <div style={{ textAlign: "center", padding: "40px", color: "#6e6e73", fontSize: 14 }}>{t.modalNoServices}</div>
             ) : (
               <div style={{ border: "1px solid #e5e5ea", borderRadius: 8, overflow: "hidden" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
                   <thead>
                     <tr style={{ background: "#f9f9f9", borderBottom: "1px solid #e5e5ea" }}>
-                      {["型号", "维修类型", "参考价", "我的价格", ""].map(h => (
-                        <th key={h} style={{ padding: "10px 12px", textAlign: "left", fontSize: 12, fontWeight: 600, color: "#6e6e73" }}>{h}</th>
+                      {[t.modalTableModel, t.modalTableRepairType, t.modalTableRefPrice, t.modalTableMyPrice, ""].map((h, i) => (
+                        <th key={i} style={{ padding: "10px 12px", textAlign: "left", fontSize: 12, fontWeight: 600, color: "#6e6e73" }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -322,7 +323,7 @@ export default function MerchantServicesPage() {
                           ) : (
                             <input
                               type="number"
-                              placeholder="价格"
+                              placeholder={t.modalPricePlaceholder}
                               value={modal.prices[s.id] ?? ""}
                               onChange={e => setModal(m => ({ ...m, prices: { ...m.prices, [s.id]: e.target.value } }))}
                               min={s.basePriceMin}
@@ -333,14 +334,14 @@ export default function MerchantServicesPage() {
                         </td>
                         <td style={{ padding: "10px 12px" }}>
                           {s.selected ? (
-                            <span style={{ padding: "3px 10px", background: "#e8f7f0", borderRadius: 6, fontSize: 11, color: "#146345", fontWeight: 500 }}>已添加</span>
+                            <span style={{ padding: "3px 10px", background: "#e8f7f0", borderRadius: 6, fontSize: 11, color: "#146345", fontWeight: 500 }}>{t.serviceBtnAdded}</span>
                           ) : (
                             <button
                               onClick={() => addServiceFromModal(s.id)}
                               disabled={modal.addingIds.has(s.id)}
                               style={{ padding: "5px 12px", background: "#146345", border: "none", borderRadius: 6, color: "#fff", fontSize: 12, fontWeight: 600, cursor: modal.addingIds.has(s.id) ? "not-allowed" : "pointer", opacity: modal.addingIds.has(s.id) ? 0.7 : 1 }}
                             >
-                              {modal.addingIds.has(s.id) ? "添加中..." : "添加"}
+                              {modal.addingIds.has(s.id) ? t.serviceBtnAdding : t.serviceBtnAdd}
                             </button>
                           )}
                         </td>
@@ -352,7 +353,7 @@ export default function MerchantServicesPage() {
             )}
 
             <div style={{ marginTop: 20, display: "flex", justifyContent: "flex-end" }}>
-              <button onClick={() => setModal(m => ({ ...m, open: false }))} style={{ padding: "10px 24px", border: "1px solid #d1d1d6", borderRadius: 8, background: "#fff", fontSize: 14, cursor: "pointer" }}>关闭</button>
+              <button onClick={() => setModal(m => ({ ...m, open: false }))} style={{ padding: "10px 24px", border: "1px solid #d1d1d6", borderRadius: 8, background: "#fff", fontSize: 14, cursor: "pointer" }}>{t.modalClose}</button>
             </div>
           </div>
         </div>

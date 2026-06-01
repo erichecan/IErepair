@@ -2,9 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLang } from "@/lib/i18n/useLang";
+import { useMerchantT } from "@/lib/i18n/merchant";
 
 export default function MerchantLoginPage() {
   const router = useRouter();
+  const [lang, setLang] = useLang("zh");
+  const t = useMerchantT(lang);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -22,7 +26,7 @@ export default function MerchantLoginPage() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "登录失败");
+        setError(data.error || t.loginError);
         return;
       }
       if (data.mustChangePassword) {
@@ -31,7 +35,7 @@ export default function MerchantLoginPage() {
         router.push("/merchant/dashboard");
       }
     } catch {
-      setError("网络错误，请重试");
+      setError(t.loginError);
     } finally {
       setLoading(false);
     }
@@ -49,14 +53,14 @@ export default function MerchantLoginPage() {
         body: JSON.stringify({ email: "merchant@ierepair.ie", password: "merchant123" }),
       });
       const data = await res.json();
-      if (!res.ok) { setError(data.error || "登录失败"); return; }
+      if (!res.ok) { setError(data.error || t.loginError); return; }
       if (data.mustChangePassword) {
         router.push("/merchant/change-password");
       } else {
         router.push("/merchant/dashboard");
       }
     } catch {
-      setError("网络错误，请重试");
+      setError(t.loginError);
     } finally {
       setLoading(false);
     }
@@ -67,7 +71,16 @@ export default function MerchantLoginPage() {
       <div style={{ background: "#fff", borderRadius: 16, padding: "48px 40px", width: 400, boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>
         <div style={{ marginBottom: 32, textAlign: "center" }}>
           <div style={{ fontSize: 28, fontWeight: 700, color: "#1c3830" }}>IERepair</div>
-          <div style={{ fontSize: 14, color: "#6e6e73", marginTop: 6 }}>商家管理中心</div>
+          <div style={{ fontSize: 14, color: "#6e6e73", marginTop: 6 }}>{t.loginTitle}</div>
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 12 }}>
+          <button
+            onClick={() => setLang(lang === "zh" ? "en" : "zh")}
+            style={{ padding: "4px 12px", background: "transparent", border: "1px solid #d1d1d6", borderRadius: 20, fontSize: 12, color: "#6e6e73", cursor: "pointer" }}
+          >
+            {t.langToggle}
+          </button>
         </div>
 
         <button
@@ -75,13 +88,13 @@ export default function MerchantLoginPage() {
           disabled={loading}
           style={{ width: "100%", padding: "10px", background: "#f0faf5", border: "1.5px dashed #146345", borderRadius: 8, fontSize: 13, fontWeight: 600, color: "#146345", cursor: loading ? "not-allowed" : "pointer", marginBottom: 20 }}
         >
-          🚀 一键登录（测试用）
+          🚀 {t.loginQuick}
         </button>
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#1d1d1f", marginBottom: 6 }}>
-              邮箱
+              {t.loginEmail}
             </label>
             <input
               type="email"
@@ -95,7 +108,7 @@ export default function MerchantLoginPage() {
 
           <div style={{ marginBottom: 24 }}>
             <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#1d1d1f", marginBottom: 6 }}>
-              密码
+              {t.loginPassword}
             </label>
             <input
               type="password"
@@ -118,7 +131,7 @@ export default function MerchantLoginPage() {
             disabled={loading}
             style={{ width: "100%", padding: "12px", background: "#146345", border: "none", borderRadius: 8, color: "#fff", fontSize: 15, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.7 : 1 }}
           >
-            {loading ? "登录中..." : "登录"}
+            {loading ? t.loginLoading : t.loginBtn}
           </button>
         </form>
       </div>

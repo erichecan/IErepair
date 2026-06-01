@@ -1,47 +1,54 @@
-import Link from "next/link";
+"use client";
 
-const services = [
-  {
-    label: "Screen Repair",
-    href: "/search?q=screen+repair",
-    image: "/fonfix/service-screen.png",
-    icon: null,
-  },
-  {
-    label: "Battery Replacement",
-    href: "/search?q=battery+replacement",
-    image: "/fonfix/service-battery.png",
-    icon: null,
-  },
-  {
-    label: "Phone Cases",
-    href: "/accessories?category=cases",
-    image: null,
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="7" y="1" width="10" height="22" rx="2" ry="2" />
-      </svg>
-    ),
-  },
-  {
-    label: "Chargers & Cables",
-    href: "/accessories?category=chargers",
-    image: "/fonfix/service-charging.png",
-    icon: null,
-  },
-  {
-    label: "Membership",
-    href: "/membership",
-    image: null,
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-      </svg>
-    ),
-  },
-];
+import Link from "next/link";
+import { useLang } from "@/lib/i18n/useLang";
+import { useConsumerT } from "@/lib/i18n/consumer";
 
 export default function QuickLinks() {
+  const [lang] = useLang("en");
+  const t = useConsumerT(lang);
+
+  const services = [
+    {
+      label: t.qlScreenRepair,
+      href: "/search?q=screen+repair",
+      image: "/fonfix/service-screen.png",
+      icon: null,
+    },
+    {
+      label: t.qlBatteryReplacement,
+      href: "/search?q=battery+replacement",
+      image: "/fonfix/service-battery.png",
+      icon: null,
+    },
+    {
+      label: t.qlPhoneCases,
+      href: "/accessories?category=cases",
+      image: null,
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="7" y="1" width="10" height="22" rx="2" ry="2" />
+        </svg>
+      ),
+    },
+    {
+      label: t.qlChargersAndCables,
+      href: "/accessories?category=chargers",
+      image: "/fonfix/service-charging.png",
+      icon: null,
+    },
+    {
+      label: t.qlMembership,
+      href: "/membership",
+      image: null,
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        </svg>
+      ),
+    },
+  ];
+
   return (
     <section style={{ padding: "48px 0", borderBottom: "1px solid #f5f5f5" }}>
       <div className="wrapper">

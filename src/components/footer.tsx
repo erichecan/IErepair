@@ -1,6 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { useLang } from "@/lib/i18n/useLang";
+import { useConsumerT } from "@/lib/i18n/consumer";
 
 export default function Footer() {
+  const [lang] = useLang("en");
+  const t = useConsumerT(lang);
+
   return (
     <footer
       style={{
@@ -50,8 +57,7 @@ export default function Footer() {
                 marginBottom: "20px",
               }}
             >
-              Ireland&apos;s leading platform for phone repair services and accessories.
-              Connecting customers with trusted repair shops nationwide.
+              {t.footerDesc}
             </p>
             <div style={{ display: "flex", gap: "12px" }}>
               {[
@@ -82,7 +88,7 @@ export default function Footer() {
           {/* Links columns */}
           {[
             {
-              title: "Services",
+              title: t.footerServices,
               links: [
                 { label: "Screen Repair", href: "/search?q=screen+repair" },
                 { label: "Battery Replacement", href: "/search?q=battery" },
@@ -92,7 +98,7 @@ export default function Footer() {
               ],
             },
             {
-              title: "Accessories",
+              title: t.footerAccessories,
               links: [
                 { label: "Phone Cases", href: "/accessories?category=cases" },
                 { label: "Screen Protectors", href: "/accessories?category=protectors" },
@@ -102,7 +108,7 @@ export default function Footer() {
               ],
             },
             {
-              title: "Company",
+              title: t.footerCompany,
               links: [
                 { label: "About IERepair", href: "/about" },
                 { label: "Find a Store", href: "/stores" },
@@ -141,13 +147,13 @@ export default function Footer() {
         {/* Bottom */}
         <div className="footer-bottom">
           <p style={{ color: "rgba(255,255,255,0.45)" }}>
-            © 2026 IERepair. All rights reserved. Ireland&apos;s Phone Repair Platform.
+            {t.footerLegal}
           </p>
           <div style={{ display: "flex", gap: "20px" }}>
             {[
-              { label: "Privacy Policy", href: "/privacy" },
-              { label: "Terms of Service", href: "/terms" },
-              { label: "Cookie Policy", href: "/cookies" },
+              { label: t.footerPrivacy, href: "/privacy" },
+              { label: t.footerTerms, href: "/terms" },
+              { label: t.footerCookies, href: "/cookies" },
             ].map((link) => (
               <Link key={link.label} href={link.href} className="footer-legal-link">
                 {link.label}
