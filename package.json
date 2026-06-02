@@ -25,7 +25,8 @@
     "qrcode.react": "^4.2.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "telnyx": "^6.73.0"
+    "telnyx": "^6.73.0",
+    "ws": "^8.21.0"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
