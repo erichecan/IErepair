@@ -1,8 +1,10 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import { useLang } from "@/lib/i18n/useLang";
+import { useConsumerT } from "@/lib/i18n/consumer";
 
 function StarPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   const [hover, setHover] = useState(0);
@@ -35,7 +37,8 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
 export default function ReviewPage() {
   const params = useParams<{ orderNumber: string }>();
   const orderNumber = params?.orderNumber ?? "";
-  const router = useRouter();
+  const [lang] = useLang("en");
+  const t = useConsumerT(lang);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -44,7 +47,7 @@ export default function ReviewPage() {
 
   async function handleSubmit() {
     if (rating === 0) {
-      setError("请选择评分");
+      setError(t.reviewErrSelectRating);
       return;
     }
     setSubmitting(true);
@@ -57,12 +60,12 @@ export default function ReviewPage() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "提交失败");
+        setError(data.error || t.reviewErrSubmitFailed);
       } else {
         setDone(true);
       }
     } catch {
-      setError("网络错误，请重试");
+      setError(t.reviewErrNetwork);
     } finally {
       setSubmitting(false);
     }
@@ -73,9 +76,9 @@ export default function ReviewPage() {
       <div style={styles.page}>
         <div style={styles.card}>
           <div style={{ fontSize: 56, marginBottom: 16 }}>🎉</div>
-          <h1 style={{ fontSize: 22, fontWeight: 800, color: "#1d1d1f", marginBottom: 8 }}>感谢您的评价！</h1>
-          <p style={{ color: "#555", fontSize: 15, marginBottom: 28 }}>您的反馈帮助我们不断改进服务质量。</p>
-          <Link href="/" style={styles.btn}>返回首页</Link>
+          <h1 style={{ fontSize: 22, fontWeight: 800, color: "#1d1d1f", marginBottom: 8 }}>{t.reviewSuccessTitle}</h1>
+          <p style={{ color: "#555", fontSize: 15, marginBottom: 28 }}>{t.reviewSuccessDesc}</p>
+          <Link href="/" style={styles.btn}>{t.reviewBackHome}</Link>
         </div>
       </div>
     );
@@ -88,27 +91,27 @@ export default function ReviewPage() {
       </div>
 
       <div style={styles.card}>
-        <h1 style={{ fontSize: 22, fontWeight: 800, color: "#1d1d1f", marginBottom: 6 }}>评价您的维修体验</h1>
-        <p style={{ color: "#888", fontSize: 14, marginBottom: 28 }}>订单号：{orderNumber}</p>
+        <h1 style={{ fontSize: 22, fontWeight: 800, color: "#1d1d1f", marginBottom: 6 }}>{t.reviewPageTitle}</h1>
+        <p style={{ color: "#888", fontSize: 14, marginBottom: 28 }}>{t.reviewOrderLabel}{orderNumber}</p>
 
         <div style={{ marginBottom: 24 }}>
-          <div style={{ fontSize: 15, fontWeight: 600, color: "#1d1d1f", marginBottom: 12 }}>总体评分</div>
+          <div style={{ fontSize: 15, fontWeight: 600, color: "#1d1d1f", marginBottom: 12 }}>{t.reviewOverallRating}</div>
           <StarPicker value={rating} onChange={setRating} />
           {rating > 0 && (
             <div style={{ marginTop: 8, fontSize: 14, color: "#888" }}>
-              {["", "非常差", "较差", "一般", "满意", "非常满意"][rating]}
+              {t.reviewRatingLabel(rating)}
             </div>
           )}
         </div>
 
         <div style={{ marginBottom: 28 }}>
           <div style={{ fontSize: 15, fontWeight: 600, color: "#1d1d1f", marginBottom: 10 }}>
-            评价内容 <span style={{ fontWeight: 400, color: "#aaa" }}>（选填）</span>
+            {t.reviewCommentLabel} <span style={{ fontWeight: 400, color: "#aaa" }}>{t.reviewOptional}</span>
           </div>
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            placeholder="分享您的维修体验，帮助其他用户做出选择..."
+            placeholder={t.reviewCommentPlaceholder}
             maxLength={500}
             rows={4}
             style={{
@@ -143,7 +146,7 @@ export default function ReviewPage() {
             width: "100%",
           }}
         >
-          {submitting ? "提交中..." : "提交评价"}
+          {submitting ? t.reviewSubmitting : t.reviewSubmitBtn}
         </button>
       </div>
     </div>

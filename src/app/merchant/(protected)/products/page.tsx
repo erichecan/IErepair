@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useLang } from "@/lib/i18n/useLang";
+import { useMerchantT } from "@/lib/i18n/merchant";
 
 interface MerchantProductItem {
   id: number;
@@ -21,6 +23,8 @@ interface MerchantProductItem {
 interface Category { id: number; name: string; }
 
 export default function MerchantProductsPage() {
+  const [lang] = useLang("en");
+  const t = useMerchantT(lang);
   const [items, setItems] = useState<MerchantProductItem[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -66,9 +70,9 @@ export default function MerchantProductsPage() {
   async function savePrice(id: number) {
     const item = items.find(i => i.id === id);
     const price = parseFloat(editPrice);
-    if (isNaN(price) || price <= 0) { setEditError("请输入有效价格"); return; }
+    if (isNaN(price) || price <= 0) { setEditError(t.errorInvalidPrice); return; }
     if (item && item.product.basePriceMin != null && price < item.product.basePriceMin) {
-      setEditError(`价格不能低于参考最低价 €${item.product.basePriceMin}`);
+      setEditError(t.productsErrPriceTooLow(item.product.basePriceMin));
       return;
     }
     const res = await fetch(`/api/merchant/products/${id}`, {
@@ -92,7 +96,7 @@ export default function MerchantProductsPage() {
   }
 
   async function removeItem(id: number) {
-    if (!confirm("确认移除该商品？")) return;
+    if (!confirm(t.productsRemoveConfirm)) return;
     const res = await fetch(`/api/merchant/products/${id}`, { method: "DELETE" });
     if (res.ok) setItems(prev => prev.filter(i => i.id !== id));
   }
@@ -101,11 +105,11 @@ export default function MerchantProductsPage() {
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: "#1d1d1f", margin: "0 0 4px" }}>我的商品</h1>
-          <p style={{ fontSize: 14, color: "#6e6e73" }}>管理已选择的销售商品和定价</p>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: "#1d1d1f", margin: "0 0 4px" }}>{t.productsTitle}</h1>
+          <p style={{ fontSize: 14, color: "#6e6e73" }}>{t.productsDesc}</p>
         </div>
         <Link href="/merchant/products/catalog" style={{ padding: "10px 20px", background: "#146345", borderRadius: 8, color: "#fff", fontSize: 14, fontWeight: 600, textDecoration: "none" }}>
-          + 选择商品
+          {t.productsAddBtn}
         </Link>
       </div>
 
@@ -113,7 +117,7 @@ export default function MerchantProductsPage() {
       <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
         <input
           type="search"
-          placeholder="搜索商品名称..."
+          placeholder={t.productsSearchPlaceholder}
           value={searchQ}
           onChange={e => setSearchQ(e.target.value)}
           style={{ flex: 1, minWidth: 180, padding: "8px 14px", border: "1px solid #d1d1d6", borderRadius: 8, fontSize: 14, outline: "none" }}
@@ -123,7 +127,7 @@ export default function MerchantProductsPage() {
           onChange={e => setFilterCat(e.target.value)}
           style={{ padding: "8px 14px", border: "1px solid #d1d1d6", borderRadius: 8, fontSize: 14, background: "#fff", outline: "none" }}
         >
-          <option value="">全部品类</option>
+          <option value="">{t.productsFilterAllCats}</option>
           {categories.map(c => <option key={c.id} value={String(c.id)}>{c.name}</option>)}
         </select>
         <select
@@ -131,33 +135,33 @@ export default function MerchantProductsPage() {
           onChange={e => setFilterStatus(e.target.value as "all" | "active" | "inactive")}
           style={{ padding: "8px 14px", border: "1px solid #d1d1d6", borderRadius: 8, fontSize: 14, background: "#fff", outline: "none" }}
         >
-          <option value="all">全部状态</option>
-          <option value="active">已上架</option>
-          <option value="inactive">已下架</option>
+          <option value="all">{t.productsFilterAll}</option>
+          <option value="active">{t.productsFilterActive}</option>
+          <option value="inactive">{t.productsFilterInactive}</option>
         </select>
       </div>
 
       {loading ? (
-        <div style={{ color: "#6e6e73", fontSize: 14 }}>加载中...</div>
+        <div style={{ color: "#6e6e73", fontSize: 14 }}>{t.loadingText}</div>
       ) : items.length === 0 ? (
         <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e5ea", padding: "60px", textAlign: "center" }}>
           <div style={{ fontSize: 40, marginBottom: 16 }}>📦</div>
-          <div style={{ fontSize: 18, fontWeight: 600, color: "#1d1d1f", marginBottom: 8 }}>还没有选择任何商品</div>
-          <div style={{ fontSize: 14, color: "#6e6e73", marginBottom: 24 }}>前往商品目录，选择您想销售的商品并设置价格</div>
+          <div style={{ fontSize: 18, fontWeight: 600, color: "#1d1d1f", marginBottom: 8 }}>{t.productsEmptyTitle}</div>
+          <div style={{ fontSize: 14, color: "#6e6e73", marginBottom: 24 }}>{t.productsEmptyDesc}</div>
           <Link href="/merchant/products/catalog" style={{ padding: "10px 24px", background: "#146345", borderRadius: 8, color: "#fff", fontSize: 14, fontWeight: 600, textDecoration: "none" }}>
-            浏览商品目录
+            {t.productsBrowseBtn}
           </Link>
         </div>
       ) : filtered.length === 0 ? (
         <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e5ea", padding: "40px", textAlign: "center", color: "#6e6e73", fontSize: 14 }}>
-          没有符合筛选条件的商品
+          {t.productsNoMatch}
         </div>
       ) : (
         <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e5e5ea", overflow: "hidden" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
               <tr style={{ background: "#f9f9f9", borderBottom: "1px solid #e5e5ea" }}>
-                {["商品", "品类", "参考价格", "我的售价", "状态", "操作"].map(h => (
+                {[t.productsColProduct, t.productsColCategory, t.productsColRefPrice, t.productsColMyPrice, t.productsColStatus, t.productsColActions].map(h => (
                   <th key={h} style={{ padding: "12px 16px", textAlign: "left", fontSize: 12, fontWeight: 600, color: "#6e6e73" }}>{h}</th>
                 ))}
               </tr>
@@ -187,18 +191,18 @@ export default function MerchantProductsPage() {
                             autoFocus
                             onKeyDown={e => { if (e.key === "Enter") savePrice(item.id); if (e.key === "Escape") setEditingId(null); }}
                           />
-                          <button onClick={() => savePrice(item.id)} style={{ padding: "4px 10px", background: "#146345", border: "none", borderRadius: 6, color: "#fff", fontSize: 12, cursor: "pointer" }}>保存</button>
-                          <button onClick={() => { setEditingId(null); setEditError(""); }} style={{ padding: "4px 10px", background: "#f5f5f7", border: "none", borderRadius: 6, color: "#6e6e73", fontSize: 12, cursor: "pointer" }}>取消</button>
+                          <button onClick={() => savePrice(item.id)} style={{ padding: "4px 10px", background: "#146345", border: "none", borderRadius: 6, color: "#fff", fontSize: 12, cursor: "pointer" }}>{t.productsSaveBtn}</button>
+                          <button onClick={() => { setEditingId(null); setEditError(""); }} style={{ padding: "4px 10px", background: "#f5f5f7", border: "none", borderRadius: 6, color: "#6e6e73", fontSize: 12, cursor: "pointer" }}>{t.productsCancelBtn}</button>
                         </div>
                         {editError && <div style={{ fontSize: 11, color: "#c0392b", marginTop: 4 }}>{editError}</div>}
                         {item.product.basePriceMin != null && (
-                          <div style={{ fontSize: 11, color: "#aeaeb2", marginTop: 2 }}>最低 €{item.product.basePriceMin}</div>
+                          <div style={{ fontSize: 11, color: "#aeaeb2", marginTop: 2 }}>{t.productsMinPrice(item.product.basePriceMin!)}</div>
                         )}
                       </div>
                     ) : (
                       <span
                         onClick={() => { setEditingId(item.id); setEditPrice(String(item.price)); setEditError(""); }}
-                        title="点击编辑价格"
+                        title={t.productsClickToEdit}
                         style={{ fontSize: 14, fontWeight: 600, color: "#146345", cursor: "pointer" }}
                       >
                         €{item.price.toFixed(2)} <span style={{ fontSize: 11, opacity: 0.6 }}>✏</span>
@@ -207,16 +211,16 @@ export default function MerchantProductsPage() {
                   </td>
                   <td style={{ padding: "14px 16px" }}>
                     <span style={{ padding: "3px 10px", borderRadius: 12, fontSize: 12, fontWeight: 500, background: item.isActive ? "#e8f7f0" : "#f5f5f7", color: item.isActive ? "#146345" : "#6e6e73" }}>
-                      {item.isActive ? "上架" : "下架"}
+                      {item.isActive ? t.productsStatusActive : t.productsStatusInactive}
                     </span>
                   </td>
                   <td style={{ padding: "14px 16px" }}>
                     <div style={{ display: "flex", gap: 8 }}>
                       <button onClick={() => toggleActive(item.id, item.isActive)} style={{ padding: "4px 12px", border: "1px solid #d1d1d6", borderRadius: 6, background: "#fff", fontSize: 12, cursor: "pointer", color: "#1d1d1f" }}>
-                        {item.isActive ? "下架" : "上架"}
+                        {item.isActive ? t.productsToggleInactive : t.productsToggleActive}
                       </button>
                       <button onClick={() => removeItem(item.id)} style={{ padding: "4px 12px", border: "1px solid #ffccc7", borderRadius: 6, background: "#fff", fontSize: 12, cursor: "pointer", color: "#c0392b" }}>
-                        移除
+                        {t.productsRemoveBtn}
                       </button>
                     </div>
                   </td>

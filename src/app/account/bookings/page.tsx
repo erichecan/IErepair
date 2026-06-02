@@ -73,13 +73,13 @@ function AccountBookingsContent() {
       const res = await fetch(`/api/public/bookings?phone=${encodeURIComponent(p.trim())}`);
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "查询失败");
+        setError(data.error || t.errorQueryFailed);
         setBookings([]);
       } else {
         setBookings(data);
       }
     } catch {
-      setError("网络错误，请稍后重试");
+      setError(t.errorNetworkRetry);
       setBookings([]);
     } finally {
       setLoading(false);

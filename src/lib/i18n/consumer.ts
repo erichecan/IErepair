@@ -134,6 +134,30 @@ const translations = {
     reviewSubmitted: "⭐ Review submitted",
     showQRSubtitle: "Show this to the store to check in",
     closeBtn: "Close",
+
+    // Account bookings page - errors
+    errorQueryFailed: "Query failed",
+    errorNetworkRetry: "Network error, please try again",
+
+    // Review page
+    reviewPageTitle: "Rate Your Repair",
+    reviewOrderLabel: "Order #",
+    reviewOverallRating: "Overall Rating",
+    reviewRatingLabel: (n: number) => {
+      const labels: string[] = ["", "Very Poor", "Poor", "Average", "Good", "Excellent"];
+      return labels[n] ?? "";
+    },
+    reviewCommentLabel: "Your Review",
+    reviewOptional: "(Optional)",
+    reviewCommentPlaceholder: "Tell us about your repair experience...",
+    reviewSubmitBtn: "Submit Review",
+    reviewSubmitting: "Submitting...",
+    reviewSuccessTitle: "Thank You for Your Review!",
+    reviewSuccessDesc: "Your feedback helps us improve our service quality.",
+    reviewBackHome: "Back to Home",
+    reviewErrSelectRating: "Please select a rating",
+    reviewErrSubmitFailed: "Submission failed",
+    reviewErrNetwork: "Network error, please try again",
   },
   zh: {
     // Header nav
@@ -264,6 +288,30 @@ const translations = {
     reviewSubmitted: "⭐ 已提交评价",
     showQRSubtitle: "向门店出示此二维码签到",
     closeBtn: "关闭",
+
+    // Account bookings page - errors
+    errorQueryFailed: "查询失败",
+    errorNetworkRetry: "网络错误，请稍后重试",
+
+    // Review page
+    reviewPageTitle: "评价您的维修体验",
+    reviewOrderLabel: "订单号：",
+    reviewOverallRating: "总体评分",
+    reviewRatingLabel: (n: number) => {
+      const labels: string[] = ["", "非常差", "较差", "一般", "满意", "非常满意"];
+      return labels[n] ?? "";
+    },
+    reviewCommentLabel: "评价内容",
+    reviewOptional: "（选填）",
+    reviewCommentPlaceholder: "请分享您的维修体验...",
+    reviewSubmitBtn: "提交评价",
+    reviewSubmitting: "提交中...",
+    reviewSuccessTitle: "感谢您的评价！",
+    reviewSuccessDesc: "您的反馈帮助我们不断改进服务质量。",
+    reviewBackHome: "返回首页",
+    reviewErrSelectRating: "请选择评分",
+    reviewErrSubmitFailed: "提交失败",
+    reviewErrNetwork: "网络错误，请重试",
   },
 } as const;
 
