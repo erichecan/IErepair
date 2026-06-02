@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
@@ -51,7 +51,7 @@ function formatDt(iso: string) {
   });
 }
 
-export default function AccountBookingsPage() {
+function AccountBookingsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -253,6 +253,14 @@ export default function AccountBookingsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AccountBookingsPage() {
+  return (
+    <Suspense>
+      <AccountBookingsContent />
+    </Suspense>
   );
 }
 
