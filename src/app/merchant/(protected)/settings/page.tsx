@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { prisma } from "@/lib/prisma";
 import { getMerchantSession } from "@/lib/merchant-auth";
 import { redirect } from "next/navigation";
@@ -20,5 +21,9 @@ export default async function MerchantSettingsPage() {
 
   if (!merchant) redirect("/merchant/login");
 
-  return <MerchantSettingsClient merchant={merchant} hours={hours} initialImages={merchant.images} stripeConfigured={!!merchant.stripePublishableKey && !!merchant.stripeSecretKey} />;
+  return (
+    <Suspense>
+      <MerchantSettingsClient merchant={merchant} hours={hours} initialImages={merchant.images} stripeConfigured={!!merchant.stripePublishableKey && !!merchant.stripeSecretKey} />
+    </Suspense>
+  );
 }

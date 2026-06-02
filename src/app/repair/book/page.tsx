@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -52,7 +52,7 @@ const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 // ─── Component ──────────────────────────────────────────────────────────────
 
-export default function BookPage() {
+function BookContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -387,6 +387,14 @@ export default function BookPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function BookPage() {
+  return (
+    <Suspense>
+      <BookContent />
+    </Suspense>
   );
 }
 
